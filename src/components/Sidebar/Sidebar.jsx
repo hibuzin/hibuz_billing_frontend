@@ -1,47 +1,53 @@
 import styles from "./Sidebar.module.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { FaHome, FaUsers, FaBox, FaChartBar, FaTags } from "react-icons/fa";
+import { MdPayments, MdInventory } from "react-icons/md";
+import { RiMoneyDollarCircleLine } from "react-icons/ri";
 
 function Sidebar() {
   const navigate = useNavigate();
   const [openMenu, setOpenMenu] = useState(null);
 
   const menu = [
-    { name: "HOME", path: "/home" },
-    { name: "CUSTOMERS", path: "/customers" },
-    { name: "PRODUCTS", path: "/products" },
+  { name: "HOME", path: "/home", icon: <FaHome /> },
+  { name: "CUSTOMERS", path: "/customers", icon: <FaUsers /> },
+  { name: "PRODUCTS", path: "/products", icon: <FaBox /> },
 
-    {
-      name: "SALES",
-      children: [
-        { name: "Today Sale", path: "/sales/today" },
-        { name: "Week Sale", path: "/sales/week" },
-        { name: "Monthly Sale", path: "/sales/month" },
-      ],
-    },
+  {
+    name: "SALES",
+    icon: <RiMoneyDollarCircleLine />,
+    children: [
+      { name: "Today Sale", path: "/sales/today" },
+      { name: "Week Sale", path: "/sales/week" },
+      { name: "Monthly Sale", path: "/sales/month" },
+    ],
+  },
 
-    {
-      name: "PAYMENT",
-      children: [
-        { name: "Cash", path: "/payment/cash" },
-        { name: "Online", path: "/payment/online" },
-        { name: "Pending", path: "/payment/pending" },
-      ],
-    },
+  {
+    name: "PAYMENT",
+    icon: <MdPayments />,
+    children: [
+      { name: "Cash", path: "/payment/cash" },
+      { name: "Online", path: "/payment/online" },
+      { name: "Pending", path: "/payment/pending" },
+    ],
+  },
 
-    {
-      name: "STOCKS",
-      children: [
-        { name: "Available", path: "/stocks/available" },
-        { name: "Low Stock", path: "/stocks/low" },
-        { name: "Out of Stock", path: "/stocks/out" },
-      ],
-    },
+  {
+    name: "STOCKS",
+    icon: <MdInventory />,
+    children: [
+      { name: "Available", path: "/stocks/available" },
+      { name: "Low Stock", path: "/stocks/low" },
+      { name: "Out of Stock", path: "/stocks/out" },
+    ],
+  },
 
-    { name: "GST", path: "/gst" },
-    { name: "ANALYTICS", path: "/analytics" },
-    { name: "OFFERS", path: "/offers" },
-  ];
+  { name: "GST", path: "/gst", icon: <FaChartBar /> },
+  { name: "ANALYTICS", path: "/analytics", icon: <FaChartBar /> },
+  { name: "OFFERS", path: "/offers", icon: <FaTags /> },
+];
 
   return (
     <div className={styles.sidebar}>
@@ -59,7 +65,10 @@ function Sidebar() {
                   : navigate(item.path)
               }
             >
-              {item.name}
+             <div className={styles.menuItem}>
+  <span className={styles.icon}>{item.icon}</span>
+  <span>{item.name}</span>
+</div>
             </li>
 
     <div className={styles.divider}></div>

@@ -1,9 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@300;400&display=swap');
-
 .wrap {
-  font-family: 'DM Sans', sans-serif;
   padding: 6px 0;
-  color: #1a1a1a;
+  color: #000000;
 }
 
 /* HEADER */
@@ -25,7 +22,6 @@
 }
 
 .title {
-  font-family: 'Cormorant Garamond', serif;
   font-size: 24px;
   font-weight: 400;
   letter-spacing: 0.04em;
@@ -35,10 +31,10 @@
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #8a867f;
-  border: 1px solid #e6e2dc;
+  color: #9a8666;
+  border: 1px solid #6f4f1e;
   padding: 5px 12px;
-  border-radius: 20px;
+  border-radius: 1px;
   background: #faf9f7;
 }
 
