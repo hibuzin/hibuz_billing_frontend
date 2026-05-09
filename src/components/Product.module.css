@@ -1,0 +1,93 @@
+.container {
+  padding: 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.header p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #777;
+}
+
+.addBtn {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  border: none;
+  background: #111;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.2s ease;
+}
+
+.addBtn:hover {
+  background: #333;
+  transform: translateY(-1px);
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.table th {
+  text-align: left;
+  padding: 12px;
+  background: #f9fafb;
+  color: #555;
+  font-weight: 600;
+}
+
+.table td {
+  padding: 12px;
+  border-top: 1px solid #eee;
+}
+
+.name {
+  font-weight: 500;
+}
+
+.stock {
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #ecfdf5;
+  color: #059669;
+  font-weight: 500;
+}
+
+.lowStock {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+}

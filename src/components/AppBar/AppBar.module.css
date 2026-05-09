@@ -1,6 +1,6 @@
 .appbar {
   height: 64px; 
-  background: #f7f0dc;
+  background: #f0f3f3;
   position: fixed;
   display: flex;
   justify-content: space-between;
@@ -8,12 +8,18 @@
   align-items: center;
   padding: 0 24px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-  
+    position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  z-index: 9999;
 }
 
 .left {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .left h2 {
@@ -48,12 +54,12 @@
 .search {
   padding: 8px 14px;
   border-radius: 10px; 
-  border: 1px solid transparent; 
+  border-color: black;
   background: #F1F5F9; 
   outline: none;
   width: 250px;
   transition: all 0.3s ease;
-  color: #475569;
+  color: #606c7c;
 }
 
 .search:focus {
@@ -66,7 +72,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #334155; 
   padding: 6px 12px;
   border-radius: 10px;
   cursor: pointer;
@@ -95,3 +100,90 @@
   transform: translateY(-2px); 
 }
 
+
+.langBox {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 9px;
+  border-radius: 8px;
+  border: 0.5px solid #e2e8f0;
+  background: transparent;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 0.15s;
+}
+
+.langBox:hover,
+.langOpen {
+  border-color: #94a3b8;
+}
+
+.flag {
+  width: 18px;
+  height: 13px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.langLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: #0f172a;
+}
+
+.langChevron {
+  font-size: 16px;
+  color: #94a3b8;
+  line-height: 1;
+  transform: rotate(90deg);
+  transition: transform 0.15s;
+  display: inline-block;
+}
+
+.rotated {
+  transform: rotate(270deg);
+}
+
+.langDropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 140px;
+  background: #ffffff;
+  border: 0.5px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  z-index: 10000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.langOption {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.langOption:hover {
+  background: #f8fafc;
+}
+
+.langSelected {
+  background: #f1f5f9;
+}
+
+.langOptionName {
+  font-size: 13px;
+  color: #0f172a;
+  flex: 1;
+}
+
+.langCheck {
+  font-size: 11px;
+  color: #64748b;
+}

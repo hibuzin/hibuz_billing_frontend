@@ -12,6 +12,7 @@
 }
 
 .panel {
+  position: relative;
   width: 320px;
   height: 100%;
   background: white;
@@ -19,52 +20,49 @@
 
   display: flex;
   flex-direction: column;
-  align-items: center;
-
-  position: relative; 
 
   transform: translateX(100%);
   animation: slideIn 0.3s forwards ease;
 }
 
-/* top space */
+/* USER SECTION */
 .topSpace {
   width: 100%;
-  height: 100px; /* increase for better spacing */
+  margin-bottom: 20px;
 }
 
-/* row layout */
 .userRow {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px;
+  margin-bottom: 20px;
+  
 }
 
-/* remove absolute positioning */
 .avatar {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 40px;
   border-radius: 50%;
-  background: #4f452b;
+  background: var(--avatar-bg);
   color: white;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  font-size: 20px;
+  font-size: 18px;
 }
 
-/* text side */
 .userInfo {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .name {
   margin: 0;
   font-weight: 600;
+  font-size: 14px;
 }
 
 .email {
@@ -73,74 +71,92 @@
   color: #6b7280;
 }
 
-
 .thickDivider {
   width: 100%;
-  height: 4px;   
-  background: #e5e7eb; 
+  height: 1px;
+  background: #060606;
   margin-bottom: 20px;
 }
 
-
-.cardContainer {
-  width: 100%;
+.menuList {
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 20px;
+  flex-direction: column;
+  margin-top: 10px;
 }
 
-/* square cards */
-.card {
-  flex: 1;
-  aspect-ratio: 1 / 1; 
-  background: #f7f0dc;
-  border-radius: 10px;
-
+.menuItem {
   display: flex;
-  justify-content: center;
+  justify-content: space-between; 
   align-items: center;
 
-  font-weight: 500;
-  font-size: 12px;
+  padding: 10px;
+  font-size: 13px;
+  color: #111;
   cursor: pointer;
+
+  border-bottom: 1px solid #f1f1f1;
   transition: 0.2s;
 }
 
-/* hover effect */
-.card:hover {
-  background: #d2c886;
+.menuItem:hover {
+  background: #fafafa;
 }
 
-@keyframes slideIn {
-  to {
-    transform: translateX(0);
-  }
+.arrow {
+  font-size: 16px;
+  color: #9ca3af; 
 }
 
 .bottomActions {
   margin-top: auto;
   width: 100%;
-  padding-bottom: 10px;
 }
 
-
-.createBtn,
 .logoutBtn {
   width: 100%;
   padding: 10px;
-  margin-bottom: 10px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-}
-
-.createBtn {
-  background: #059669;
+  background: var(--button-bg);
   color: white;
 }
 
-.logoutBtn {
-  background: #4f452b;
-  color: white;
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.roleChip {
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+/* Role colors */
+.admin {
+  background: #e0f2fe;
+  color: #075985;
+}
+
+.cashier {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.superAdmin {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+
+@keyframes slideIn {
+  to {
+    transform: translateX(0);
+  }
 }

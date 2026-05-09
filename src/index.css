@@ -15,3 +15,12 @@ html, body {
   padding-top: 84px;    
   padding: 84px 20px 20px 20px;
 }
+
+.main-content {
+  margin-left: 220px;
+  transition: margin-left 0.3s ease;
+}
+
+.main-content.collapsed {
+  margin-left: 70px;
+}

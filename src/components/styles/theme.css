@@ -1,0 +1,29 @@
+:root {
+  /* primary brand */
+  --primary-color: #4f452b;
+
+  --sidebar-bg: #1a5e67; 
+  /* sidebar hover accent */
+  --sidebar-accent:  #d4af37; 
+
+  /* avatar */
+  --avatar-bg: #0a8984;
+  --avatar-text: #ffffff;
+
+  /* button */
+  --button-bg: #07474a;
+  --button-text: #ffffff;
+
+  /* hover */
+  --button-hover: #3f3723;
+
+    /* focus (input / active highlight) */
+  --focus-color: #d4af37;
+
+  /* text */
+  --text-primary: #111;
+  --text-secondary: #6b7280;
+
+  /* dropdown accent */
+  --dropdown-hover: #0d5835;
+}

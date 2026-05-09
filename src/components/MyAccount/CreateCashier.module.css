@@ -39,15 +39,14 @@
 
 .formBox input:focus,
 .formBox select:focus {
-  border-color: #a79b0e;
-  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+  border-color: var(--focus-color);
 }
 
 .formBox button {
   padding: 12px;
   border: none;
   border-radius: 8px;
-  background: #bdab07;
+  background: var(--button-bg);
   color: white;
   font-weight: 600;
   cursor: pointer;
@@ -55,7 +54,7 @@
 }
 
 .formBox button:hover {
-  background: #a79b0e;
+  background: var(--button-hover);
 }
 
 .formBox button:disabled {

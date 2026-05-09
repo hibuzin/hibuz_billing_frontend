@@ -3,7 +3,6 @@
   color: #000000;
 }
 
-/* HEADER */
 .header {
   display: flex;
   justify-content: space-between;
@@ -13,44 +12,36 @@
   padding-bottom: 0.9rem;
 }
 
-.eyebrow {
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #8a867f;
-  margin-bottom: 4px;
-}
-
 .title {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 400;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
+  color: #1a1a1a;
 }
 
 .countBadge {
   font-size: 10px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #9a8666;
-  border: 1px solid #6f4f1e;
-  padding: 5px 12px;
-  border-radius: 1px;
+  color: #6b6760;
+  border: 1px solid #ddd9d3;
+  padding: 4px 12px;
+  border-radius: 20px;
   background: #faf9f7;
 }
 
-/* TABLE */
 .table {
   width: 100%;
   border-collapse: collapse;
 }
 
 .table thead th {
-  font-size: 10px;
-  letter-spacing: 0.15em;
+  font-size: 11px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #9c978f;
-  font-weight: 400;
-  padding: 0 12px 10px 0;
+  color: #a6a29b;
+  font-weight: 500;
+  padding: 0 16px 10px 0;
   text-align: left;
   border-bottom: 1px solid #ece9e4;
 }
@@ -58,24 +49,24 @@
 .table tbody tr {
   border-bottom: 1px solid #f3f1ed;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.18s ease;
 }
 
 .table tbody tr:hover {
-  background: #f7f5f2;
+  background: #faf9f7;
 }
 
 .table tbody td {
   font-size: 13px;
-  padding: 12px 12px 12px 0;
-  color: #5c5852;
+  padding: 13px 16px 13px 0;
+  color: #1a1a1a;
 }
 
-/* CELLS */
 .idCell {
   font-size: 11px;
-  color: #b5b1aa;
-  letter-spacing: 0.04em;
+  color: #c2beb7;
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
 }
 
 .nameCell {
@@ -85,133 +76,113 @@
 }
 
 .ptsCell {
-  text-align: right;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 14px;
-  font-weight: 500;
-  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   white-space: nowrap;
 }
 
+.ptsValue {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  font-weight: 500;
+}
+
 .ptsBar {
-  display: inline-block;
-  height: 3px;
-  background: #d6d2cc;
-  margin-left: 8px;
+  height: 2px;
+  background: #e0dcd6;
   border-radius: 2px;
 }
 
-/* MODAL */
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.35);
+  background: rgba(0, 0, 0, 0.28);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(4px);
 }
 
 .dialog {
   background: #ffffff;
-  border-radius: 14px;
+  border-radius: 2px;
   width: 420px;
   max-width: 95vw;
-  padding: 1.6rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  padding: 1.8rem;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.04),
+    0 12px 32px rgba(0, 0, 0, 0.08);
 }
 
-/* DIALOG HEADER */
 .dialogHeader {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
   margin-bottom: 1.2rem;
 }
 
 .dialogName {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 21px;
-  font-weight: 400;
-  letter-spacing: 0.03em;
+  font-size: 20px;
+  color: #1a1a1a;
 }
 
 .dialogId {
   font-size: 10px;
-  letter-spacing: 0.1em;
-  color: #b5b1aa;
-  margin-top: 3px;
+  color: #c2beb7;
 }
 
-/* CLOSE BUTTON */
 .closeBtn {
-  background: none;
-  border: 1px solid #e6e2dc;
-  color: #8a867f;
-  font-size: 12px;
-  cursor: pointer;
+  width: 34px;
+  height: 34px;
+
+  border: none;
+  outline: none;
+
   border-radius: 50%;
-  width: 28px;
-  height: 28px;
+
+  background: #f7f5f2;
+  color: #6b6760;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.18s ease,
+    color 0.2s ease;
 }
 
 .closeBtn:hover {
-  background: #f5f3f0;
+  background: #ece9e4;
+  color: #1a1a1a;
+
+  transform: rotate(90deg);
 }
 
-/* DIVIDER */
+.closeBtn:active {
+  transform: scale(0.92);
+}
+
 .divider {
-  border: none;
   border-top: 1px solid #ece9e4;
-  margin: 0 0 1.2rem;
+  margin-bottom: 1.3rem;
 }
 
-/* GRID */
 .dialogGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.1rem;
+  gap: 1.2rem;
 }
 
 .field label {
   font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #a6a29b;
-  display: block;
-  margin-bottom: 4px;
+  color: #b5b1aa;
 }
 
 .field p {
   font-size: 13px;
-  color: #1a1a1a;
-  word-break: break-word;
-}
-
-.full {
-  grid-column: 1 / -1;
-  padding-top: 1rem;
-  border-top: 1px solid #ece9e4;
-  margin-top: 0.5rem;
-}
-
-/* POINTS DISPLAY */
-.ptsDisplay {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 30px;
-  font-weight: 300;
-  line-height: 1;
-}
-
-.ptsLabel {
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #a6a29b;
-  margin-top: 3px;
 }
