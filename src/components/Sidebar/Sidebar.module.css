@@ -1,27 +1,47 @@
 .sidebar {
   width: 220px;
   height: calc(100vh - 64px);
+
   background: var(--sidebar-bg);
 
   position: fixed;
   top: 64px;
   left: 0;
 
-  overflow-y: auto;
   overflow-x: hidden;
+  overflow-y: auto;
 
-  transform: translateX(0);
-  transition: transform 0.3s ease;
+  scrollbar-width: thin; 
+  scrollbar-color: rgba(255,255,255,0.2) transparent;
+
+  will-change: width;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  z-index: 100;
 }
-.sidebar {
-  width: 220px;
+
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.35);
 }
 
 .menu {
   list-style: none;
   padding: 6px 0;
   margin: 0;
-  font-size: 12px;
+  font-size: var(--sidebar-font);
 }
 
 .item {
@@ -45,7 +65,7 @@
 }
 
 .icon {
-  font-size: 15px;
+  font-size: var(--sidebar-icon);
   display: flex;
   align-items: center;
   color: #ffffff;
@@ -118,7 +138,7 @@
 }
 
 .collapsed {
-  width: 70px;
+  width: 60px;
 }
 
 .collapsed .item {
@@ -127,14 +147,12 @@
   border-left: none;  
 }
 .collapsed .topBar {
-  justify-content: center;
-  padding-left: 0;
+  justify-content: flex;
+  padding-left: 14px;
 }
 
 .collapsed .menuItem {
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+  justify-content: flex;
 }
 
 .icon {

@@ -1,17 +1,13 @@
 import { useState } from "react";
-import styles from "./CreateSupplier.module.css";
-import Toast from "./Toast";
+import styles from "./CreateCustomers.module.css";
+import Toast from "../../components/Toast";
 
-function CreateSupplier() {
+function CreateCustomer() {
   const [form, setForm] = useState({
-    supplierName: "",
-    mobile: "",
-    gstNumber: "",
+    name: "",
+    phone: "",
     email: "",
     address: "",
-    city: "",
-    state: "",
-    pincode: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -50,7 +46,7 @@ function CreateSupplier() {
       setLoading(true);
 
       const res = await fetch(
-        "http://192.168.31.181:5000/api/supplier/add",
+        "http://192.168.31.181:5000/api/customer/customers",
         {
           method: "POST",
 
@@ -67,24 +63,20 @@ function CreateSupplier() {
 
       if (!res.ok) {
         throw new Error(
-          data.message || "Failed to create supplier"
+          data.message || "Failed to create customer"
         );
       }
 
       showToast(
-        data.message || "Supplier created successfully",
+        "Customer created successfully",
         "success"
       );
 
       setForm({
-        supplierName: "",
-        mobile: "",
-        gstNumber: "",
+        name: "",
+        phone: "",
         email: "",
         address: "",
-        city: "",
-        state: "",
-        pincode: "",
       });
 
     } catch (err) {
@@ -105,10 +97,10 @@ function CreateSupplier() {
         <div className={styles.card}>
 
           <div className={styles.header}>
-            <h2>Create Supplier</h2>
+            <h2>Create Customer</h2>
 
             <p>
-              Add supplier details
+              Add customer details to your system
             </p>
           </div>
 
@@ -119,43 +111,31 @@ function CreateSupplier() {
             <div className={styles.grid}>
 
               <div className={styles.field}>
-                <label>Supplier Name</label>
+                <label>Customer Name</label>
 
                 <input
                   type="text"
-                  name="supplierName"
-                  value={form.supplierName}
+                  name="name"
+                  value={form.name}
                   onChange={handleChange}
                   required
                 />
               </div>
 
               <div className={styles.field}>
-                <label>Mobile</label>
+                <label>Phone Number</label>
 
                 <input
                   type="text"
-                  name="mobile"
-                  value={form.mobile}
+                  name="phone"
+                  value={form.phone}
                   onChange={handleChange}
                   required
                 />
               </div>
 
               <div className={styles.field}>
-                <label>GST Number</label>
-
-                <input
-                  type="text"
-                  name="gstNumber"
-                  value={form.gstNumber}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className={styles.field}>
-                <label>Email</label>
+                <label>Email Address</label>
 
                 <input
                   type="email"
@@ -178,42 +158,6 @@ function CreateSupplier() {
                 />
               </div>
 
-              <div className={styles.field}>
-                <label>City</label>
-
-                <input
-                  type="text"
-                  name="city"
-                  value={form.city}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className={styles.field}>
-                <label>State</label>
-
-                <input
-                  type="text"
-                  name="state"
-                  value={form.state}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className={styles.field}>
-                <label>Pincode</label>
-
-                <input
-                  type="text"
-                  name="pincode"
-                  value={form.pincode}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
             </div>
 
             <button
@@ -223,7 +167,7 @@ function CreateSupplier() {
             >
               {loading
                 ? "Creating..."
-                : "Create Supplier"}
+                : "Create Customer"}
             </button>
 
           </form>
@@ -233,4 +177,4 @@ function CreateSupplier() {
   );
 }
 
-export default CreateSupplier;
+export default CreateCustomer;

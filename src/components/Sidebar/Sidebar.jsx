@@ -8,9 +8,23 @@ import { FaBars } from "react-icons/fa";
 import { useState, useEffect } from "react";
 
 
+  const getRoleFromToken = () => {
+  try {
+    const token = localStorage.getItem("token");
+    const payload = token.split(".")[1];
+    const decoded = JSON.parse(atob(payload));
+    return decoded.role;
+  } catch {
+    return null;
+  }
+};
+
+
 function Sidebar({ collapsed, setCollapsed, lang }) {
   const navigate = useNavigate();
   const [openMenu, setOpenMenu] = useState(null);
+  const role = getRoleFromToken();
+
 
   const menu = [
   { 
@@ -64,7 +78,8 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
   { 
     name: lang === "ta" ? "ஜிஎஸ்டி" : "GST", 
     path: "/gst", 
-    icon: <FaChartBar /> 
+    icon: <FaChartBar />,
+    onlyRole: "super_admin"
   },
 
   { 
@@ -92,7 +107,9 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
 
       <ul className={styles.menu}>
 
-        {menu.map((item, index) => (
+        {menu
+  .filter(item => !item.onlyRole || item.onlyRole === role)
+  .map((item, index) => (
   <div key={index}>
     
     {/* MAIN ITEM */}

@@ -1,5 +1,5 @@
 import styles from "./Onboarding.module.css";
-import Toast from "../components/Toast";
+import Toast from "./Toast";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -43,7 +43,6 @@ function Onboarding() {
     try {
       setLoading(true);
 
-      // change this URL later to your backend
       const res = await fetch("http://192.168.31.181:5000/api/onboarding", {
         method: "POST",
         headers: {

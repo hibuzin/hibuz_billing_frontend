@@ -17,7 +17,7 @@
   /* hover */
   --button-hover: #3f3723;
 
-    /* focus (input / active highlight) */
+  /* focus (input / active highlight) */
   --focus-color: #d4af37;
 
   /* text */
@@ -26,4 +26,12 @@
 
   /* dropdown accent */
   --dropdown-hover: #0d5835;
+
+  /* sidebar sizes */
+  --sidebar-font: 10px;
+  --sidebar-icon: 10px;
+
+  /* appbar control */
+  --admin-role: 15px
+
 }

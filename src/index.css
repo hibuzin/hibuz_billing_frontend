@@ -18,7 +18,10 @@ html, body {
 
 .main-content {
   margin-left: 220px;
-  transition: margin-left 0.3s ease;
+  padding: 84px 20px 20px 20px;
+
+  transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: margin-left;
 }
 
 .main-content.collapsed {

@@ -81,12 +81,6 @@ function AppBar({ lang, setLang }) {
               </div>
             )}
           </div>
-
-          <input
-            type="text"
-            placeholder={lang === "ta" ? "தேடு..." : "Search..."}
-            className={styles.search}
-          />
           <FiUser className={styles.icon} onClick={() => setOpen((p) => !p)} />
         </div>
       </div>
