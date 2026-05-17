@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./CreateAdmin.module.css";
 import Toast from "../../Toast";
+import { API } from "../../../constants/api";
 
 function CreateAdmin() {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ function CreateAdmin() {
 
     try {
       const res = await fetch(
-        "http://192.168.31.181:5000/api/auth/create-user",
+        API.createUser,
         {
           method: "POST",
           headers: {

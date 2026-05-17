@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 
 import Toast from "../../components/Toast";
+import { API } from "../../constants/api";
 
 function Product() {
   const [product, setProduct] =
@@ -48,7 +49,7 @@ function Product() {
         localStorage.getItem("token");
 
       const res = await fetch(
-        "http://192.168.31.181:5000/api/productadd/",
+        API.products,
         {
           method: "GET",
           headers: {
@@ -89,7 +90,7 @@ function Product() {
         localStorage.getItem("token");
 
       const res = await fetch(
-        "http://192.168.31.181:5000/api/category",
+        API.categories,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -124,7 +125,7 @@ function Product() {
         localStorage.getItem("token");
 
       const res = await fetch(
-        `http://192.168.31.181:5000/api/productadd/${id}`,
+        `${API.products}/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -238,7 +239,7 @@ function Product() {
       };
 
       const res = await fetch(
-        `http://192.168.31.181:5000/api/productadd/${editProduct._id}`,
+        `${API.products}/${editProduct._id}`,
         {
           method: "PUT",
 
@@ -319,113 +320,86 @@ function Product() {
 
       {/* PRODUCTS */}
 
-      <div className={styles.grid}>
-        {loading ? (
-          <div className={styles.loading}>
-            Loading...
-          </div>
-        ) : product.length === 0 ? (
-          <div className={styles.empty}>
-            No products found
-          </div>
-        ) : (
-          product.map((p) => (
-            <div
-              key={p._id}
-              className={styles.card}
-            >
+<div className={styles.tableWrapper}>
+  {loading ? (
+    <div className={styles.loading}>
+      Loading...
+    </div>
+  ) : product.length === 0 ? (
+    <div className={styles.empty}>
+      No products found
+    </div>
+  ) : (
+    <table className={styles.table}>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Name</th>
+          <th>Brand</th>
+          <th>Category</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {product.map((p, index) => (
+          <tr key={p._id}>
+            <td>{index + 1}</td>
+
+            <td className={styles.nameCell}>
+              {p.name}
+            </td>
+
+            <td>
+              {p.brand || "—"}
+            </td>
+
+            <td>
+              {p.categoryId?.name ||
+                "—"}
+            </td>
+
+            <td>
               <div
-                className={styles.cardTop}
+                className={
+                  styles.actions
+                }
               >
-                <div>
-                  <h3>{p.name}</h3>
-
-                  <span>
-                    {p.brand || "No Brand"}
-                  </span>
-                </div>
-
-                <div
+                <button
                   className={
-                    styles.actions
+                    styles.editBtn
+                  }
+                  onClick={() =>
+                    openEdit(p)
                   }
                 >
-                  <button
-                    className={
-                      styles.editBtn
-                    }
-                    onClick={() =>
-                      openEdit(p)
-                    }
-                  >
-                    <FaEdit />
-                  </button>
+                  <FaEdit />
+                </button>
 
-                  <button
-                    className={
-                      styles.deleteBtn
-                    }
-                    onClick={() =>
-                      handleDelete(
-                        p._id
-                      )
-                    }
-                    disabled={
-                      deleteLoading ===
+                <button
+                  className={
+                    styles.deleteBtn
+                  }
+                  onClick={() =>
+                    handleDelete(
                       p._id
-                    }
-                  >
-                    <FaTrash />
-                  </button>
-                </div>
+                    )
+                  }
+                  disabled={
+                    deleteLoading ===
+                    p._id
+                  }
+                >
+                  <FaTrash />
+                </button>
               </div>
-
-              <div className={styles.info}>
-                <div className={styles.row}>
-                  <span>Category</span>
-
-                  <strong>
-                    {p.categoryId?.name ||
-                      "N/A"}
-                  </strong>
-                </div>
-
-                <div className={styles.row}>
-                  <span>Flavor</span>
-
-                  <strong>
-                    {p.flavor?.join(
-                      ", "
-                    ) || "N/A"}
-                  </strong>
-                </div>
-
-                <div className={styles.row}>
-                  <span>Liters</span>
-
-                  <strong>
-                    {p.liters?.join(
-                      ", "
-                    ) || "N/A"}
-                  </strong>
-                </div>
-
-                <div className={styles.row}>
-                  <span>MRP</span>
-
-                  <strong>
-                    ₹{" "}
-                    {p.mrps?.join(
-                      ", ₹ "
-                    ) || "0"}
-                  </strong>
-                </div>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
+</div>
       {/* MODAL */}
 
       {showModal && editProduct && (

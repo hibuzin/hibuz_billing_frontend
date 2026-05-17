@@ -50,7 +50,9 @@ function MainLayout() {
 <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} lang={lang} />
       <div className={`main-content ${collapsed ? "collapsed" : ""}`}>
         <Routes>
-          <Route path="/" element={<Customers />} />
+           <Route path="/" element={<Home />} />
+  <Route path="/home" element={<Home />} />
+  <Route path="/customers" element={<Customers />} />
           <Route path="/home" element={<Home />} />
           <Route path="/customers" element={<Customers />} />
           <Route path="/products" element={<Products />} />

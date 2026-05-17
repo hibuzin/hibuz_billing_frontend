@@ -2,6 +2,7 @@ import styles from "./Register.module.css";
 import Toast from "./Toast";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { API } from "../constants/api";
 
 function Register() {
   const [name, setName] = useState("");
@@ -32,7 +33,7 @@ function Register() {
       setLoading(true);
 
       const res = await fetch(
-        "http://192.168.31.181:5000/api/auth/register-super-admin",
+       API.registerSuperAdmin,
         {
           method: "POST",
           headers: {

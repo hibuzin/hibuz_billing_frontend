@@ -3,6 +3,7 @@ import Select from "react-select";
 import { FaEdit } from "react-icons/fa";
 import styles from "./CreatePurchase.module.css";
 import Toast from "../../components/Toast";
+import { API } from "../../constants/api";
 
 function CreatePurchase() {
   const emptyItem = {
@@ -19,8 +20,10 @@ function CreatePurchase() {
   };
 
   const [form, setForm] = useState({
-    supplierId: "",
-  });
+  supplierId: "",
+  invoiceNo: "",
+  invoiceDate: "",
+});
 
   const [currentItem, setCurrentItem] =
     useState(emptyItem);
@@ -75,7 +78,7 @@ function CreatePurchase() {
   const fetchSuppliers = async () => {
     try {
       const res = await fetch(
-        "http://192.168.31.181:5000/api/supplier",
+        API.suppliers,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -107,7 +110,7 @@ function CreatePurchase() {
   const fetchProducts = async () => {
     try {
       const res = await fetch(
-        "http://192.168.31.181:5000/api/productadd/",
+        API.products,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -328,9 +331,11 @@ function CreatePurchase() {
       setLoading(true);
 
       const payload = {
-        supplierId: form.supplierId,
+  supplierId: form.supplierId,
+  invoiceNo: form.invoiceNo,
+  invoiceDate: form.invoiceDate,
 
-        items: billItems.map((item) => ({
+  items: billItems.map((item) => ({
           productId: item.productId,
           flavor: item.flavor,
           liters: item.liters,
@@ -351,7 +356,7 @@ function CreatePurchase() {
       };
 
       const res = await fetch(
-        "http://192.168.31.181:5000/api/purchase/purchase/",
+        API.purchase,
         {
           method: "POST",
 
@@ -381,8 +386,10 @@ function CreatePurchase() {
       );
 
       setForm({
-        supplierId: "",
-      });
+  supplierId: "",
+  invoiceNo: "",
+  invoiceDate: "",
+});
 
       setBillItems([]);
 
@@ -435,16 +442,36 @@ function CreatePurchase() {
                       Select Supplier
                     </option>
 
-                    {suppliers.map((s) => (
-                      <option
-                        key={s._id}
-                        value={s._id}
-                      >
-                        {s.name}
-                      </option>
-                    ))}
+                   {suppliers.map((s) => (
+  <option key={s._id} value={s._id}>{s.supplierName}</option>
+))}
                   </select>
                 </div>
+
+                <div className={styles.grid}>
+  <div className={styles.field}>
+    <label>Invoice No</label>
+
+    <input
+      type="text"
+      name="invoiceNo"
+      value={form.invoiceNo}
+      onChange={handleChange}
+      placeholder="Enter Invoice No"
+    />
+  </div>
+
+  <div className={styles.field}>
+    <label>Invoice Date</label>
+
+    <input
+      type="date"
+      name="invoiceDate"
+      value={form.invoiceDate}
+      onChange={handleChange}
+    />
+  </div>
+</div>
 
                 {/* PRODUCT CARD */}
                 <div className={styles.itemCard}>
@@ -979,15 +1006,11 @@ function CreatePurchase() {
     </option>
 
     {suppliers.map((s) => (
-      <option
-        key={s._id}
-        value={s._id}
-      >
-        {s.name}
-      </option>
-    ))}
+  <option key={s._id} value={s._id}>{s.supplierName}</option>
+))}
   </select>
 </div>
+
             <div className={styles.grid}>
               {/* PRODUCT */}
               <div

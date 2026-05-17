@@ -108,7 +108,6 @@
   -moz-appearance: textfield;
 }
 
-/* REACT SELECT */
 
 /* REACT SELECT */
 
@@ -197,6 +196,7 @@
   cursor: pointer;
   transition: 0.2s;
 }
+
 
 .addBtn:hover,
 .submitBtn:hover {
@@ -441,51 +441,17 @@
   border-radius: 20px;
 }
 
-/* RESPONSIVE */
-
-@media (max-width: 980px) {
-  .layout {
-    grid-template-columns: 1fr;
-  }
-
-  .right {
-    width: 100%;
-  }
-
-  .billItems {
-    max-height: unset;
-  }
-}
-
-@media (max-width: 600px) {
-  .container {
-    padding: 12px;
-  }
-
-  .form,
-  .header,
-  .billHeader,
-  .billFooter,
-  .billItem {
-    padding-left: 14px;
-    padding-right: 14px;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .billItem {
-    flex-direction: column;
-  }
-
-  .billRight {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .modal {
-    padding: 16px;
-  }
+.field input[type="date"],
+.field input[type="text"],
+.field input[type="number"],
+.field select {
+  width: 100%;
+  height: 44px;
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  padding: 0 14px;
+  font-size: 14px;
+  background: #fff;
+  outline: none;
+  transition: 0.2s;
 }

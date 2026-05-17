@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "./CreateSupplier.module.css";
 import Toast from "./Toast";
+import { API } from "../constants/api";
 
 function CreateSupplier() {
   const [form, setForm] = useState({
@@ -20,6 +21,8 @@ function CreateSupplier() {
     message: "",
     type: "",
   });
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,7 +53,7 @@ function CreateSupplier() {
       setLoading(true);
 
       const res = await fetch(
-        "http://192.168.31.181:5000/api/supplier/add",
+        API.createsupplier,
         {
           method: "POST",
 

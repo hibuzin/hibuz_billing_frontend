@@ -1,12 +1,16 @@
 import { useState, useEffect } from "react";
 import styles from "./CreateProduct.module.css";
 import Toast from "../../components/Toast";
+import { API } from "../../constants/api";
 
 function CreateProduct() {
- const [form, setForm] = useState({
+
+const [form, setForm] = useState({
   name: "",
   brand: "",
   categoryId: "",
+  hsnId: "",
+  gstRate: "",
   flavor: "",
   liters: "",
   mrps: "",
@@ -31,7 +35,7 @@ function CreateProduct() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("http://192.168.31.181:5000/api/category", {
+    fetch(API.categories, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -66,6 +70,8 @@ function CreateProduct() {
   name: form.name,
   brand: form.brand,
   categoryId: form.categoryId,
+  hsnId: form.hsnId,
+  gstRate: Number(form.gstRate),
 
   flavor: form.flavor
     .split(",")
@@ -84,7 +90,7 @@ function CreateProduct() {
 };
 
       const res = await fetch(
-        "http://192.168.31.181:5000/api/productadd/add",
+        API.createProduct,
         {
           method: "POST",
           headers: {
@@ -112,6 +118,8 @@ function CreateProduct() {
   name: "",
   brand: "",
   categoryId: "",
+  hsnId: "",
+  gstRate: "",
   flavor: "",
   liters: "",
   mrps: "",
@@ -176,11 +184,23 @@ function CreateProduct() {
                 <label>Category</label>
 
                 <select
-                  name="categoryId"
-                  value={form.categoryId}
-                  onChange={handleChange}
-                  required
-                >
+  name="categoryId"
+  value={form.categoryId}
+  onChange={(e) => {
+    const selectedCategory = categories.find(
+      (cat) => cat._id === e.target.value
+    );
+
+    setForm((prev) => ({
+      ...prev,
+      categoryId: e.target.value,
+      hsnId: selectedCategory?.hsnId || "",
+      gstRate:
+        selectedCategory?.gstRate || "",
+    }));
+  }}
+  required
+>
                   <option value="">
                     Select Category
                   </option>
@@ -197,7 +217,28 @@ function CreateProduct() {
               </div>
 
             </div>
+<div className={styles.field}>
+  <label>HSN ID</label>
 
+ <input
+  type="text"
+  name="hsnId"
+  value={form.hsnId}
+  onChange={handleChange}
+/>
+</div>
+
+<div className={styles.field}>
+  <label>GST Rate</label>
+
+  <input
+  type="number"
+  name="gstRate"
+  value={form.gstRate}
+  onChange={handleChange}
+/>
+
+</div>
             <div className={styles.section}>
   <div className={styles.sectionHeader}>
     <h3>Flavors</h3>

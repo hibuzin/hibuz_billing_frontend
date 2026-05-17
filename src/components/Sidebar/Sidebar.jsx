@@ -1,8 +1,9 @@
 import styles from "./Sidebar.module.css";
 import { useNavigate } from "react-router-dom";
-import { FaHome, FaUsers, FaBox, FaChartBar, FaTags } from "react-icons/fa";
+import { FaHome, FaUsers, FaBox, FaChartBar, FaTags, FaCog } from "react-icons/fa";
 import { MdPayments, MdInventory } from "react-icons/md";
-import { RiMoneyDollarCircleLine } from "react-icons/ri";
+import { RiMoneyDollarCircleLine ,} from "react-icons/ri";
+import { FaTruckLoading } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa";
 import { FaBars } from "react-icons/fa";
 import { useState, useEffect } from "react";
@@ -40,10 +41,36 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
   },
 
   { 
-    name: lang === "ta" ? "பொருட்கள்" : "PRODUCTS", 
-    path: "/products", 
-    icon: <FaBox /> 
-  },
+  name: lang === "ta" ? "பொருட்கள்" : "PRODUCTS",  
+  icon: <FaBox />,
+  children: [
+    { 
+      name: lang === "ta" ? "வகைகள்" : "Category", 
+      path: "/category" 
+    },
+
+    { 
+      name: lang === "ta" ? "பொருட்கள்" : "Product", 
+      path: "/product" 
+    },
+  ],
+},
+
+{ 
+  name: lang === "ta" ? "சப்ளையர்கள்" : "SUPPLIER", 
+  icon: <FaTruckLoading />,
+  children: [
+    { 
+      name: lang === "ta" ? "சப்ளையர்" : "Supplier", 
+      path: "/supplier" 
+    },
+
+    { 
+      name: lang === "ta" ? "கொள்முதல்" : "Purchase", 
+      path: "/purchase" 
+    },
+  ],
+},
 
   {
     name: lang === "ta" ? "விற்பனை" : "SALES",
@@ -92,6 +119,12 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
     name: lang === "ta" ? "சலுகைகள்" : "OFFERS", 
     path: "/offers", 
     icon: <FaTags /> 
+  },
+
+  { 
+    name: lang === "ta" ? "அமைப்புகள்" : "SETTINGS", 
+    path: "/offers", 
+    icon: <FaCog /> 
   },
 ];
 

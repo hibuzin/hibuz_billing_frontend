@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import styles from "./Admin.module.css";
+import { API } from "../../../constants/api";
 
 function Admin() {
   const [admins, setAdmins] = useState([]);
@@ -22,7 +23,7 @@ const [form, setForm] = useState({
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("http://192.168.31.181:5000/api/admins/", {
+   fetch(`${API.admins}/`,{
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -42,8 +43,7 @@ const [form, setForm] = useState({
   const token = localStorage.getItem("token");
 
   try {
-    const res = await fetch(
-      `http://192.168.31.181:5000/api/admins/${deleteAdmin._id}`,
+    const res = await fetch(`${API.admins}/${deleteAdmin._id}`,
       {
         method: "DELETE",
         headers: {
@@ -79,8 +79,7 @@ const [form, setForm] = useState({
   const token = localStorage.getItem("token");
 
   try {
-    const res = await fetch(
-      `http://192.168.31.181:5000/api/admins/${editAdmin._id}`,
+    const res = await fetch(`${API.admins}/${editAdmin._id}`,
       {
         method: "PUT",
         headers: {

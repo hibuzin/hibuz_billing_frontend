@@ -1,14 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Customers.module.css";
-import { FiPlus } from "react-icons/fi";
+import { FiPlus, FiSearch } from "react-icons/fi";
 import Toast from "../../components/Toast";
-import useKeyboard from "../../hooks/useKeyboard";
+import { API } from "../../constants/api";
 
 function Customers() {
 
   const [customers, setCustomers] = useState([]);
-
+  const [search, setSearch] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] =
   useState(false);
   const [selected, setSelected] = useState(null);
@@ -32,8 +32,12 @@ const [isEditing, setIsEditing] = useState(false);
   });
 
   useEffect(() => {
+  if (search.trim()) {
+    searchCustomers(search);
+  } else {
     fetchCustomers();
-  }, []);
+  }
+}, [search]);
 
   const showToast = (message, type = "success") => {
   setToast({ message, type });
@@ -46,7 +50,7 @@ const [isEditing, setIsEditing] = useState(false);
   const fetchCustomers = () => {
     const token = localStorage.getItem("token");
 
-    fetch("http://192.168.31.181:5000/api/customer/customers", {
+    fetch(API.customers, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -66,6 +70,34 @@ const [isEditing, setIsEditing] = useState(false);
       .catch((err) => console.error("FETCH ERROR:", err));
   };
 
+  const searchCustomers = async (query) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(
+      `${API.customerSearch}?q=${query}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(
+        data.message || "Failed to search customers"
+      );
+    }
+
+    setCustomers(data.data || []);
+
+  } catch (err) {
+    console.error("SEARCH ERROR:", err);
+  }
+};
+
   const openCustomer = (customer) => {
     setSelected(customer);
 
@@ -84,7 +116,7 @@ const [isEditing, setIsEditing] = useState(false);
       const token = localStorage.getItem("token");
 
       const res = await fetch(
-        `http://192.168.31.181:5000/api/customer/customers/${selected._id}`,
+        `${API.customers}/${selected._id}`,
         {
           method: "PUT",
           headers: {
@@ -130,7 +162,7 @@ const [isEditing, setIsEditing] = useState(false);
     const token = localStorage.getItem("token");
 
     const res = await fetch(
-      `http://192.168.31.181:5000/api/customer/customers/${selected._id}`,
+      `${API.customers}/${selected._id}`,
       {
         method: "DELETE",
         headers: {
@@ -167,47 +199,44 @@ const [isEditing, setIsEditing] = useState(false);
   }
 };
 
-useKeyboard([
-  {
-    key: "Escape",
-    action: () => {
-      setSelected(null);
-      setShowDeleteConfirm(false);
-    },
-  },
-
-  {
-    ctrl: true,
-    key: "s",
-    action: () => {
-      if (selected && isEditing) {
-        handleUpdate();
-      }
-    },
-  },
-]);
   return (
     <>
       <div className={styles.wrap}>
-        <div className={styles.header}>
-          <div>
-            <h1 className={styles.title}>Customers</h1>
-          </div>
+        <div className={styles.topSection}>
 
-          <div className={styles.headerRight}>
+  <h1 className={styles.title}>
+    Customers
+  </h1>
 
-  <span className={styles.countBadge}>
-    {customers.length} members
-  </span>
+  <div className={styles.searchRow}>
 
-  <button
-  className={styles.addBtn}
-  onClick={() => navigate("/create-customer")}
->
-  <FiPlus />
-</button>
+    <div className={styles.searchBox}>
 
-</div>
+      <FiSearch className={styles.searchIcon} />
+
+      <input
+        type="text"
+        placeholder="Search by name, phone or ID..."
+        value={search}
+        onChange={(e) =>
+          setSearch(e.target.value)
+        }
+        className={styles.searchInput}
+      />
+
+    </div>
+
+    <button
+      ref={addBtnRef}
+      className={styles.addBtn}
+      onClick={() =>
+        navigate("/create-customer")
+      }
+    >
+      <FiPlus />
+    </button>
+
+  </div>
         </div>
 
         <table className={styles.table}>

@@ -2,6 +2,7 @@ import styles from "./CreateCashier.module.css";
 import Toast from "../../Toast";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { API } from "../../../constants/api";
 
 function CreateUser() {
   const [name, setName] = useState("");
@@ -41,7 +42,7 @@ function CreateUser() {
       setLoading(true);
 
       const res = await fetch(
-        "http://192.168.31.181:5000/api/auth/create-user",
+        API.createUser,
         {
           method: "POST",
           headers: {
@@ -68,12 +69,10 @@ function CreateUser() {
         setMessage(data.message || "User created successfully");
         setMessageType("success");
 
-        // Reset form
         setName("");
         setEmail("");
         setPassword("");
 
-        // Redirect
         setTimeout(() => {
           navigate("/cashier");
         }, 1200);

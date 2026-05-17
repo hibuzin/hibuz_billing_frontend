@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 
 import Toast from "../../components/Toast";
+import { API } from "../../constants/api";
 
 function Category() {
   const [categories, setCategories] =
@@ -45,7 +46,7 @@ function Category() {
         localStorage.getItem("token");
 
       const res = await fetch(
-        "http://192.168.31.181:5000/api/category",
+        API.categories,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -89,7 +90,7 @@ function Category() {
         localStorage.getItem("token");
 
       const res = await fetch(
-        `http://192.168.31.181:5000/api/category/${id}`,
+        `${API.categories}/${id}`,
         {
           method: "DELETE",
 
@@ -171,7 +172,7 @@ function Category() {
         localStorage.getItem("token");
 
       const res = await fetch(
-        `http://192.168.31.181:5000/api/category/${editCategory._id}`,
+        `${API.categories}/${editCategory._id}`,
         {
           method: "PUT",
 
@@ -249,37 +250,39 @@ function Category() {
           }
         >
           <FaPlus />
-          Add Category
         </button>
       </div>
 
-      {/* LIST */}
+      {/* TABLE */}
 
-      <div className={styles.grid}>
-        {categories.map((cat) => (
-          <div
-            key={cat._id}
-            className={styles.card}
-          >
-            <div className={styles.top}>
-              <div>
-                <h3>{cat.name}</h3>
+<div className={styles.tableWrapper}>
+  <table className={styles.table}>
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Category Name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
 
-                <span
-                  className={
-                    styles.status
-                  }
-                >
-                  {cat.isActive
-                    ? "Active"
-                    : "Inactive"}
+    <tbody>
+      {categories.length > 0 ? (
+        categories.map((cat, index) => (
+          <tr key={cat._id}>
+            <td>{index + 1}</td>
+
+            <td>
+              <div className={styles.categoryCell}>
+
+                <span>
+                  {cat.name}
                 </span>
               </div>
+            </td>
 
+            <td>
               <div
-                className={
-                  styles.actions
-                }
+                className={styles.actions}
               >
                 <button
                   className={
@@ -309,10 +312,22 @@ function Category() {
                   <FaTrash />
                 </button>
               </div>
-            </div>
-          </div>
-        ))}
-      </div>
+            </td>
+          </tr>
+        ))
+      ) : (
+        <tr>
+          <td
+            colSpan="5"
+            className={styles.emptyRow}
+          >
+            No categories found
+          </td>
+        </tr>
+      )}
+    </tbody>
+  </table>
+</div>
 
       {/* EDIT MODAL */}
 

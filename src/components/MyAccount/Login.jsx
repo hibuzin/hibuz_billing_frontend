@@ -2,6 +2,7 @@ import styles from "./Login.module.css";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Toast from "../Toast";
+import { API } from "../../constants/api";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -37,6 +38,7 @@ function Login() {
     if (e.key === "Enter") handleLogin();
   };
 
+  //Login fetch 
   const handleLogin = async () => {
   if (!email) {
     showToast("Email is required", "error");
@@ -47,11 +49,9 @@ function Login() {
     showToast("Password is required", "error");
     return;
   }
-
   try {
     setLoading(true);
-
-    const res = await fetch("http://192.168.31.181:5000/api/auth/login", {
+    const res = await fetch(API.login, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),

@@ -1,8 +1,27 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import styles from "./CreateCustomers.module.css";
 import Toast from "../../components/Toast";
+import { API } from "../../constants/api";
 
 function CreateCustomer() {
+
+  const nameRef = useRef(null);
+const phoneRef = useRef(null);
+const emailRef = useRef(null);
+const addressRef = useRef(null);
+
+const handleEnter = (e, nextRef) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+
+    if (nextRef) {
+      nextRef.current.focus();
+    } else {
+      handleSubmit(e);
+    }
+  }
+};
+
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -46,7 +65,7 @@ function CreateCustomer() {
       setLoading(true);
 
       const res = await fetch(
-        "http://192.168.31.181:5000/api/customer/customers",
+        API.customers,
         {
           method: "POST",
 
@@ -114,35 +133,48 @@ function CreateCustomer() {
                 <label>Customer Name</label>
 
                 <input
-                  type="text"
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  required
-                />
+  ref={nameRef}
+  autoFocus
+  type="text"
+  name="name"
+  value={form.name}
+  onChange={handleChange}
+  onKeyDown={(e) =>
+    handleEnter(e, phoneRef)
+  }
+  required
+/>
               </div>
 
               <div className={styles.field}>
                 <label>Phone Number</label>
 
                 <input
-                  type="text"
-                  name="phone"
-                  value={form.phone}
-                  onChange={handleChange}
-                  required
-                />
+  ref={phoneRef}
+  type="text"
+  name="phone"
+  value={form.phone}
+  onChange={handleChange}
+  onKeyDown={(e) =>
+    handleEnter(e, emailRef)
+  }
+  required
+/>
               </div>
 
               <div className={styles.field}>
                 <label>Email Address</label>
 
                 <input
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                />
+  ref={emailRef}
+  type="email"
+  name="email"
+  value={form.email}
+  onChange={handleChange}
+  onKeyDown={(e) =>
+    handleEnter(e, addressRef)
+  }
+/>
               </div>
 
               <div
@@ -151,11 +183,15 @@ function CreateCustomer() {
                 <label>Address</label>
 
                 <textarea
-                  name="address"
-                  value={form.address}
-                  onChange={handleChange}
-                  required
-                />
+  ref={addressRef}
+  name="address"
+  value={form.address}
+  onChange={handleChange}
+  onKeyDown={(e) =>
+    handleEnter(e, null)
+  }
+  required
+/>
               </div>
 
             </div>

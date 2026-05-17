@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "./CreateCategory.module.css";
 import Toast from "../../components/Toast";
+import { API } from "../../constants/api";
 
 function CreateCategory() {
   const [name, setName] = useState("");
@@ -24,7 +25,7 @@ function CreateCategory() {
       setLoading(true);
 
       const res = await fetch(
-        "http://192.168.31.181:5000/api/category",
+       API.categories,
         {
           method: "POST",
           headers: {

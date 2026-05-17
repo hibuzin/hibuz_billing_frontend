@@ -3,6 +3,7 @@ import styles from "./Cashier.module.css";
 import { useNavigate } from "react-router-dom";
 import UIState from "../../styles/UIState";
 import Toast from "../../Toast";
+import { API } from "../../../constants/api";
 
 function Cashier() {
   const [users, setUsers] = useState([]);
@@ -38,7 +39,7 @@ function Cashier() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("http://192.168.31.181:5000/api/cashier/", {
+    fetch(`${API.cashiers}/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -54,7 +55,7 @@ function Cashier() {
       })
       .then((data) => {
         if (data.success && Array.isArray(data.data)) {
-          setUsers(data.data); // no filter needed
+          setUsers(data.data); 
         } else {
           setUsers([]);
         }
@@ -84,7 +85,7 @@ function Cashier() {
 
     try {
       const res = await fetch(
-        `http://192.168.31.181:5000/api/users/${editUser._id}`,
+        `${API.users}/${editUser._id}`,
         {
           method: "PUT",
           headers: {
@@ -127,7 +128,7 @@ function Cashier() {
 
   try {
     const res = await fetch(
-      `http://192.168.31.181:5000/api/cashier/${deleteUser._id}`,
+      `${API.cashiers}/${deleteUser._id}`,
       {
         method: "DELETE",
         headers: {
@@ -146,7 +147,7 @@ function Cashier() {
   prev.filter((u) => u._id !== data.data.userId)
 );
 
-    setMessage("Cashier deleted successfully"); // optional update
+    setMessage("Cashier deleted successfully"); 
     setMessageType("success");
 
     setDeleteUser(null);

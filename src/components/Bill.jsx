@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import styles from "./Bill.module.css";
 import Toast from "./Toast";
+import { API } from "../constants/api";
 
 function Bill() {
   const [code, setCode] = useState("");
@@ -64,6 +65,7 @@ function Bill() {
     );
   };
 
+  //Bill
   const generateBill = async () => {
     if (codes.length === 0) {
       showToast(
@@ -78,7 +80,7 @@ function Bill() {
       setBill(null);
 
       const res = await fetch(
-        "http://192.168.31.181:5000/api/bill",
+        API.bill,
         {
           method: "POST",
           headers: {

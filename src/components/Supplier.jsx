@@ -7,8 +7,12 @@ import {
   FaEdit,
 } from "react-icons/fa";
 import Toast from "./Toast";
+import { API } from "../constants/api";
 
 function Supplier() {
+
+  const [selectedSupplier, setSelectedSupplier] =
+  useState(null);
   const [suppliers, setSuppliers] =
     useState([]);
 
@@ -68,7 +72,7 @@ function Supplier() {
         localStorage.getItem("token");
 
       const res = await fetch(
-        "http://192.168.31.181:5000/api/supplier",
+        API.suppliers,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -108,7 +112,7 @@ function Supplier() {
         localStorage.getItem("token");
 
       const res = await fetch(
-        `http://192.168.31.181:5000/api/supplier/${selectedDeleteId}`,
+        `${API.suppliers}/${selectedDeleteId}`,
         {
           method: "DELETE",
 
@@ -198,7 +202,7 @@ function Supplier() {
         localStorage.getItem("token");
 
       const res = await fetch(
-        `http://192.168.31.181:5000/api/supplier/${editSupplier._id}`,
+        fetch(`${API.suppliers}/${editSupplier._id}`),
         {
           method: "PUT",
 
@@ -293,63 +297,75 @@ function Supplier() {
         </button>
       </div>
 
-      <div className={styles.grid}>
-        {suppliers.map((sup) => (
-          <div
-            key={sup._id}
-            className={styles.card}
+      <div className={styles.tableWrapper}>
+  <table className={styles.table}>
+    <thead>
+  <tr>
+    <th>No</th>
+    <th>Supplier Name</th>
+    <th>GST No</th>
+    <th>Mobile</th>
+    <th>Actions</th>
+  </tr>
+</thead>
+
+<tbody>
+  {suppliers.map((sup, index) => (
+    <tr
+      key={sup._id}
+      onClick={() =>
+        setSelectedSupplier(sup)
+      }
+      className={styles.tableRow}
+    >
+      <td>{index + 1}</td>
+
+      <td className={styles.nameCell}>
+        {sup.supplierName}
+      </td>
+
+      <td>{sup.gstNumber}</td>
+
+      <td>{sup.mobile}</td>
+
+      <td>
+        <div
+          className={styles.actionBtns}
+          onClick={(e) =>
+            e.stopPropagation()
+          }
+        >
+          <button
+            className={styles.editBtn}
+            onClick={() =>
+              openEditModal(sup)
+            }
           >
-            <div className={styles.top}>
+            <FaEdit />
+          </button>
 
-              <div>
-                <h3>
-                  {sup.supplierName}
-                </h3>
+          <button
+            className={styles.deleteBtn}
+            onClick={() =>
+              openDeleteConfirm(
+                sup._id
+              )
+            }
+            disabled={
+              loadingId === sup._id
+            }
+          >
+            <FaTrash />
+          </button>
+        </div>
+      </td>
+    </tr>
+  ))}
+</tbody>
+  </table>
+</div>
 
-                <p>{sup.mobile}</p>
 
-                <span>
-                  {sup.address}
-                </span>
-              </div>
-
-              <div
-                className={
-                  styles.actionBtns
-                }
-              >
-                <button
-                  className={
-                    styles.editBtn
-                  }
-                  onClick={() =>
-                    openEditModal(sup)
-                  }
-                >
-                  <FaEdit />
-                </button>
-
-                <button
-                  className={
-                    styles.deleteBtn
-                  }
-                  onClick={() =>
-                    openDeleteConfirm(
-                      sup._id
-                    )
-                  }
-                  disabled={
-                    loadingId === sup._id
-                  }
-                >
-                  <FaTrash />
-                </button>
-              </div>
-
-            </div>
-          </div>
-        ))}
-      </div>
 
       {showEditModal && (
         <div
