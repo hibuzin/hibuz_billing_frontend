@@ -1,400 +1,19 @@
+/* PAGE WRAPPER → FULL PAGE SCROLL */
 .wrap {
-  padding: 6px 0;
-  color: #000000;
-}
-
-.header {
+  padding: 20px;
+  min-height: 100vh;
+  background-color: #ffffff;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 1.8rem;
-  border-bottom: 1px solid #ece9e4;
-  padding-bottom: 0.9rem;
+  flex-direction: column;
+border-radius: 8px;
+  font-family: system-ui, -apple-system, Segoe UI;
+  overflow-y: auto;   
+  overflow-x: hidden;
 }
 
-.title {
-  font-size: 22px;
-  font-weight: 400;
-  letter-spacing: 0.05em;
-  color: #1a1a1a;
-}
 
-.countBadge {
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #6b6760;
-  border: 1px solid #ddd9d3;
-  padding: 4px 12px;
-  border-radius: 20px;
-  background: #faf9f7;
-}
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table thead th {
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #a6a29b;
-  font-weight: 500;
-  padding: 0 16px 10px 0;
-  text-align: left;
-  border-bottom: 1px solid #ece9e4;
-}
-
-.table tbody tr {
-  border-bottom: 1px solid #f3f1ed;
-  cursor: pointer;
-  transition: background 0.18s ease;
-}
-
-.table tbody tr:hover {
-  background: #faf9f7;
-}
-
-.table tbody td {
-  font-size: 13px;
-  padding: 13px 16px 13px 0;
-  color: #1a1a1a;
-}
-
-.idCell {
-  font-size: 11px;
-  color: #c2beb7;
-  letter-spacing: 0.05em;
-  font-variant-numeric: tabular-nums;
-}
-
-.nameCell {
-  font-size: 13px;
-  font-weight: 500;
-  color: #1a1a1a;
-}
-
-.ptsCell {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  white-space: nowrap;
-}
-
-.ptsValue {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 15px;
-  font-weight: 500;
-}
-
-.ptsBar {
-  height: 2px;
-  background: #e0dcd6;
-  border-radius: 2px;
-}
-
-.overlay {
-  position: fixed;
-  inset: 0;
-
-  z-index: 99999;
-
-  background: rgba(15, 15, 15, 0.45);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 24px;
-
-  backdrop-filter: blur(8px);
-
-  overflow-y: auto;
-}
-
-.dialog {
-  width: 760px;
-  max-width: 100%;
-
-  max-height: 88vh;
-  overflow-y: auto;
-
-  background: #ffffff;
-
-  border-radius: 24px;
-
-  padding: 28px;
-
-  box-shadow:
-    0 20px 60px rgba(0,0,0,0.18),
-    0 2px 10px rgba(0,0,0,0.06);
-
-  animation: popup 0.18s ease;
-}
-
-.dialogHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-
-  gap: 16px;
-
-  margin-bottom: 18px;
-}
-
-.dialogName {
-  font-size: 20px;
-  color: #1a1a1a;
-}
-
-.dialogId {
-  font-size: 10px;
-  color: #c2beb7;
-}
-
-.closeBtn {
-  width: 34px;
-  height: 34px;
-
-  border: none;
-  outline: none;
-
-  border-radius: 50%;
-
-  background: #f7f5f2;
-  color: #6b6760;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    transform 0.18s ease,
-    color 0.2s ease;
-}
-
-.closeBtn:hover {
-  background: #ece9e4;
-  color: #1a1a1a;
-
-  transform: rotate(90deg);
-}
-
-.closeBtn:active {
-  transform: scale(0.92);
-}
-
-.divider {
-  border-top: 1px solid #ece9e4;
-  margin-bottom: 1.3rem;
-}
-
-.dialogGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-
-  gap: 20px;
-}
-
-.field label {
-  font-size: 10px;
-  color: #b5b1aa;
-}
-
-.field p {
-  font-size: 13px;
-}
-
-.field input,
-.field textarea {
-  width: 100%;
-  padding: 10px;
-
-  border: 1px solid #ddd;
-  border-radius: 8px;
-
-  background: #f8f8f8;
-  color: #1a1a1a;
-
-  outline: none;
-  margin-top: 6px;
-
-  font-size: 13px;
-}
-
-.field textarea {
-  min-height: 80px;
-  resize: none;
-}
-
-.field input:focus,
-.field textarea:focus {
-  border-color: #d4af37;
-  background: #ffffff;
-}
-
-.updateBtn {
-  width: 100%;
-  margin-top: 20px;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  background: #d4af37;
-  color: black;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.updateBtn:hover {
-  opacity: 0.9;
-}
-
-.deleteBtn {
-  padding: 9px 16px;
-  border: none;
-  border-radius: 10px;
-
-  background: #e53935;
-  color: white;
-
-  font-weight: 700;
-  cursor: pointer;
-
-  transition: 0.2s;
-}
-
-.actionBtns {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.deleteBtn:hover {
-  opacity: 0.9;
-}
-
-.headerRight {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.addBtn {
-  width: 38px;
-  height: 38px;
-
-  border: none;
-  border-radius: 12px;
-
-  background: #1a1a1a;
-  color: white;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  cursor: pointer;
-
-  font-size: 18px;
-
-  transition: all 0.2s ease;
-}
-
-.addBtn:hover {
-  transform: scale(1.05);
-  background: #000;
-}
-
-@keyframes popup {
-  from {
-    opacity: 0;
-    transform: scale(0.96) translateY(8px);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-.confirmOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999999;
-  backdrop-filter: blur(6px);
-}
-
-.confirmBox {
-  width: 360px;
-  background: white;
-  border-radius: 20px;
-  padding: 24px;
-  box-shadow:
-    0 20px 50px rgba(0,0,0,0.18);
-  animation: popup 0.2s ease;
-}
-
-.confirmBox h3 {
-  margin: 0;
-  font-size: 20px;
-  color: #111827;
-}
-
-.confirmBox p {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #6b7280;
-}
-
-.confirmActions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 24px;
-}
-
-.cancelBtn {
-  border: none;
-  background: #f3f4f6;
-  color: #111827;
-  padding: 10px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.confirmDeleteBtn {
-  border: none;
-  background: #dc2626;
-  color: white;
-  padding: 10px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.activeRow {
-  background: #f3f3f3;
-  outline: 2px solid #000;
-}
-
-tbody tr {
-  cursor: pointer;
-}
-
-tbody tr:focus {
-  outline: none;
-}
-
+/* TOP SECTION */
 .topSection {
   display: flex;
   flex-direction: column;
@@ -402,6 +21,13 @@ tbody tr:focus {
   margin-bottom: 24px;
 }
 
+.title {
+  font-size: 22px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+/* SEARCH ROW */
 .searchRow {
   display: flex;
   align-items: center;
@@ -424,19 +50,285 @@ tbody tr:focus {
 }
 
 .searchInput {
-  width: 30%;
-  height:42px;
-  border: 1px solid #2e3030;
+  width: 100%;   
+  height: 42px;
+
+  border: 1px solid #e5e7eb;
   border-radius: 10px;
+
   padding: 0 18px 0 48px;
+
   background: #ffffff;
   font-size: 13px;
+
   outline: none;
   transition: 0.2s ease;
-  box-sizing: border-box;
 }
 
 .searchInput:focus {
   border-color: #111827;
   box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.05);
+}
+
+/* ADD BUTTON */
+.addBtn {
+  width: 42px;
+  height: 42px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #111827;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  font-size: 18px;
+
+  transition: 0.2s ease;
+}
+
+.addBtn:hover {
+  transform: scale(1.05);
+}
+
+/* TABLE WRAPPER (NO SCROLL INSIDE) */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+/* HEADER */
+.table thead th {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+
+  color: #9ca3af;
+  font-weight: 600;
+
+  padding: 12px;
+  text-align: left;
+
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* ROW */
+.table tbody tr {
+  border-bottom: 1px solid #f3f4f6;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.table tbody tr:hover {
+  background: #fafafa;
+}
+
+/* CELL */
+.table tbody td {
+  padding: 14px 12px;
+  font-size: 13px;
+  color: #111827;
+}
+
+/* CUSTOMER ID */
+.idCell {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+/* NAME */
+.nameCell {
+  font-weight: 500;
+}
+
+/* POINTS */
+.ptsCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ptsValue {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.ptsBar {
+  height: 3px;
+  background: #d1d5db;
+  border-radius: 2px;
+}
+
+/* OVERLAY (DETAIL POPUP) */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(6px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* DIALOG */
+.dialog {
+  width: 760px;
+  max-width: 100%;
+  max-height: 90vh;
+
+  background: white;
+  border-radius: 20px;
+
+  padding: 24px;
+
+  overflow-y: auto;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+}
+
+/* HEADER */
+.dialogHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.dialogName {
+  font-size: 20px;
+}
+
+.dialogId {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+/* ACTION BUTTONS */
+.actionBtns {
+  display: flex;
+  gap: 10px;
+}
+
+.editBtn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  background: #f3f4f6;
+  cursor: pointer;
+}
+
+.deleteBtn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  background: #dc2626;
+  color: white;
+  cursor: pointer;
+}
+
+/* GRID */
+.dialogGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+/* FIELD */
+.field label {
+  font-size: 10px;
+  color: #9ca3af;
+}
+
+.field p {
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+/* INPUT */
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #f9fafb;
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+.field textarea {
+  min-height: 80px;
+  resize: none;
+}
+
+/* SAVE */
+.updateBtn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #111827;
+  color: white;
+
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* CONFIRM BOX */
+.confirmOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirmBox {
+  width: 360px;
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.confirmActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.cancelBtn {
+  background: #f3f4f6;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.confirmDeleteBtn {
+  background: #dc2626;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
 }

@@ -1,0 +1,144 @@
+.wrap {
+  padding: 2rem 1.5rem;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 500;
+  color: #111827;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 4px 0 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0;
+  background: #e5e7eb;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 0.5px solid #e5e7eb;
+}
+
+.panel {
+  background: #ffffff;
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.panel:first-child {
+  border-radius: 14px 0 0 14px;
+}
+
+.panel:last-child {
+  border-radius: 0 14px 14px 0;
+}
+
+.iconRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.adminIcon {
+  background: #eeedfe;
+  color: #534ab7;
+}
+
+.cashierIcon {
+  background: #e1f5ee;
+  color: #0f6e56;
+}
+
+.badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.03em;
+}
+
+.adminBadge {
+  background: #eeedfe;
+  color: #3c3489;
+}
+
+.cashierBadge {
+  background: #e1f5ee;
+  color: #085041;
+}
+
+.panelTitle {
+  font-size: 18px;
+  font-weight: 500;
+  color: #111827;
+  margin: 0;
+}
+
+.desc {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 6px 0 0;
+  line-height: 1.6;
+}
+
+.divider {
+  height: 0.5px;
+  background: #e5e7eb;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stat {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.stat span {
+  font-weight: 500;
+  color: #111827;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 0.5px solid #d1d5db;
+  background: transparent;
+  color: #111827;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn:hover {
+  background: #f9fafb;
+}

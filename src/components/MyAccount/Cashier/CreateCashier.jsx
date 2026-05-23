@@ -4,86 +4,131 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { API } from "../../../constants/api";
 
-function CreateUser() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+function CreateCashier() {
 
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+  });
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [message, setMessage] =
+    useState("");
+
+  const [messageType, setMessageType] =
+    useState("");
 
   const navigate = useNavigate();
 
   useEffect(() => {
     if (message) {
-      const timer = setTimeout(() => setMessage(""), 2500);
+      const timer = setTimeout(() => {
+        setMessage("");
+      }, 2500);
+
       return () => clearTimeout(timer);
     }
   }, [message]);
 
-  const handleCreateUser = async () => {
-   if (!name || !email || !password) {
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleCreateCashier = async () => {
+
+    if (
+      !form.name ||
+      !form.email ||
+      !form.phone ||
+      !form.password
+    ) {
       setMessage("Please fill all fields");
       setMessageType("error");
       return;
     }
 
-    const token = localStorage.getItem("token");
+    const token =
+      localStorage.getItem("token");
 
     if (!token) {
       setMessage("Please login first");
       setMessageType("error");
+
       navigate("/login");
       return;
     }
 
     try {
+
       setLoading(true);
 
       const res = await fetch(
-        API.createUser,
+        "http://192.168.31.181:5000/api/super-admin/create-user",
         {
           method: "POST",
+
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type":
+              "application/json",
+
             Authorization: `Bearer ${token}`,
           },
-         body: JSON.stringify({
-  name,
-  email,
-  password,
-  role: "cashier", 
-}),
+
+          body: JSON.stringify({
+            name: form.name,
+            email: form.email,
+            phone: form.phone,
+            password: form.password,
+            role: "cashier",
+          }),
         }
       );
 
-      let data;
-      try {
-        data = await res.json();
-      } catch {
-        throw new Error("Invalid JSON response");
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(
+          data.message ||
+            "Failed to create cashier"
+        );
       }
 
-      if (res.ok && data.success) {
-        setMessage(data.message || "User created successfully");
-        setMessageType("success");
+      setMessage(
+        data.message ||
+          "Cashier created successfully"
+      );
 
-        setName("");
-        setEmail("");
-        setPassword("");
+      setMessageType("success");
 
-        setTimeout(() => {
-          navigate("/cashier");
-        }, 1200);
-      } else {
-        setMessage(data.message || "Failed to create user");
-        setMessageType("error");
-      }
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        password: "",
+      });
+
+      setTimeout(() => {
+        navigate("/cashier");
+      }, 1200);
+
     } catch (error) {
-      console.error("Create User Error:", error);
-      setMessage("Server error or CORS issue");
+
+      console.log(error);
+
+      setMessage(
+        error.message ||
+          "Server error"
+      );
+
       setMessageType("error");
+
     } finally {
       setLoading(false);
     }
@@ -91,38 +136,60 @@ function CreateUser() {
 
   return (
     <div className={styles.container}>
-      <Toast message={message} type={messageType} />
+
+      <Toast
+        message={message}
+        type={messageType}
+      />
 
       <div className={styles.formBox}>
+
         <h1>CREATE CASHIER</h1>
 
         <input
           type="text"
+          name="name"
           placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={form.name}
+          onChange={handleChange}
         />
 
         <input
           type="email"
+          name="email"
           placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={form.email}
+          onChange={handleChange}
+        />
+
+        <input
+          type="text"
+          name="phone"
+          placeholder="Phone Number"
+          value={form.phone}
+          onChange={handleChange}
         />
 
         <input
           type="password"
+          name="password"
           placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={form.password}
+          onChange={handleChange}
         />
 
-        <button onClick={handleCreateUser} disabled={loading}>
-          {loading ? "Creating..." : "CREATE CASHIER"}
+        <button
+          onClick={handleCreateCashier}
+          disabled={loading}
+        >
+          {loading
+            ? "Creating..."
+            : "CREATE CASHIER"}
         </button>
+
       </div>
     </div>
   );
 }
 
-export default CreateUser;
+export default CreateCashier;

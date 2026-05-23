@@ -2,16 +2,18 @@ import styles from "./Onboarding.module.css";
 import Toast from "./Toast";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import AppBar from "./AppBar/AppBar";
+import { FaShieldAlt } from "react-icons/fa";
+import { MdVerified } from "react-icons/md";
 
 function Onboarding() {
+  const [lang, setLang] = useState("en");
+
   const [form, setForm] = useState({
-    name: "",
-    email: "",
-    company: "",
-    phone: "",
-    location: "",
-    address: "",
-    gst: "",
+    CompanyName: "",
+    CompanyPhone: "",
+    CompanyEmail: "",
+    password: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -28,14 +30,15 @@ function Onboarding() {
   }, [message]);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async () => {
-    const { name, email, company, phone, location } = form;
+    const { CompanyName, CompanyPhone, CompanyEmail, password } = form;
 
-    if (!name || !email || !company || !phone || !location) {
-      setMessage("Please fill required fields");
+    if (!CompanyName || !CompanyPhone || !CompanyEmail || !password) {
+      setMessage("Please fill all fields");
       setType("error");
       return;
     }
@@ -43,29 +46,30 @@ function Onboarding() {
     try {
       setLoading(true);
 
-      const res = await fetch("http://192.168.31.181:5000/api/onboarding", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
+      const res = await fetch(
+        "http://192.168.31.181:5000/api/auth/register-super-admin",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        }
+      );
 
       const data = await res.json();
 
       if (res.ok && data.success) {
-        setMessage("Onboarding completed");
+        setMessage(data.message || "Setup completed");
         setType("success");
 
-        setTimeout(() => {
-          navigate("/home");
-        }, 1200);
+        localStorage.setItem("user", JSON.stringify(data.data));
+        localStorage.setItem("isLoggedIn", "true");
+
+        setTimeout(() => navigate("/home"), 1200);
       } else {
         setMessage(data.message || "Failed");
         setType("error");
       }
     } catch (err) {
-      console.error(err);
       setMessage("Server error");
       setType("error");
     } finally {
@@ -74,34 +78,102 @@ function Onboarding() {
   };
 
   return (
-    <div className={styles.container}>
-      <Toast message={message} type={type} />
+    <>
+      <AppBar lang={lang} setLang={setLang} />
 
-      <div className={styles.card}>
-        <h1>Welcome </h1>
-        <p className={styles.subtitle}>Let’s set up your account</p>
+      <div className={styles.container}>
+        <Toast message={message} type={type} />
 
-        <div className={styles.grid}>
-          <input name="name" placeholder="Full Name" onChange={handleChange} />
-          <input name="email" placeholder="Email" onChange={handleChange} />
-          <input name="company" placeholder="Company Name" onChange={handleChange} />
-          <input name="phone" placeholder="Phone Number" onChange={handleChange} />
-          <input name="location" placeholder="Location" onChange={handleChange} />
-          <input name="gst" placeholder="GST Number (optional)" onChange={handleChange} />
+        <div className={styles.wrapper}>
+
+          {/* LEFT */}
+          <div className={styles.left}>
+            <div className={styles.brand}>
+              <span className={styles.orange}>hibuz</span>
+              <span className={styles.dark}>Billing</span>
+            </div>
+
+            <h1>Welcome 👋 to</h1>
+            <h2>Our Billing</h2>
+
+            <p>Simple billing & accounting software for your business.</p>
+
+            <div className={styles.badgeRow}>
+              <div className={styles.badge}>
+                <FaShieldAlt className={styles.badgeIcon} />
+                <span>100% Secure</span>
+              </div>
+              <div className={styles.badge}>
+                <MdVerified className={styles.badgeIcon} />
+                <span>ISO Certified</span>
+              </div>
+            </div>
+          </div>
+
+          {/* DIVIDER */}
+          <div className={styles.dividerWrap}>
+            <div className={styles.dividerLine} />
+          </div>
+
+          {/* RIGHT */}
+          <div className={styles.right}>
+            <div className={styles.formCard}>
+              <h3>Let's set up your business</h3>
+              <p className={styles.topText}>Fill your basic details</p>
+
+              <div className={styles.field}>
+                <label>Business Name</label>
+                <input
+                  type="text"
+                  name="CompanyName"
+                  value={form.CompanyName}
+                  onChange={handleChange}
+                  placeholder="Enter business name"
+                />
+              </div>
+
+              <div className={styles.field}>
+                <label>Mobile Number</label>
+                <input
+                  type="text"
+                  name="CompanyPhone"
+                  value={form.CompanyPhone}
+                  onChange={handleChange}
+                  placeholder="Enter mobile number"
+                />
+              </div>
+
+              <div className={styles.field}>
+                <label>Email Address</label>
+                <input
+                  type="email"
+                  name="CompanyEmail"
+                  value={form.CompanyEmail}
+                  onChange={handleChange}
+                  placeholder="Enter email"
+                />
+              </div>
+
+              <div className={styles.field}>
+                <label>Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  placeholder="Enter password"
+                />
+              </div>
+
+              <button onClick={handleSubmit} disabled={loading}>
+                {loading ? "Setting up..." : "Finish Setup"}
+              </button>
+            </div>
+          </div>
+
         </div>
-
-        <textarea
-          name="address"
-          placeholder="Full Address"
-          onChange={handleChange}
-          className={styles.textarea}
-        />
-
-        <button onClick={handleSubmit} disabled={loading}>
-          {loading ? "Saving..." : "Finish Setup"}
-        </button>
       </div>
-    </div>
+    </>
   );
 }
 

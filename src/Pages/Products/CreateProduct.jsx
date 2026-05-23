@@ -5,16 +5,16 @@ import { API } from "../../constants/api";
 
 function CreateProduct() {
 
-const [form, setForm] = useState({
-  name: "",
-  brand: "",
-  categoryId: "",
-  hsnId: "",
-  gstRate: "",
-  flavor: "",
-  liters: "",
-  mrps: "",
-});
+  const [form, setForm] = useState({
+    name: "",
+    brand: "",
+    categoryId: "",
+    hsnId: "",
+    gstRate: "",
+    flavor: "",
+    liters: "",
+    mrps: "",
+  });
 
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -67,27 +67,27 @@ const [form, setForm] = useState({
       const token = localStorage.getItem("token");
 
       const payload = {
-  name: form.name,
-  brand: form.brand,
-  categoryId: form.categoryId,
-  hsnId: form.hsnId,
-  gstRate: Number(form.gstRate),
+        name: form.name,
+        brand: form.brand,
+        categoryId: form.categoryId,
+        hsnId: form.hsnId,
+        gstRate: Number(form.gstRate),
 
-  flavor: form.flavor
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean),
+        flavor: form.flavor
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean),
 
-  liters: form.liters
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean),
+        liters: form.liters
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean),
 
-  mrps: form.mrps
-    .split(",")
-    .map((item) => Number(item.trim()))
-    .filter((item) => !isNaN(item)),
-};
+        mrps: form.mrps
+          .split(",")
+          .map((item) => Number(item.trim()))
+          .filter((item) => !isNaN(item)),
+      };
 
       const res = await fetch(
         API.createProduct,
@@ -114,16 +114,16 @@ const [form, setForm] = useState({
         "success"
       );
 
-     setForm({
-  name: "",
-  brand: "",
-  categoryId: "",
-  hsnId: "",
-  gstRate: "",
-  flavor: "",
-  liters: "",
-  mrps: "",
-});
+      setForm({
+        name: "",
+        brand: "",
+        categoryId: "",
+        hsnId: "",
+        gstRate: "",
+        flavor: "",
+        liters: "",
+        mrps: "",
+      });
 
     } catch (err) {
       showToast(err.message, "error");
@@ -184,23 +184,23 @@ const [form, setForm] = useState({
                 <label>Category</label>
 
                 <select
-  name="categoryId"
-  value={form.categoryId}
-  onChange={(e) => {
-    const selectedCategory = categories.find(
-      (cat) => cat._id === e.target.value
-    );
+                  name="categoryId"
+                  value={form.categoryId}
+                  onChange={(e) => {
+                    const selectedCategory = categories.find(
+                      (cat) => cat._id === e.target.value
+                    );
 
-    setForm((prev) => ({
-      ...prev,
-      categoryId: e.target.value,
-      hsnId: selectedCategory?.hsnId || "",
-      gstRate:
-        selectedCategory?.gstRate || "",
-    }));
-  }}
-  required
->
+                    setForm((prev) => ({
+                      ...prev,
+                      categoryId: e.target.value,
+                      hsnId: selectedCategory?.hsnId || "",
+                      gstRate:
+                        selectedCategory?.gstRate || "",
+                    }));
+                  }}
+                  required
+                >
                   <option value="">
                     Select Category
                   </option>
@@ -217,72 +217,72 @@ const [form, setForm] = useState({
               </div>
 
             </div>
-<div className={styles.field}>
-  <label>HSN ID</label>
+            <div className={styles.field}>
+              <label>HSN ID</label>
 
- <input
-  type="text"
-  name="hsnId"
-  value={form.hsnId}
-  onChange={handleChange}
-/>
-</div>
+              <input
+                type="text"
+                name="hsnId"
+                value={form.hsnId}
+                onChange={handleChange}
+              />
+            </div>
 
-<div className={styles.field}>
-  <label>GST Rate</label>
+            <div className={styles.field}>
+              <label>GST Rate</label>
 
-  <input
-  type="number"
-  name="gstRate"
-  value={form.gstRate}
-  onChange={handleChange}
-/>
+              <input
+                type="number"
+                name="gstRate"
+                value={form.gstRate}
+                onChange={handleChange}
+              />
 
-</div>
+            </div>
             <div className={styles.section}>
-  <div className={styles.sectionHeader}>
-    <h3>Flavors</h3>
-  </div>
+              <div className={styles.sectionHeader}>
+                <h3>Flavors</h3>
+              </div>
 
-  <input
-    type="text"
-    name="flavor"
-    value={form.flavor}
-    onChange={handleChange}
-    className={styles.singleInput}
-    placeholder="mango, orange, cola"
-  />
-</div>
+              <input
+                type="text"
+                name="flavor"
+                value={form.flavor}
+                onChange={handleChange}
+                className={styles.singleInput}
+                placeholder="mango, orange, cola"
+              />
+            </div>
 
-           <div className={styles.section}>
-  <div className={styles.sectionHeader}>
-    <h3>Liters</h3>
-  </div>
+            <div className={styles.section}>
+              <div className={styles.sectionHeader}>
+                <h3>Liters</h3>
+              </div>
 
-  <input
-    type="text"
-    name="liters"
-    value={form.liters}
-    onChange={handleChange}
-    className={styles.singleInput}
-    placeholder="250ml, 500ml, 1L"
-  />
-</div>
+              <input
+                type="text"
+                name="liters"
+                value={form.liters}
+                onChange={handleChange}
+                className={styles.singleInput}
+                placeholder="250ml, 500ml, 1L"
+              />
+            </div>
 
-           <div className={styles.section}>
-  <div className={styles.sectionHeader}>
-    <h3>MRP Values</h3>
-  </div>
+            <div className={styles.section}>
+              <div className={styles.sectionHeader}>
+                <h3>MRP Values</h3>
+              </div>
 
-  <input
-    type="text"
-    name="mrps"
-    value={form.mrps}
-    onChange={handleChange}
-    className={styles.singleInput}
-    placeholder="20, 40, 60"
-  />
-</div>
+              <input
+                type="text"
+                name="mrps"
+                value={form.mrps}
+                onChange={handleChange}
+                className={styles.singleInput}
+                placeholder="20, 40, 60"
+              />
+            </div>
 
             <button
               type="submit"

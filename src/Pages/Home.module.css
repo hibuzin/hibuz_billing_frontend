@@ -1,35 +1,207 @@
 .page {
-  padding: 24px;
+    display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color:rgb(255,255,255);
+  border-radius: 8px;
+  font-family: system-ui, -apple-system, Segoe UI;
 }
 
-.topBar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+
+
+/* FIXED HEADER */
+.pageHeader {
+  flex-shrink: 0;
+
+  background: #ffffff;
+
+  position: sticky;
+  top: 0;
+  z-index: 20;
+
+  padding-bottom: 14px;
 }
 
-.title {
-  font-size: 16px;
+.pageHeader h1 {
+  margin: 0;
+
+  font-size: 20px;
+  font-weight: 500;
+
+  color: #1f2937;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+
+  background: #d7dce2;
+
+  margin-top: 12px;
+}
+
+/* THIS AREA ONLY SCROLLS */
+.pageContent {
+  flex: 1;
+  padding-top: 18px;
+}
+/* HEADER */
+.header {
+  font-size: 18px;
   font-weight: 600;
-  color: #0f172a;
+  color: #111827;
+  margin-bottom: 10px;
+}
+
+/* SECTION TITLE */
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin: 16px 0;
+}
+
+/* OVERVIEW */
+.overviewGrid {
+  display: flex;
+  gap: 16px;
+}
+
+.cardGreen,
+.cardRed,
+.cardGreay {
+  flex: 1;
+  padding: 16px;
+  border-radius: 12px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cardGreen {
+  background: linear-gradient(135deg, #ecfdf5, #ffffff);
+  border: 1px solid #bbf7d0;
+}
+
+.cardRed {
+  background: linear-gradient(135deg, #fef2f2, #ffffff);
+  border: 1px solid #fecaca;
+}
+
+.cardGreay{
+    background: linear-gradient(135deg, #e5f4ff, #fffcfc);
+  border: 1px solid #9e9999;
+}
+.cardLabel {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.amount {
+  font-size: 22px;
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+/* TABLE */
+.tableCard {
+  background: white;
+  margin-top: 18px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+
+.tableHeader {
+  padding: 14px;
+  font-weight: 600;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: left;
+  font-size: 12px;
+  padding: 10px;
+  color: #6b7280;
+  background: #f9fafb;
+}
+
+.table td {
+  padding: 14px 10px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.empty {
+  text-align: center;
+  padding: 40px;
+}
+
+.emptyBox p {
+  font-weight: 600;
   margin: 0;
 }
 
-.addBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  border: 0.5px solid #e2e8f0;
-  background: transparent;
-  color: #0f172a;
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+.emptyBox span {
+  font-size: 12px;
+  color: #6b7280;
 }
 
-.addBtn:hover {
-  background: #f1f5f9;
-  border-color: #cbd5e1;
-} 
+/* SALES CHART */
+.chartCard {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 16px;
+  border: 1px solid #f1f5f9;
+  margin-top: 16px;
+}
+
+/* Header row */
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+/* Title */
+.chartHeader h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+/* Dropdown */
+.chartHeader select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  font-size: 13px;
+  color: #111827;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover + focus effect */
+.chartHeader select:hover {
+  border-color: #ffffff;
+}
+
+.chartHeader select:focus {
+  border-color: #4f46e5;
+}
+
+/* Chart spacing fix */
+.chartCard .recharts-wrapper {
+  margin-top: 10px;
+}
+
+

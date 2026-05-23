@@ -1,4 +1,8 @@
-import { useState } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+} from "react";
 import styles from "./CreateCategory.module.css";
 import Toast from "../../components/Toast";
 import { API } from "../../constants/api";
@@ -9,7 +13,7 @@ function CreateCategory() {
 
   const [message, setMessage] = useState("");
   const [type, setType] = useState("");
-
+const inputRef = useRef(null);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -55,6 +59,14 @@ function CreateCategory() {
     }
   };
 
+  useEffect(() => {
+
+  if (inputRef.current) {
+    inputRef.current.focus();
+  }
+
+}, []);
+
   return (
     <div className={styles.page}>
       <Toast message={message} type={type} />
@@ -66,11 +78,14 @@ function CreateCategory() {
           <div className={styles.field}>
             <label>Category Name</label>
             <input
-              type="text"
-              placeholder="Enter category name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+  ref={inputRef}
+  type="text"
+  placeholder="Enter category name"
+  value={name}
+  onChange={(e) =>
+    setName(e.target.value)
+  }
+/>
           </div>
 
           <button

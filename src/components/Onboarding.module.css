@@ -1,62 +1,236 @@
 .container {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  background: #f5f7fb;
+  justify-content: center;
+  background: #f4f6fb;
+  padding: 40px 14px 14px;
 }
 
-.card {
-  width: 500px;
-  background: white;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+.wrapper {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  max-width: 1300px;
+  min-height: 420px;
+  border-radius: 8px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  min-height: 540px;
 }
 
-.card h1 {
-  margin-bottom: 5px;
+/* ─── LEFT ─────────────────────────────────── */
+
+.left {
+  flex: 1;
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 14px;
 }
 
-.subtitle {
+.brand {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.orange {
+  color: #f97316;
+}
+
+.dark {
+  color: #1e293b;
+}
+
+.left h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.left h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: -6px 0 0;
+}
+
+.left p {
   font-size: 14px;
-  color: #777;
-  margin-bottom: 20px;
+  color: #64748b;
+  line-height: 1.6;
+  max-width: 240px;
+  margin: 0;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+.badgeRow {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
 }
 
-.grid input {
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 100px;
+  padding: 7px 14px;
 }
 
-.textarea {
-  margin-top: 12px;
+.badge span {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0369a1;
+}
+
+.badgeIcon {
+  font-size: 15px;
+  color: #0284c7;
+}
+
+/* ─── DIVIDER ───────────────────────────────── */
+
+.dividerWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1px;
+  align-self: stretch;
+  padding: 5% 0;
+}
+
+.dividerLine {
+  width: 1px;
+  height: 120%;
+  background: #303031;
+  border-radius: 1px;
+}
+
+/* ─── RIGHT ─────────────────────────────────── */
+
+.right {
+  flex: 1;
+  padding: 48px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.formCard {
   width: 100%;
-  height: 70px;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
 }
 
-button {
-  margin-top: 15px;
+.formCard h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+.topText {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-bottom: 24px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.field input {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #1e293b;
+  background: #f8fafc;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  font-family: inherit;
+}
+
+.field input:focus {
+  border-color: #f97316;
+  background: #ffffff;
+}
+
+.field input::placeholder {
+  color: #cbd5e1;
+}
+
+.formCard button {
   width: 100%;
-  padding: 12px;
+  background: #f97316;
+  color: #ffffff;
   border: none;
   border-radius: 10px;
-  background: #6c63ff;
-  color: white;
+  padding: 12px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
+  font-family: inherit;
+  margin-top: 4px;
+  transition: background 0.2s, opacity 0.2s;
 }
 
-button:disabled {
-  background: #aaa;
+.formCard button:hover {
+  background: #ea6c0a;
+}
+
+.formCard button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ─── RESPONSIVE ────────────────────────────── */
+
+@media (max-width: 680px) {
+  .wrapper {
+    flex-direction: column;
+  }
+
+  .dividerWrap {
+    width: 90%;
+    height: 1px;
+    align-self: center;
+    padding: 0 5%;
+  }
+
+  .dividerLine {
+    width: 100%;
+    height: 1px;
+  }
+
+  .left {
+    padding: 36px 24px 24px;
+  }
+
+  .right {
+    padding: 24px 24px 36px;
+  }
 }

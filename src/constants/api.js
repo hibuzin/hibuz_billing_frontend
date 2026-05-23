@@ -7,7 +7,9 @@ export const API = {
   createUser: `${BASE_URL}/auth/create-user`,
   registerSuperAdmin: `${BASE_URL}/auth/register-super-admin`,
 
-  
+  //setup status
+  setstatus:`${BASE_URL}/auth/setup-status`,
+
   // users
   users: `${BASE_URL}/users`,
   admins: `${BASE_URL}/admins`,
@@ -34,7 +36,7 @@ products: `${BASE_URL}/productadd`,
 
 
 // purchase
-purchase: `${BASE_URL}/purchase/purchase`,
+purchase: `${BASE_URL}/purchase/`,
 createPurchase: `${BASE_URL}/purchase/purchase`,
 
 };

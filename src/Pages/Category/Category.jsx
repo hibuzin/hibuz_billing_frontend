@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styles from "./Category.module.css";
 import { useNavigate } from "react-router-dom";
 import {
@@ -13,6 +13,11 @@ import { API } from "../../constants/api";
 function Category() {
   const [categories, setCategories] =
     useState([]);
+
+    const [selectedIndex, setSelectedIndex] =
+  useState(0);
+
+const rowRefs = useRef([]);
 
   const [toast, setToast] =
     useState(null);
@@ -37,6 +42,80 @@ function Category() {
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  // AUTO FOCUS FIRST ROW
+useEffect(() => {
+  setSelectedIndex(0);
+}, [categories]);
+
+// KEYBOARD CONTROL
+useEffect(() => {
+
+  const handleKeyDown = (e) => {
+
+    // DOWN
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+
+      setSelectedIndex((prev) =>
+        prev === categories.length - 1
+          ? 0
+          : prev + 1
+      );
+    }
+
+    // UP
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+
+      setSelectedIndex((prev) =>
+        prev === 0
+          ? categories.length - 1
+          : prev - 1
+      );
+    }
+
+    // ENTER
+    if (e.key === "Enter") {
+
+      const current =
+        categories[selectedIndex];
+
+      if (!current) return;
+
+      openEditModal(current);
+    }
+  };
+
+  window.addEventListener(
+    "keydown",
+    handleKeyDown
+  );
+
+  return () => {
+    window.removeEventListener(
+      "keydown",
+      handleKeyDown
+    );
+  };
+
+}, [categories, selectedIndex]);
+
+// AUTO SCROLL
+useEffect(() => {
+
+  if (
+    rowRefs.current[selectedIndex]
+  ) {
+    rowRefs.current[
+      selectedIndex
+    ].scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+    });
+  }
+
+}, [selectedIndex]);
 
   // FETCH
 
@@ -268,7 +347,17 @@ function Category() {
     <tbody>
       {categories.length > 0 ? (
         categories.map((cat, index) => (
-          <tr key={cat._id}>
+          <tr
+  key={cat._id}
+  ref={(el) =>
+    (rowRefs.current[index] = el)
+  }
+  className={
+    selectedIndex === index
+      ? styles.activeRow
+      : ""
+  }
+>
             <td>{index + 1}</td>
 
             <td>
@@ -312,7 +401,7 @@ function Category() {
                   <FaTrash />
                 </button>
               </div>
-            </td>
+             </td>
           </tr>
         ))
       ) : (

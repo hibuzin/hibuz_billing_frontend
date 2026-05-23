@@ -8,13 +8,84 @@
   padding: 20px;
 }
 
+.securityBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  width: 100%;
+}
+
+.securityWrapper {
+  width: 100%;
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+
+  background: #f3f4f6;  
+  padding: 20px 32px;
+  border-radius: 8px;
+}
+
+.secureItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 10px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.secureIcon {
+  color: #1d72d8;
+  font-size: 18px;
+}
+
+.isoCircle {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #1d72d8;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 11px;
+  font-weight: 700;
+  color: #1d72d8;
+  font-family: serif;
+}
+
+.brand {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ff7a00;
+
+  margin-bottom: 10px;
+}
+
+
+.label {
+  font-size: 12px;
+  font-weight: 530;
+  color: #4f5765;
+
+  margin-top: 6px;
+  margin-bottom: -10px;
+}
+
+
 .formBox {
   width: 100%;
   max-width: 380px;
 
   background: #ffffff;
   padding: 32px;
-  border-radius: 14px;
+  border-radius: 10px;
 
   display: flex;
   flex-direction: column;
@@ -24,16 +95,17 @@
 }
 
 .formBox h1 {
-  text-align: center;
+  text-align: left;
   color: #0f172a;
-  font-size: 24px;
-  margin-bottom: 10px;
+  font-size: 20px;
+   margin: 0;  
   font-weight: 700;
 }
 
 .formBox input {
   padding: 12px 14px;
-  border-radius: 8px;
+  height: 34px;
+  border-radius: 2px;
   border: 1px solid #e2e8f0;
   background: #f8fafc;
 
@@ -50,8 +122,9 @@
 
 .formBox button {
   padding: 12px;
+  height: 34px;
   border: none;
-  border-radius: 8px;
+  border-radius: 2px;
 
   background: var(--button-bg);
   color: white;
@@ -66,12 +139,6 @@
 .formBox button:hover {
   background: var(--button-hover);
   transform: translateY(-1px);
-}
-
-.formBox button:disabled {
-  background: #94a3b8;
-  cursor: not-allowed;
-  transform: none;
 }
 
 .signupText {

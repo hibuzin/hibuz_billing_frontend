@@ -1,3 +1,4 @@
+/* RESET */
 * {
   margin: 0;
   padding: 0;
@@ -6,24 +7,33 @@
 
 html, body {
   width: 100%;
-  overflow-x: hidden;
+  height: 100%;
   font-family: Arial, sans-serif;
+  overflow-y: auto;
 }
 
-.main-content {
-  margin-left: 180px;
-  padding-top: 84px;    
-  padding: 84px 20px 20px 20px;
+/* ROOT BACKGROUND */
+#root {
+  min-height: 100vh;
+  background: rgb(240,241,243);
 }
 
+/* MAIN LAYOUT AREA (RIGHT SIDE CONTENT) */
 .main-content {
-  margin-left: 220px;
-  padding: 84px 20px 20px 20px;
+  margin-left: 220px;          /* sidebar space */
+  padding: 35px 10px 12px 20px; /* 👈 reduced side padding (fix gap) */
+
+  min-height: 100vh;
 
   transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: margin-left;
 }
 
+/* WHEN SIDEBAR COLLAPSED */
 .main-content.collapsed {
   margin-left: 70px;
+}
+
+/* OPTIONAL: SMOOTH SCROLL */
+html {
+  scroll-behavior: smooth;
 }

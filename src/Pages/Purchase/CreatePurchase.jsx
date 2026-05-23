@@ -169,39 +169,37 @@ function CreatePurchase() {
   };
 
   // FLAVOR OPTIONS
-  const getFlavorOptions = (
-    productId
-  ) => {
-    const product = products.find(
-      (p) => p._id === productId
-    );
+  const getFlavorOptions = (productId) => {
+  const product = products.find(
+    (p) => p._id === productId
+  );
 
-    if (!product) return [];
+  if (!product || !product.flavor)
+    return [];
 
-    return product.flavor.map((f) => ({
-      value: f,
-      label: f,
-    }));
-  };
+  return product.flavor.map((f) => ({
+    value: f,
+    label: f,
+  }));
+};
 
-  // LITER OPTIONS
-  const getLiterOptions = (
-    productId
-  ) => {
-    const product = products.find(
-      (p) => p._id === productId
-    );
+const getLiterOptions = (productId) => {
+  const product = products.find(
+    (p) => p._id === productId
+  );
 
-    if (!product) return [];
+  if (!product || !product.liters)
+    return [];
 
-    return product.liters.map(
-      (l, index) => ({
-        value: l,
-        label: l,
-        mrp: product.mrps[index],
-      })
-    );
-  };
+  return product.liters.map(
+    (l, i) => ({
+      value: l,
+      label: l,
+      mrp: product.mrps?.[i] || 0,
+    })
+  );
+};
+
 
   // MRP OPTIONS
   const getMrpOptions = (

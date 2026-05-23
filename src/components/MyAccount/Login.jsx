@@ -3,6 +3,8 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Toast from "../Toast";
 import { API } from "../../constants/api";
+import AppBar from "../AppBar/AppBar";
+import { FaShieldAlt } from "react-icons/fa";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -13,6 +15,7 @@ function Login() {
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
+  const [lang, setLang] = useState("en");
 
   useEffect(() => {
     emailRef.current?.focus();
@@ -70,7 +73,7 @@ function Login() {
     showToast("Login successful!", "success");
 
     setTimeout(() => {
-      window.location.href = "/";
+      window.location.href = "/home";
     }, 1000);
 
   } catch (error) {
@@ -83,39 +86,66 @@ function Login() {
 
   return (
     <div className={styles.container}>
+      <AppBar
+  lang={lang}
+  setLang={setLang}
+/>
 
       
       {message && <Toast message={message} type={messageType} />}
 
       <div className={styles.formBox}>
+         <div className={styles.brand}>
+    HIBUZ BILLING
+  </div>
         <h1>Login</h1>
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          ref={emailRef}
-          onChange={(e) => setEmail(e.target.value)}
-          onKeyDown={handleKeyDownEmail}
-        />
+        <label className={styles.label}>Enter your email</label>
+<input
+  type="email"
+  placeholder="Email"
+  value={email}
+  ref={emailRef}
+  onChange={(e) => setEmail(e.target.value)}
+  onKeyDown={handleKeyDownEmail}
+/>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          ref={passwordRef}
-          onChange={(e) => setPassword(e.target.value)}
-          onKeyDown={handleKeyDownPassword}
-        />
+<label className={styles.label}>Enter your password</label>
+<input
+  type="password"
+  placeholder="Password"
+  value={password}
+  ref={passwordRef}
+  onChange={(e) => setPassword(e.target.value)}
+  onKeyDown={handleKeyDownPassword}
+/>
 
         <button onClick={handleLogin} disabled={loading}>
           {loading ? "Logging in..." : "Login"}
         </button>
 
-        <p className={styles.signupText}>
-          <span onClick={() => navigate("/register")}>Forgot password?</span>
-        </p>
+       <p className={styles.signupText}>
+  <span onClick={() => navigate("/register")}>
+    Forgot password?
+  </span>
+</p>
+
+{/* TRUST ROW */}
+<div className={styles.securityWrapper}>
+  <div className={styles.securityBox}>
+    <div className={styles.secureItem}>
+      <FaShieldAlt className={styles.secureIcon} />
+      <span>100% Secure</span>
+    </div>
+
+    <div className={styles.secureItem}>
+      <div className={styles.isoCircle}>ISO</div>
+      <span>Certified</span>
+    </div>
+  </div>
+</div>
       </div>
+      
     </div>
   );
 }

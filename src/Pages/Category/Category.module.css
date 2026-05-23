@@ -250,3 +250,13 @@
 .cancelBtn:hover {
   opacity: 0.88;
 }
+
+
+.activeRow {
+  background: #fafafa;
+  transition: 0.2s ease;
+}
+
+.activeRow td {
+  color: #111827;
+}

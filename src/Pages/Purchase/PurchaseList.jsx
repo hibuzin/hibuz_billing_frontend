@@ -26,7 +26,7 @@ function PurchaseList() {
   const fetchPurchases = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`${API.purchases}/`, {
+      const res = await fetch(`${API.purchase}/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();

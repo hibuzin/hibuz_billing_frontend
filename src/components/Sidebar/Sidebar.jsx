@@ -1,15 +1,24 @@
 import styles from "./Sidebar.module.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FaHome, FaUsers, FaBox, FaChartBar, FaTags, FaCog } from "react-icons/fa";
 import { MdPayments, MdInventory } from "react-icons/md";
-import { RiMoneyDollarCircleLine ,} from "react-icons/ri";
-import { FaTruckLoading } from "react-icons/fa";
+import { RiMoneyDollarCircleLine, } from "react-icons/ri";
+import {
+  FaTruckLoading, FaUserCircle,
+  FaFileInvoice,
+  FaChevronRight,
+  FaPrint,
+  FaHeadset,
+  FaShieldAlt,
+} from "react-icons/fa";
+
 import { FaChevronDown } from "react-icons/fa";
 import { FaBars } from "react-icons/fa";
 import { useState, useEffect } from "react";
 
 
-  const getRoleFromToken = () => {
+
+const getRoleFromToken = () => {
   try {
     const token = localStorage.getItem("token");
     const payload = token.split(".")[1];
@@ -24,174 +33,350 @@ import { useState, useEffect } from "react";
 function Sidebar({ collapsed, setCollapsed, lang }) {
   const navigate = useNavigate();
   const [openMenu, setOpenMenu] = useState(null);
+  const [settingsMode, setSettingsMode] = useState(false);
   const role = getRoleFromToken();
+  const location = useLocation();
+  const user =
+    JSON.parse(
+      localStorage.getItem("user")
+    ) || {};
 
+  const businessName =
+    user?.CompanyName || "";
+
+  const phone =
+    user?.CompanyPhone || "";
+
+  const logo =
+    localStorage.getItem(
+      "businessLogo"
+    ) || "";
+
+  const settingsMenu = [
+    {
+      name: lang === "ta" ? "கணக்கு" : "Account",
+      path: "/account",
+      icon: <FaUserCircle />,
+    },
+    {
+      name: lang === "ta" ? "வணிகத்தை நிர்வகிக்கவும்" : "Manage Business",
+      path: "/myaccountpage",
+      icon: <FaUserCircle />,
+    },
+    {
+      name: lang === "ta" ? "பயனர்கள் நிர்வாகம்" : "Manage Users",
+      path: "/settings/users",
+      icon: <FaUsers />,
+    },
+    {
+      name: lang === "ta" ? "இன்வாய்ஸ் அமைப்புகள்" : "Invoice Settings",
+      path: "/settings/invoice",
+      icon: <FaFileInvoice />,
+    },
+    {
+      name: lang === "ta" ? "அச்சு அமைப்புகள்" : "Print Settings",
+      path: "/settings/print",
+      icon: <FaPrint />,
+    },
+    {
+      name: lang === "ta" ? "உதவி & ஆதரவு" : "Help & Support",
+      path: "/settings/support",
+      icon: <FaHeadset />,
+    },
+  ];
 
   const menu = [
-  { 
-    name: lang === "ta" ? "முகப்பு" : "HOME", 
-    path: "/home", 
-    icon: <FaHome /> 
-  },
 
-  { 
-    name: lang === "ta" ? "வாடிக்கையாளர்கள்" : "CUSTOMERS", 
-    path: "/customers", 
-    icon: <FaUsers /> 
-  },
 
-  { 
-  name: lang === "ta" ? "பொருட்கள்" : "PRODUCTS",  
-  icon: <FaBox />,
-  children: [
-    { 
-      name: lang === "ta" ? "வகைகள்" : "Category", 
-      path: "/category" 
+    {
+      name: lang === "ta" ? "முகப்பு பலகம்" : "DASHBOARD",
+      path: "/home",
+      icon: <FaHome />
     },
 
-    { 
-      name: lang === "ta" ? "பொருட்கள்" : "Product", 
-      path: "/product" 
-    },
-  ],
-},
-
-{ 
-  name: lang === "ta" ? "சப்ளையர்கள்" : "SUPPLIER", 
-  icon: <FaTruckLoading />,
-  children: [
-    { 
-      name: lang === "ta" ? "சப்ளையர்" : "Supplier", 
-      path: "/supplier" 
+    {
+      name: lang === "ta" ? "வாடிக்கையாளர்கள்" : "CUSTOMERS",
+      path: "/customers",
+      icon: <FaUsers />
     },
 
-    { 
-      name: lang === "ta" ? "கொள்முதல்" : "Purchase", 
-      path: "/purchase" 
+    {
+      name: lang === "ta" ? "பொருட்கள்" : "PRODUCTS",
+      icon: <FaBox />,
+      children: [
+        {
+          name: lang === "ta" ? "வகைகள்" : "Category",
+          path: "/category"
+        },
+
+        {
+          name: lang === "ta" ? "பொருட்கள்" : "Product",
+          path: "/product"
+        },
+      ],
     },
-  ],
-},
 
-  {
-    name: lang === "ta" ? "விற்பனை" : "SALES",
-    icon: <RiMoneyDollarCircleLine />,
-    children: [
-      { name: lang === "ta" ? "இன்றைய விற்பனை" : "Today Sale", path: "/sales/today" },
-      { name: lang === "ta" ? "வார விற்பனை" : "Week Sale", path: "/sales/week" },
-      { name: lang === "ta" ? "மாத விற்பனை" : "Monthly Sale", path: "/sales/month" },
-    ],
-  },
+    {
+      name: lang === "ta" ? "சப்ளையர்கள்" : "SUPPLIER",
+      icon: <FaTruckLoading />,
+      children: [
+        {
+          name: lang === "ta" ? "சப்ளையர்" : "Supplier",
+          path: "/supplier"
+        },
 
-  {
-    name: lang === "ta" ? "கட்டணம்" : "PAYMENT",
-    icon: <MdPayments />,
-    children: [
-      { name: lang === "ta" ? "பணம்" : "Cash", path: "/payment/cash" },
-      { name: lang === "ta" ? "ஆன்லைன்" : "Online", path: "/payment/online" },
-      { name: lang === "ta" ? "நிலுவை" : "Pending", path: "/payment/pending" },
-    ],
-  },
+        {
+          name: lang === "ta" ? "கொள்முதல்" : "Purchase",
+          path: "/purchase"
+        },
+      ],
+    },
 
-  {
-    name: lang === "ta" ? "சரக்கு" : "STOCKS",
-    icon: <MdInventory />,
-    children: [
-      { name: lang === "ta" ? "கிடைக்கும்" : "Available", path: "/stocks/available" },
-      { name: lang === "ta" ? "குறைந்தது" : "Low Stock", path: "/stocks/low" },
-      { name: lang === "ta" ? "இல்லை" : "Out of Stock", path: "/stocks/out" },
-    ],
-  },
+    {
+      name: lang === "ta" ? "விற்பனை" : "SALES",
+      icon: <RiMoneyDollarCircleLine />,
+      children: [
+        { name: lang === "ta" ? "இன்றைய விற்பனை" : "Today Sale", path: "/sales/today" },
+        { name: lang === "ta" ? "வார விற்பனை" : "Week Sale", path: "/sales/week" },
+        { name: lang === "ta" ? "மாத விற்பனை" : "Monthly Sale", path: "/sales/month" },
+      ],
+    },
 
-  { 
-    name: lang === "ta" ? "ஜிஎஸ்டி" : "GST", 
-    path: "/gst", 
-    icon: <FaChartBar />,
-    onlyRole: "super_admin"
-  },
+    {
+      name: lang === "ta" ? "கட்டணம்" : "PAYMENT",
+      icon: <MdPayments />,
+      children: [
+        { name: lang === "ta" ? "பணம்" : "Cash", path: "/payment/cash" },
+        { name: lang === "ta" ? "ஆன்லைன்" : "Online", path: "/payment/online" },
+        { name: lang === "ta" ? "நிலுவை" : "Pending", path: "/payment/pending" },
+      ],
+    },
 
-  { 
-    name: lang === "ta" ? "பகுப்பாய்வு" : "ANALYTICS", 
-    path: "/analytics", 
-    icon: <FaChartBar /> 
-  },
+    {
+      name: lang === "ta" ? "சரக்கு" : "STOCKS",
+      icon: <MdInventory />,
+      children: [
+        { name: lang === "ta" ? "கிடைக்கும்" : "Available", path: "/stocks/available" },
+        { name: lang === "ta" ? "குறைந்தது" : "Low Stock", path: "/stocks/low" },
+        { name: lang === "ta" ? "இல்லை" : "Out of Stock", path: "/stocks/out" },
+      ],
+    },
 
-  { 
-    name: lang === "ta" ? "சலுகைகள்" : "OFFERS", 
-    path: "/offers", 
-    icon: <FaTags /> 
-  },
+    {
+      name: lang === "ta" ? "ஜிஎஸ்டி" : "GST",
+      path: "/gst",
+      icon: <FaChartBar />,
+      onlyRole: "super_admin"
+    },
 
-  { 
-    name: lang === "ta" ? "அமைப்புகள்" : "SETTINGS", 
-    path: "/offers", 
-    icon: <FaCog /> 
-  },
-];
+    {
+      name: lang === "ta" ? "பகுப்பாய்வு" : "ANALYTICS",
+      path: "/analytics",
+      icon: <FaChartBar />
+    },
+
+    {
+      name: lang === "ta" ? "சலுகைகள்" : "OFFERS",
+      path: "/offers",
+      icon: <FaTags />
+    },
+  ];
 
   return (
-    <div className={`${styles.sidebar} ${collapsed ? styles.collapsed : ""}`}>
+    <div
+      className={`${styles.sidebar}
+  ${collapsed ? styles.collapsed : ""}`}
+    >
 
-<div className={styles.topBar}>
+      {/* TOP FIXED */}
+
+      <div className={styles.topFixed}>
+
+        <div className={styles.topBar}>
+
+          {!collapsed && (
+            <div className={styles.businessSection}>
+
+              <div className={styles.businessInfo}>
+
+                <div className={styles.avatar}>
+                  {logo ? (
+                    <img src={logo} alt="logo" />
+                  ) : (
+                    businessName.charAt(0)
+                  )}
+                </div>
+
+                <div className={styles.businessText}>
+                  <h4>{businessName}</h4>
+                  <p>{phone}</p>
+                </div>
+
+              </div>
+
+              <div className={styles.billRow}>
+
+                <button
+                  className={styles.billBtn}
+                  onClick={() => navigate("/onboarding")}
+                >
+                  + Create Sale Invoice
+                </button>
+                {/*
+      <button
+        className={styles.menuBtn}
+        onClick={() => setCollapsed(!collapsed)}
+      >
+        <FaBars />
+      </button>
+*/}
+              </div>
+
+            </div>
+          )}
+
+
+
+          {/*
+{collapsed && (
   <FaBars
     className={styles.toggleBtn}
     onClick={() => setCollapsed(!collapsed)}
   />
+)}
+*/}
+
+
+        </div>
+
+      </div>
+
+      <div className={styles.menuWrapper}>
+
+        <ul className={styles.menu}>
+          {!settingsMode ? (
+            menu
+              .filter(
+                item =>
+                  item.key !== "settings" &&
+                  (
+                    !item.onlyRole ||
+                    item.onlyRole === role
+                  )
+              )
+              .map((item, index) => (
+                <div key={index}>
+                  <li
+                    className={`${styles.item} ${location.pathname === item.path
+                      ? styles.active
+                      : ""
+                      }`}
+                    onClick={() => {
+                      if (item.key === "settings") {
+                        setSettingsMode(true);
+                        navigate("/myaccountpage");
+                      } else if (item.children) {
+                        setOpenMenu(openMenu === index ? null : index);
+                      } else {
+                        navigate(item.path);
+                      }
+                    }}
+                  >
+                    <div className={styles.menuItem}>
+                      <span className={styles.icon}>{item.icon}</span>
+
+                      {!collapsed && <span>{item.name}</span>}
+                    </div>
+
+                    {!collapsed && item.children && (
+                      <span
+                        className={`${styles.arrow} ${openMenu === index ? styles.rotate : ""
+                          }`}
+                      >
+                        <FaChevronRight />
+                      </span>
+                    )}
+                  </li>
+
+                  {!collapsed && item.children && openMenu === index && (
+                    <div className={styles.subMenu}>
+                      {item.children.map((sub, i) => (
+                        <li
+                          key={i}
+                          className={`${styles.subItem} ${location.pathname === sub.path
+                            ? styles.active
+                            : ""
+                            }`}
+                          onClick={() => navigate(sub.path)}
+                        >
+                          {sub.name}
+                        </li>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))
+          ) : (
+            <>
+              <li
+                className={styles.backItem}
+                onClick={() => setSettingsMode(false)}
+              >
+                <span>← Back to Dashboard</span>
+              </li>
+
+              {settingsMenu.map((item, index) => (
+                <li
+                  key={index}
+                  className={`${styles.item} ${location.pathname === item.path
+                    ? styles.active
+                    : ""
+                    }`}
+                  onClick={() => navigate(item.path)}
+                >
+                  <div className={styles.menuItem}>
+                    <span className={styles.icon}>
+                      {item.icon}
+                    </span>
+
+                    {!collapsed && <span>{item.name}</span>}
+                  </div>
+                </li>
+              ))}
+            </>
+          )}
+        </ul>
+      </div>
+
+      <div
+  className={styles.bottomSettings}
+  onClick={() => {
+    setSettingsMode(true);
+    navigate("/myaccountpage");
+  }}
+>
+
+  {/* SETTINGS */}
+
+  <div className={styles.menuItem}>
+
+    <span className={styles.icon}>
+      <FaCog />
+    </span>
+
+    {!collapsed && (
+      <span className={styles.settingsText}>
+        Settings
+      </span>
+    )}
+
+  </div>
+
+ 
+
+</div>
 </div>
 
-      <ul className={styles.menu}>
-
-        {menu
-  .filter(item => !item.onlyRole || item.onlyRole === role)
-  .map((item, index) => (
-  <div key={index}>
-    
-    {/* MAIN ITEM */}
-    <li
-      className={styles.item}
-      onClick={() =>
-        item.children
-          ? setOpenMenu(openMenu === index ? null : index)
-          : navigate(item.path)
-      }
-    >
-      <div className={styles.menuItem}>
-        <span className={styles.icon}>{item.icon}</span>
-
-        {/* TEXT */}
-        {!collapsed && <span>{item.name}</span>}
-      </div>
-
-      {/* ARROW */}
-      {!collapsed && item.children && (
-        <span
-          className={`${styles.arrow} ${
-            openMenu === index ? styles.rotate : ""
-          }`}
-        >
-          <FaChevronDown />
-        </span>
-      )}
-    </li>
-
-    {/* SUB MENU */}
-    {!collapsed && item.children && openMenu === index && (
-      <div className={styles.subMenu}>
-        {item.children.map((sub, i) => (
-          <li
-            key={i}
-            className={styles.subItem}
-            onClick={() => navigate(sub.path)}
-          >
-            {sub.name}
-          </li>
-        ))}
-      </div>
-    )}
-  </div>
-))}
-
-      </ul>
-    </div>
   );
 }
 
