@@ -158,9 +158,9 @@ function MainLayout() {
           />
 
           <Route
-            path="/settings/business"
-            element={<ManageBusiness />}
-          />
+  path="/managebusiness"
+  element={<ManageBusiness />}
+/>
 
           <Route
             path="/settings/invoice"

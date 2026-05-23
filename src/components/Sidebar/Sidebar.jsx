@@ -60,7 +60,7 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
     },
     {
       name: lang === "ta" ? "வணிகத்தை நிர்வகிக்கவும்" : "Manage Business",
-      path: "/myaccountpage",
+      path: "/managebusiness",
       icon: <FaUserCircle />,
     },
     {

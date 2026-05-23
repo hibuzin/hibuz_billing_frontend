@@ -1,41 +1,21 @@
-import { useEffect, useState, useRef } from "react";
-import styles from "./Category.module.css";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  FaPlus,
-  FaTrash,
-  FaEdit,
-} from "react-icons/fa";
-
+import styles from "./Category.module.css";
+import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import Toast from "../../components/Toast";
 import { API } from "../../constants/api";
 
 function Category() {
-  const [categories, setCategories] =
-    useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editData, setEditData] = useState({ name: "" });
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-    const [selectedIndex, setSelectedIndex] =
-  useState(0);
-
-const rowRefs = useRef([]);
-
-  const [toast, setToast] =
-    useState(null);
-
-  const [loadingId, setLoadingId] =
-    useState(null);
-
-  const [showEditModal, setShowEditModal] =
-    useState(false);
-
-  const [editCategory, setEditCategory] =
-    useState(null);
-
-  const [editName, setEditName] =
-    useState("");
-
-  const [saving, setSaving] =
-    useState(false);
+  const [toast, setToast] = useState({
+    message: "",
+    type: "success",
+  });
 
   const navigate = useNavigate();
 
@@ -43,449 +23,227 @@ const rowRefs = useRef([]);
     fetchCategories();
   }, []);
 
-  // AUTO FOCUS FIRST ROW
-useEffect(() => {
-  setSelectedIndex(0);
-}, [categories]);
-
-// KEYBOARD CONTROL
-useEffect(() => {
-
-  const handleKeyDown = (e) => {
-
-    // DOWN
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-
-      setSelectedIndex((prev) =>
-        prev === categories.length - 1
-          ? 0
-          : prev + 1
-      );
-    }
-
-    // UP
-    if (e.key === "ArrowUp") {
-      e.preventDefault();
-
-      setSelectedIndex((prev) =>
-        prev === 0
-          ? categories.length - 1
-          : prev - 1
-      );
-    }
-
-    // ENTER
-    if (e.key === "Enter") {
-
-      const current =
-        categories[selectedIndex];
-
-      if (!current) return;
-
-      openEditModal(current);
-    }
+  const showToast = (message, type = "success") => {
+    setToast({ message, type });
+    setTimeout(() => {
+      setToast({ message: "", type: "success" });
+    }, 2500);
   };
-
-  window.addEventListener(
-    "keydown",
-    handleKeyDown
-  );
-
-  return () => {
-    window.removeEventListener(
-      "keydown",
-      handleKeyDown
-    );
-  };
-
-}, [categories, selectedIndex]);
-
-// AUTO SCROLL
-useEffect(() => {
-
-  if (
-    rowRefs.current[selectedIndex]
-  ) {
-    rowRefs.current[
-      selectedIndex
-    ].scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-    });
-  }
-
-}, [selectedIndex]);
-
-  // FETCH
 
   const fetchCategories = async () => {
     try {
-      const token =
-        localStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
-      const res = await fetch(
-        API.categories,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(API.categories, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const data = await res.json();
 
       if (data.success) {
         setCategories(data.data || []);
       } else {
-        setToast({
-          type: "error",
-          message:
-            "Failed to load categories",
-        });
+        showToast("Failed to load categories", "error");
       }
     } catch (err) {
-      setToast({
-        type: "error",
-        message: "Server error",
-      });
+      showToast("Server error", "error");
     }
   };
 
-  // DELETE
-
-  const handleDelete = async (id) => {
-    const confirmDelete =
-      window.confirm(
-        "Delete this category?"
-      );
-
-    if (!confirmDelete) return;
-
-    try {
-      setLoadingId(id);
-
-      const token =
-        localStorage.getItem("token");
-
-      const res = await fetch(
-        `${API.categories}/${id}`,
-        {
-          method: "DELETE",
-
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const data = await res.json();
-
-      if (data.success) {
-        setCategories((prev) =>
-          prev.filter(
-            (cat) => cat._id !== id
-          )
-        );
-
-        setToast({
-          type: "success",
-          message:
-            data.message ||
-            "Category deleted successfully",
-        });
-      } else {
-        setToast({
-          type: "error",
-          message:
-            data.message ||
-            "Delete failed",
-        });
-      }
-    } catch (err) {
-      setToast({
-        type: "error",
-        message: "Server error",
-      });
-    } finally {
-      setLoadingId(null);
-    }
+  const openCategory = (cat) => {
+    setSelected(cat);
+    setEditData({ name: cat.name });
+    setIsEditing(false);
   };
-
-  // OPEN EDIT
-
-  const openEditModal = (cat) => {
-    setEditCategory(cat);
-
-    setEditName(cat.name);
-
-    setShowEditModal(true);
-
-    document.body.style.overflow =
-      "hidden";
-  };
-
-  // CLOSE EDIT
-
-  const closeEditModal = () => {
-    setShowEditModal(false);
-
-    document.body.style.overflow =
-      "auto";
-  };
-
-  // UPDATE
 
   const handleUpdate = async () => {
-    if (!editName.trim()) {
-      return setToast({
-        type: "error",
-        message: "Enter category name",
-      });
-    }
-
     try {
-      setSaving(true);
+      const token = localStorage.getItem("token");
 
-      const token =
-        localStorage.getItem("token");
-
-      const res = await fetch(
-        `${API.categories}/${editCategory._id}`,
-        {
-          method: "PUT",
-
-          headers: {
-            "Content-Type":
-              "application/json",
-
-            Authorization: `Bearer ${token}`,
-          },
-
-          body: JSON.stringify({
-            name: editName,
-          }),
-        }
-      );
+      const res = await fetch(`${API.categories}/${selected._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(editData),
+      });
 
       const data = await res.json();
 
-      if (data.success) {
-        setCategories((prev) =>
-          prev.map((cat) =>
-            cat._id ===
-            editCategory._id
-              ? data.data
-              : cat
-          )
-        );
+      if (!res.ok) throw new Error(data.message);
 
-        setToast({
-          type: "success",
-          message:
-            data.message ||
-            "Category updated successfully",
-        });
+      showToast("Category updated successfully");
 
-        closeEditModal();
-      } else {
-        setToast({
-          type: "error",
-          message:
-            data.message ||
-            "Update failed",
-        });
-      }
+      setCategories((prev) =>
+        prev.map((c) =>
+          c._id === selected._id ? data.data : c
+        )
+      );
+
+      setSelected(data.data);
+      setIsEditing(false);
     } catch (err) {
-      setToast({
-        type: "error",
-        message: "Server error",
+      showToast(err.message, "error");
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(`${API.categories}/${selected._id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
-    } finally {
-      setSaving(false);
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message);
+
+      showToast("Category deleted successfully");
+
+      setCategories((prev) =>
+        prev.filter((c) => c._id !== selected._id)
+      );
+
+      setSelected(null);
+      setShowDeleteConfirm(false);
+    } catch (err) {
+      showToast(err.message, "error");
     }
   };
 
   return (
-    <div className={styles.container}>
-      {toast && <Toast {...toast} />}
+    <>
+      <div className={styles.wrap}>
+        <div className={styles.topSection}>
+          <h1 className={styles.title}>Categories</h1>
 
-      {/* HEADER */}
+          <button
+            className={styles.addBtn}
+            onClick={() => navigate("/create-category")}
+          >
+            <FaPlus />
+          </button>
+        </div>
 
-      <div className={styles.header}>
-        <div>
-          <h2>Categories</h2>
+        <div className={styles.card}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Category Name</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
 
-          <p>
-            Total Categories :
-            {categories.length}
-          </p>
+            <tbody>
+              {categories.map((c, i) => (
+                <tr key={c._id} onClick={() => openCategory(c)}>
+                  <td>{i + 1}</td>
+                  <td>{c.name}</td>
+
+                  <td>
+  <div className={styles.actions}>
+
+    <button
+      className={styles.editBtn}
+      onClick={(e) => {
+        e.stopPropagation();
+        setSelected(c);
+        setEditData({ name: c.name });
+        setIsEditing(true);
+      }}
+    >
+      <FaEdit />
+    </button>
+
+    <button
+      className={styles.deleteBtn}
+      onClick={(e) => {
+        e.stopPropagation();
+        setSelected(c);
+        setShowDeleteConfirm(true);
+      }}
+    >
+      <FaTrash />
+    </button>
+
+  </div>
+</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {selected && (
+  <div className={styles.overlay}>
+    <div className={styles.dialog}>
+
+      <div className={styles.dialogHeader}>
+        <div className={styles.dialogName}>
+          Category Details
         </div>
 
         <button
-          className={styles.addBtn}
-          onClick={() =>
-            navigate("/create-category")
-          }
+          className={styles.closeBtn}
+          onClick={() => setSelected(null)}
         >
-          <FaPlus />
+          ✕
         </button>
       </div>
 
-      {/* TABLE */}
+      <hr className={styles.divider} />
 
-<div className={styles.tableWrapper}>
-  <table className={styles.table}>
-    <thead>
-      <tr>
-        <th>No</th>
-        <th>Category Name</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
+      <div className={styles.dialogGrid}>
 
-    <tbody>
-      {categories.length > 0 ? (
-        categories.map((cat, index) => (
-          <tr
-  key={cat._id}
-  ref={(el) =>
-    (rowRefs.current[index] = el)
-  }
-  className={
-    selectedIndex === index
-      ? styles.activeRow
-      : ""
-  }
->
-            <td>{index + 1}</td>
-
-            <td>
-              <div className={styles.categoryCell}>
-
-                <span>
-                  {cat.name}
-                </span>
-              </div>
-            </td>
-
-            <td>
-              <div
-                className={styles.actions}
-              >
-                <button
-                  className={
-                    styles.editBtn
-                  }
-                  onClick={() =>
-                    openEditModal(cat)
-                  }
-                >
-                  <FaEdit />
-                </button>
-
-                <button
-                  className={
-                    styles.deleteBtn
-                  }
-                  onClick={() =>
-                    handleDelete(
-                      cat._id
-                    )
-                  }
-                  disabled={
-                    loadingId ===
-                    cat._id
-                  }
-                >
-                  <FaTrash />
-                </button>
-              </div>
-             </td>
-          </tr>
-        ))
-      ) : (
-        <tr>
-          <td
-            colSpan="5"
-            className={styles.emptyRow}
-          >
-            No categories found
-          </td>
-        </tr>
-      )}
-    </tbody>
-  </table>
-</div>
-
-      {/* EDIT MODAL */}
-
-      {showEditModal && (
-        <div
-          className={
-            styles.modalOverlay
-          }
-        >
-          <div className={styles.modal}>
-            <div
-              className={
-                styles.modalHeader
-              }
-            >
-              <h3>Edit Category</h3>
-
-              <button
-                className={
-                  styles.closeBtn
-                }
-                onClick={
-                  closeEditModal
-                }
-              >
-                ×
-              </button>
-            </div>
-
-            <div
-              className={
-                styles.modalBody
-              }
-            >
-              <div
-                className={styles.field}
-              >
-                <label>
-                  Category Name
-                </label>
-
-                <input
-                  type="text"
-                  value={editName}
-                  onChange={(e) =>
-                    setEditName(
-                      e.target.value
-                    )
-                  }
-                  placeholder="Enter category name"
-                />
-              </div>
-
-              <button
-                className={
-                  styles.saveBtn
-                }
-                onClick={handleUpdate}
-                disabled={saving}
-              >
-                {saving
-                  ? "Saving..."
-                  : "Save Changes"}
-              </button>
-            </div>
-          </div>
+        <div className={styles.field}>
+          <label>ID</label>
+          <p>{selected._id}</p>
         </div>
-      )}
+
+        <div className={styles.field}>
+          <label>Name</label>
+          <p>{selected.name}</p>
+        </div>
+
+        <div className={styles.field}>
+          <label>HSN Code</label>
+          <p>{selected.hsnCode}</p>
+        </div>
+
+        <div className={styles.field}>
+          <label>GST Rate</label>
+          <p>{selected.gstRate}%</p>
+        </div>
+
+        <div className={styles.field}>
+          <label>HSN Description</label>
+          <p>{selected.hsnId?.description}</p>
+        </div>
+
+        <div className={styles.field}>
+          <label>Created At</label>
+          <p>
+            {new Date(selected.createdAt).toLocaleString()}
+          </p>
+        </div>
+
+      </div>
+
     </div>
+  </div>
+)}
+
+      <Toast message={toast.message} type={toast.type} />
+    </>
   );
 }
 

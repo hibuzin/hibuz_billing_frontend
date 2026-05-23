@@ -3,7 +3,7 @@ import Toast from "./Toast";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AppBar from "./AppBar/AppBar";
-import { FaShieldAlt } from "react-icons/fa";
+import { FaShieldAlt, FaCheckCircle, FaCertificate } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
 
 function Onboarding() {
@@ -99,15 +99,18 @@ function Onboarding() {
             <p>Simple billing & accounting software for your business.</p>
 
             <div className={styles.badgeRow}>
-              <div className={styles.badge}>
-                <FaShieldAlt className={styles.badgeIcon} />
-                <span>100% Secure</span>
-              </div>
-              <div className={styles.badge}>
-                <MdVerified className={styles.badgeIcon} />
-                <span>ISO Certified</span>
-              </div>
-            </div>
+
+  <div className={styles.badge}>
+    <FaShieldAlt className={styles.badgeIcon} />
+    <span>100% Secure</span>
+  </div>
+
+  <div className={styles.isoBadge}>
+    <span className={styles.isoCircle}>ISO</span>
+    <span className={styles.isoText}>ISO Certified</span>
+  </div>
+
+</div>
           </div>
 
           {/* DIVIDER */}

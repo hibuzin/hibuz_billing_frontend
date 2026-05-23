@@ -36,13 +36,14 @@
 }
 
 .brand {
-  font-size: 26px;
+  font-size: 36px;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
 }
 
 .orange {
-  color: #f97316;
+  color:  #ea6c0a;
 }
 
 .dark {
@@ -60,7 +61,7 @@
 .left h2 {
   font-size: 28px;
   font-weight: 700;
-  color: #1e293b;
+  color: #4A3DC6;
   margin: -6px 0 0;
 }
 
@@ -68,38 +69,58 @@
   font-size: 14px;
   color: #64748b;
   line-height: 1.6;
-  max-width: 240px;
+  max-width: 280px;
   margin: 0;
 }
 
 .badgeRow {
   display: flex;
-  flex-direction: row;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 8px;
+  align-items: center;
+  gap: 18px;
+  margin-top: 60px;
 }
 
 .badge {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 6px;
-  background: #f0f9ff;
-  border: 1px solid #bae6fd;
-  border-radius: 100px;
-  padding: 7px 14px;
-}
-
-.badge span {
-  font-size: 13px;
-  font-weight: 600;
-  color: #0369a1;
+  gap: 8px;
+  font-size: 14px;
+  color: #444;
 }
 
 .badgeIcon {
-  font-size: 15px;
-  color: #0284c7;
+  color: #1d72d8;
+  font-size: 14px;
+}
+
+/* ISO BADGE */
+.isoBadge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.isoCircle {
+  width: 22px;
+  height: 22px;
+
+  border: 2px solid #1d72d8;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 7px;
+  font-weight: 700;
+  color: #1d72d8;
+  font-family: Arial, sans-serif;
+}
+
+.isoText {
+  font-size: 10px;
+  color: #444;
+  font-weight: 500;
 }
 
 /* ─── DIVIDER ───────────────────────────────── */
@@ -116,7 +137,7 @@
 .dividerLine {
   width: 1px;
   height: 120%;
-  background: #303031;
+  background: #dfdfe1;
   border-radius: 1px;
 }
 
@@ -164,18 +185,19 @@
 
 .field input {
   border: 1.5px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 10px 14px;
+  border-radius: 4px;
+  width: 500px;
+  padding: 8px 14px;
   font-size: 14px;
   color: #1e293b;
-  background: #f8fafc;
+  background: #ffffff;
   outline: none;
   transition: border-color 0.2s, background 0.2s;
   font-family: inherit;
 }
 
 .field input:focus {
-  border-color: #f97316;
+  border-color: #4A3DC6;
   background: #ffffff;
 }
 
@@ -184,11 +206,11 @@
 }
 
 .formCard button {
-  width: 100%;
-  background: #f97316;
+  width: 500px;
+  background: #4A3DC6;
   color: #ffffff;
   border: none;
-  border-radius: 10px;
+  border-radius: 4px;
   padding: 12px;
   font-size: 15px;
   font-weight: 600;
@@ -199,13 +221,15 @@
 }
 
 .formCard button:hover {
-  background: #ea6c0a;
+  background: #4A3DC6;
 }
 
 .formCard button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+
 
 /* ─── RESPONSIVE ────────────────────────────── */
 
