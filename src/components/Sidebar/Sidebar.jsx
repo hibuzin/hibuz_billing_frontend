@@ -215,7 +215,7 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
 
       localStorage.clear();
 
-      navigate("/");
+      navigate("/login");
 
     }
   };
@@ -315,7 +315,7 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
                     onClick={() => {
                       if (item.key === "settings") {
                         setSettingsMode(true);
-                        navigate("/myaccountpage");
+                        navigate("/managebusiness");
                       } else if (item.children) {
                         setOpenMenu(openMenu === index ? null : index);
                       } else {
@@ -410,7 +410,7 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
       className={styles.settingsButton}
       onClick={() => {
         setSettingsMode(true);
-        navigate("/myaccountpage");
+        navigate("/managebusiness");
       }}
     >
       <div className={styles.menuItem}>
