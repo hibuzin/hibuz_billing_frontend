@@ -11,10 +11,11 @@ import {
   FaHeadset,
   FaShieldAlt,
 } from "react-icons/fa";
-
 import { FaChevronDown } from "react-icons/fa";
 import { FaBars } from "react-icons/fa";
 import { useState, useEffect } from "react";
+import { APP_VERSION } from "../../version";
+import { FaSignOutAlt } from "react-icons/fa";
 
 
 
@@ -82,6 +83,17 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
       name: lang === "ta" ? "உதவி & ஆதரவு" : "Help & Support",
       path: "/settings/support",
       icon: <FaHeadset />,
+    },
+
+    {
+      divider: true
+    },
+
+    {
+      name: lang === "ta" ? "வெளியேறு" : "Logout",
+      path: "/logout",
+      icon: <FaSignOutAlt />,
+      logout: true,
     },
   ];
 
@@ -182,10 +194,39 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
     },
   ];
 
+  const handleLogout = async () => {
+    try {
+
+      const token = localStorage.getItem("token");
+
+      await axios.post(
+        "http://192.168.31.181:5000/api/auth/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+
+      localStorage.clear();
+
+      navigate("/");
+
+    }
+  };
+
   return (
     <div
-      className={`${styles.sidebar}
-  ${collapsed ? styles.collapsed : ""}`}
+      className={`
+    ${styles.sidebar}
+    ${collapsed ? styles.collapsed : ""}
+    ${settingsMode ? styles.settingsSidebar : ""}
+  `}
     >
 
       {/* TOP FIXED */}
@@ -324,58 +365,76 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
               >
                 <span>← Back to Dashboard</span>
               </li>
+              {settingsMenu.map((item, index) => {
 
-              {settingsMenu.map((item, index) => (
-                <li
-                  key={index}
-                  className={`${styles.item} ${location.pathname === item.path
-                    ? styles.active
-                    : ""
-                    }`}
-                  onClick={() => navigate(item.path)}
-                >
-                  <div className={styles.menuItem}>
-                    <span className={styles.icon}>
-                      {item.icon}
-                    </span>
+                if (item.divider) {
+                  return <div key={index} className={styles.settingsDivider}></div>;
+                }
 
-                    {!collapsed && <span>{item.name}</span>}
-                  </div>
-                </li>
-              ))}
+                return (
+                  <li
+                    key={index}
+                    className={`${styles.item} ${location.pathname === item.path
+                        ? styles.active
+                        : ""
+                      }`}
+                    onClick={() => {
+
+                      if (item.logout) {
+                        handleLogout();
+                        return;
+                      }
+
+                      navigate(item.path);
+                    }}
+                  >
+                    <div className={styles.menuItem}>
+                      <span className={styles.icon}>
+                        {item.icon}
+                      </span>
+
+                      {!collapsed && <span>{item.name}</span>}
+                    </div>
+                  </li>
+                );
+              })}
             </>
           )}
         </ul>
       </div>
 
-      <div
-  className={styles.bottomSettings}
-  onClick={() => {
-    setSettingsMode(true);
-    navigate("/myaccountpage");
-  }}
->
+      <div className={styles.bottomSettings}>
 
-  {/* SETTINGS */}
+  {!settingsMode && (
+    <div
+      className={styles.settingsButton}
+      onClick={() => {
+        setSettingsMode(true);
+        navigate("/myaccountpage");
+      }}
+    >
+      <div className={styles.menuItem}>
+        <span className={styles.icon}>
+          <FaCog />
+        </span>
 
-  <div className={styles.menuItem}>
+        {!collapsed && (
+          <span className={styles.settingsText}>
+            Settings
+          </span>
+        )}
+      </div>
+    </div>
+  )}
 
-    <span className={styles.icon}>
-      <FaCog />
-    </span>
-
-    {!collapsed && (
-      <span className={styles.settingsText}>
-        Settings
-      </span>
-    )}
-
-  </div>
-
- 
+  {!collapsed && (
+    <p className={styles.versionText}>
+      Version {APP_VERSION}
+    </p>
+  )}
 
 </div>
-</div>
+    </div>
 
   );
 }

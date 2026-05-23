@@ -245,6 +245,33 @@
   background: #2E3867;
 }
 
+.item {
+  margin: 3px 10px;
+  padding: 0 14px;
+  height: 40px;
+  border-radius: 14px;
+
+  cursor: pointer;
+  gap: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  transition: background 0.25s ease;
+  color: #ffffff;
+}
+
+.versionText {
+  margin-top: 20px;
+
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+
+  text-align: center;
+  width: 100%;
+}
+
+
 .active {
   background: #2E3867;
 }
@@ -348,14 +375,31 @@
   align-items: center;
 }
 
-
-
-
 .settingsText {
   font-size: 12px;
 }
 
-.bottomSettings:hover {
+.settingsSidebar {
+  background: #ffffff;
+}
+
+.settingsDivider {
+  height: 2px;
+
+  margin: 12px 16px;
+
+  background: rgba(255,255,255,0.08);
+}
+
+.settingsButton {
+  padding: 10px 12px;
+  border-radius: 14px;
+  cursor: pointer;
+
+  transition: background 0.25s ease;
+}
+
+.settingsButton:hover {
   background: #2E3867;
 }
 
@@ -397,4 +441,129 @@
 .isoText {
   font-size: 10px;
   font-weight: 700;
+}
+
+
+.settingsSidebar {
+  background: #ffffff;
+}
+
+/* MAIN MENU ITEMS */
+
+.settingsSidebar .item {
+  color: #111827;
+}
+
+/* ICONS */
+
+.settingsSidebar .icon {
+  color: #111827;
+}
+
+/* MENU TEXT */
+
+.settingsSidebar .menuItem span {
+  color: #111827;
+}
+
+/* BUSINESS NAME */
+
+.settingsSidebar .businessText h4 {
+  color: #111827;
+}
+
+/* PHONE */
+
+.settingsSidebar .businessText p {
+  color: #6b7280;
+}
+
+/* SUB MENU */
+
+.settingsSidebar .subItem {
+  color: #374151;
+}
+
+/* SETTINGS TEXT */
+
+.settingsSidebar .settingsText {
+  color: #111827;
+}
+
+/* VERSION */
+
+.settingsSidebar .versionText {
+  color: rgba(0,0,0,0.5);
+}
+
+/* ARROW */
+
+.settingsSidebar .arrow {
+  color: #6b7280;
+}
+
+/* DIVIDER */
+
+.settingsSidebar .settingsDivider {
+  background: rgba(0,0,0,0.08);
+}
+
+/* BOTTOM SETTINGS AREA */
+
+.settingsSidebar .bottomSettings {
+  background: #ffffff;
+  border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+
+/* HOVER */
+
+.settingsSidebar .item:hover,
+.settingsSidebar .settingsButton:hover,
+.settingsSidebar .subItem:hover {
+  background: #1e3a8a;
+}
+
+/* HOVER TEXT WHITE */
+
+.settingsSidebar .item:hover .menuItem span,
+.settingsSidebar .item:hover .icon,
+.settingsSidebar .item:hover .arrow,
+.settingsSidebar .subItem:hover {
+  color: #ffffff;
+}
+
+/* ACTIVE ITEM */
+
+.settingsSidebar .active {
+  background: #1e3a8a;
+  color: #ffffff;
+}
+
+/* ACTIVE ITEM TEXT */
+
+.settingsSidebar .active .icon,
+.settingsSidebar .active .menuItem span,
+.settingsSidebar .active .arrow {
+  color: #ffffff;
+}
+
+/* KEEP ACTIVE ITEM DARK BLUE EVEN ON HOVER */
+
+.settingsSidebar .active:hover {
+  background: #1e3a8a;
+  color: #ffffff;
+}
+
+.settingsSidebar .active:hover .icon,
+.settingsSidebar .active:hover .menuItem span,
+.settingsSidebar .active:hover .arrow {
+  color: #ffffff;
+}
+
+/* ACTIVE ITEM */
+
+.settingsSidebar .active {
+  background: #1e3a8a;
+  color: #ffffff;
 }
