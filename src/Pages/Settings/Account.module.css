@@ -2,6 +2,8 @@
   padding: 2rem;
   font-family: sans-serif;
   position: relative;
+  background-color: #ffffff;
+  min-height: 100vh;
 }
 
 /* Header */
