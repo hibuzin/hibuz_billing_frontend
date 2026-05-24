@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./ManageBusiness.module.css";
+import { FiImage } from "react-icons/fi";
 
 function ManageBusiness() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -76,8 +77,17 @@ function ManageBusiness() {
               />
             ) : (
               <div className={styles.uploadText}>
-                Upload Logo
-              </div>
+  <FiImage />
+
+  <div>
+    Upload Logo
+    <br />
+
+    <span>
+      PNG/JPG, max 5 MB.
+    </span>
+  </div>
+</div>
             )}
 
           </label>
