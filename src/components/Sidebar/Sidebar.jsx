@@ -315,7 +315,7 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
                     onClick={() => {
                       if (item.key === "settings") {
                         setSettingsMode(true);
-                        navigate("/managebusiness");
+                        navigate("/account");
                       } else if (item.children) {
                         setOpenMenu(openMenu === index ? null : index);
                       } else {
@@ -410,7 +410,7 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
       className={styles.settingsButton}
       onClick={() => {
         setSettingsMode(true);
-        navigate("/managebusiness");
+        navigate("/account");
       }}
     >
       <div className={styles.menuItem}>

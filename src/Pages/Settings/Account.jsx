@@ -1,143 +1,279 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Account.module.css";
 
 function Account() {
-  const [saved, setSaved] = useState({
-    name: "",
-    phone: "",
-    email: "",
-  });
 
   const [form, setForm] = useState({
     name: "",
     phone: "",
     email: "",
+    password: "",
   });
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [toastVisible, setToastVisible] = useState(false);
+  const [toastVisible, setToastVisible] =
+    useState(false);
+
+  const API_URL =
+    "http://192.168.31.181:5000/api/profile/seperate/create";
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  const fetchProfile = async () => {
+
+    try {
+
+      const token =
+        localStorage.getItem("token");
+
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // check response type
+      const text = await res.text();
+
+      console.log(text);
+
+      const data = JSON.parse(text);
+
+      const profileData =
+        data.data || data;
+
+      setForm({
+        name:
+          profileData.name || "",
+        phone:
+          profileData.phone || "",
+        email:
+          profileData.email || "",
+        password: "",
+      });
+
+    } catch (err) {
+
+      console.log(err);
+      alert("Failed to fetch profile");
+
+    }
+  };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+
+    const { name, value } = e.target;
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleEdit = () => {
-    setForm({ ...saved });
-    setIsEditing(true);
-  };
+  const handleSave = async () => {
 
-  const handleCancel = () => {
-    setForm({ ...saved });
-    setIsEditing(false);
-  };
+    try {
 
-  const handleSave = () => {
-    if (!form.name.trim()) return;
-    setSaved({ ...form });
-    setIsEditing(false);
-    setToastVisible(true);
-    setTimeout(() => setToastVisible(false), 2500);
+      const token =
+        localStorage.getItem("token");
+
+      const payload = {
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        phone: form.phone,
+      };
+
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const text = await res.text();
+
+      console.log(text);
+
+      const data = JSON.parse(text);
+
+      if (!res.ok) {
+        throw new Error(
+          data.message || "Failed"
+        );
+      }
+
+      setToastVisible(true);
+
+      setTimeout(() => {
+        setToastVisible(false);
+      }, 2500);
+
+    } catch (err) {
+
+      console.log(err);
+      alert(err.message);
+
+    }
   };
 
   const getInitials = (name) => {
+
     if (!name) return "?";
-    const parts = name.trim().split(" ");
+
+    const parts =
+      name.trim().split(" ");
+
     return parts.length >= 2
-      ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+      ? (
+          parts[0][0] +
+          parts[parts.length - 1][0]
+        ).toUpperCase()
       : name.slice(0, 2).toUpperCase();
   };
 
   return (
+
     <div className={styles.accountPage}>
 
-      {/* Header */}
       <div className={styles.topHeader}>
+
         <div className={styles.headerLeft}>
-          <h1 className={styles.title}>Account Settings</h1>
-          <p className={styles.subtitle}>Manage your account details</p>
+
+          <h1 className={styles.title}>
+            Account Settings
+          </h1>
+
+          <p className={styles.subtitle}>
+            Manage your account details
+          </p>
+
         </div>
 
-        <div className={styles.headerButtons}>
-          {isEditing ? (
-            <>
-              <button className={styles.cancelBtn} onClick={handleCancel}>
-                Cancel
-              </button>
-              <button className={styles.saveBtn} onClick={handleSave}>
-                Save Changes
-              </button>
-            </>
-          ) : (
-            <button className={styles.editBtn} onClick={handleEdit}>
-              <span className={styles.editIcon}>✎</span> Edit
-            </button>
-          )}
-        </div>
       </div>
 
-      {/* Avatar Row */}
       <div className={styles.avatarRow}>
+
         <div className={styles.avatar}>
-          {getInitials(saved.name)}
+          {getInitials(form.name)}
         </div>
+
         <div className={styles.avatarInfo}>
-          <p className={styles.avatarName}>{saved.name || "—"}</p>
-          <p className={styles.avatarEmail}>{saved.email || "—"}</p>
+
+          <p className={styles.avatarName}>
+            {form.name || "—"}
+          </p>
+
+          <p className={styles.avatarEmail}>
+            {form.email || "—"}
+          </p>
+
         </div>
+
       </div>
 
-      {/* Section */}
       <div className={styles.sectionHeader}>
-        <h2 className={styles.sectionTitle}>General Information</h2>
+
+        <h2 className={styles.sectionTitle}>
+          General Information
+        </h2>
+
       </div>
 
       <hr className={styles.divider} />
 
-      {/* Form */}
       <div className={styles.formGrid}>
+
         <div className={styles.inputGroup}>
-          <label className={styles.label}>NAME *</label>
+
+          <label className={styles.label}>
+            Name
+          </label>
+
           <input
             type="text"
             name="name"
             placeholder="Enter name"
-            value={isEditing ? form.name : saved.name}
+            value={form.name}
             onChange={handleChange}
-            disabled={!isEditing}
             className={styles.input}
           />
+
         </div>
 
         <div className={styles.inputGroup}>
-          <label className={styles.label}>MOBILE NUMBER</label>
+
+          <label className={styles.label}>
+            Mobile Number
+          </label>
+
           <input
             type="text"
             name="phone"
             placeholder="Enter mobile number"
-            value={isEditing ? form.phone : saved.phone}
+            value={form.phone}
             onChange={handleChange}
-            disabled={!isEditing}
             className={styles.input}
           />
+
         </div>
 
         <div className={styles.inputGroup}>
-          <label className={styles.label}>EMAIL</label>
+
+          <label className={styles.label}>
+            E-mail
+          </label>
+
           <input
             type="email"
             name="email"
             placeholder="Enter email"
-            value={isEditing ? form.email : saved.email}
+            value={form.email}
             onChange={handleChange}
-            disabled={!isEditing}
             className={styles.input}
           />
+
         </div>
+
+        <div className={styles.inputGroup}>
+
+          <label className={styles.label}>
+            Password
+          </label>
+
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter password"
+            value={form.password}
+            onChange={handleChange}
+            className={styles.input}
+          />
+
+        </div>
+
       </div>
 
-      {/* Toast */}
+      <div className={styles.saveWrap}>
+
+        <button
+          className={styles.saveBtn}
+          onClick={handleSave}
+        >
+          Save Changes
+        </button>
+
+      </div>
+
       {toastVisible && (
-        <div className={styles.toast}>✓ Changes saved successfully</div>
+        <div className={styles.toast}>
+          Changes saved successfully
+        </div>
       )}
 
     </div>

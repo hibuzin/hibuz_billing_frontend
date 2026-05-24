@@ -22,19 +22,13 @@ import Offers from "./Pages/Settings";
 import Settings from "./pages/Settings";
 import Home from "./pages/Home";
 
-import CreateUser from "./components/MyAccount/Cashier/CreateCashier";
-import Cashier from "./components/MyAccount/Cashier/Cashier";
 import MyAccount from "./components/MyAccount/PersonIcon";
 import Register from "./components/Register";
 import Onboarding from "./components/Onboarding";
 
-import Admin from "./components/MyAccount/Admin/Admin";
-import CreateAdmin from "./components/MyAccount/Admin/CreateAdmin";
-
 import "./components/styles/theme.css";
 
-import MyAccountPage from "./components/MyAccount/MyAccountPage";
-
+import CreateUser from "./components/CreateUser";
 import CreateProduct from "./Pages/Products/CreateProduct";
 import CreateSupplier from "./components/CreateSupplier";
 
@@ -92,9 +86,8 @@ function MainLayout() {
       />
 
       <div
-        className={`main-content ${
-          collapsed ? "collapsed" : ""
-        }`}
+        className={`main-content ${collapsed ? "collapsed" : ""
+          }`}
       >
         <Routes>
           <Route
@@ -148,19 +141,19 @@ function MainLayout() {
           />
 
           <Route
+            path="/createuser"
+            element={<CreateUser />}
+          />
+
+          <Route
             path="/account"
             element={<Account />}
           />
 
           <Route
-            path="/myaccountpage"
-            element={<MyAccountPage />}
+            path="/managebusiness"
+            element={<ManageBusiness />}
           />
-
-          <Route
-  path="/managebusiness"
-  element={<ManageBusiness />}
-/>
 
           <Route
             path="/settings/invoice"
@@ -187,15 +180,7 @@ function MainLayout() {
             element={<MyAccount />}
           />
 
-          <Route
-            path="/create-user"
-            element={<CreateUser />}
-          />
 
-          <Route
-            path="/cashier"
-            element={<Cashier />}
-          />
 
           <Route
             path="/create-product"
@@ -277,15 +262,6 @@ function MainLayout() {
             element={<CreateHSN />}
           />
 
-          <Route
-            path="/admin"
-            element={<Admin />}
-          />
-
-          <Route
-            path="/create-admin"
-            element={<CreateAdmin />}
-          />
         </Routes>
       </div>
     </>

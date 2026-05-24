@@ -2,54 +2,134 @@ import { useEffect, useState } from "react";
 import styles from "./ManageBusiness.module.css";
 
 function ManageBusiness() {
-  const [business, setBusiness] = useState(null);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const role = user?.role;
+
+  const [logo, setLogo] = useState("");
 
   useEffect(() => {
-    const userData = localStorage.getItem("user");
 
-    if (userData) {
-      setBusiness(JSON.parse(userData));
+    const savedLogo =
+      localStorage.getItem("businessLogo");
+
+    if (savedLogo) {
+      setLogo(savedLogo);
     }
+
   }, []);
 
- return (
-  <div className={styles.container}>
-    <div className={styles.wrapper}>
-      <div className={styles.title}>Manage Business</div>
+  const roleText =
+    role === "super_admin"
+      ? "Super Admin"
+      : role === "admin"
+        ? "Admin"
+        : role === "cashier"
+          ? "Cashier"
+          : "";
 
-      {business ? (
-        <div className={styles.form}>
-  <div className={styles.row}>
-    <div className={styles.col}>
-      <label>Business Name</label>
-      <div className={styles.box}>
-        {business.CompanyName}
-      </div>
-    </div>
+  return (
+    <div className={styles.container}>
 
-    <div className={styles.col}>
-      <label>Phone</label>
-      <div className={styles.box}>
-        {business.CompanyPhone}
-      </div>
-    </div>
+      {/* TOP SECTION */}
+      <div className={styles.topSection}>
 
-    <div className={styles.col}>
-      <label>Email</label>
-      <div className={styles.box}>
-        {business.CompanyEmail}
+        <div className={styles.logoSection}>
+
+          <label className={styles.logoUpload}>
+
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={(e) => {
+
+                const file = e.target.files[0];
+
+                if (file) {
+
+                  const reader =
+                    new FileReader();
+
+                  reader.onloadend = () => {
+
+                    const base64 =
+                      reader.result;
+
+                    setLogo(base64);
+
+                    localStorage.setItem(
+                      "businessLogo",
+                      base64
+                    );
+                  };
+
+                  reader.readAsDataURL(file);
+                }
+              }}
+            />
+
+            {logo ? (
+              <img
+                src={logo}
+                alt="Logo"
+                className={styles.logo}
+              />
+            ) : (
+              <div className={styles.uploadText}>
+                Upload Logo
+              </div>
+            )}
+
+          </label>
+
+        </div>
+
+        {/* ROLE RIGHT */}
+        <div
+          className={`${styles.roleChip} ${role === "admin"
+            ? styles.admin
+            : role === "cashier"
+              ? styles.cashier
+              : styles.superAdmin
+            }`}
+        >
+          {roleText}
+        </div>
+
       </div>
-    </div>
+
+      {/* DETAILS */}
+      <div className={styles.detailsGrid}>
+
+        <div className={styles.field}>
+          <label>Company Name</label>
+
+          <div className={styles.box}>
+            {user?.CompanyName || "-"}
+          </div>
+        </div>
+
+        <div className={styles.field}>
+          <label>Phone</label>
+
+          <div className={styles.box}>
+            {user?.CompanyPhone || "-"}
+          </div>
+        </div>
+
+
+
+<div className={styles.field}>
+  <label>Email</label>
+  <div className={styles.box}>
+    {user?.CompanyEmail || "-"}
   </div>
 </div>
-      ) : (
-        <div className={styles.empty}>
-          No business data found
-        </div>
-      )}
+</div>
+
+
     </div>
-  </div>
-);
+  );
 }
 
 export default ManageBusiness;
