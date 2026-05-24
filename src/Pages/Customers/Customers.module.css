@@ -22,9 +22,9 @@ border-radius: 8px;
 }
 
 .title {
-  font-size: 22px;
-  font-weight: 500;
-  color: #1a1a1a;
+  font-size: var(--heading-text);
+  font-weight: var(--heading-fontweight);
+  color: var(--heading-color);
 }
 
 /* SEARCH ROW */

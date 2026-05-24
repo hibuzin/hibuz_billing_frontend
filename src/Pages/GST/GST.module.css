@@ -4,6 +4,12 @@
   padding: 0;
 }
 
+.container{
+  padding: 20px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  min-height: 100vh;
+}
 .header {
   display: flex;
   justify-content: space-between;
@@ -29,10 +35,9 @@
 
 .title {
   margin: 0;
-  font-size: 26px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  color: #111827;
+  font-size: var(--heading-text);
+  font-weight: var(--heading-fontweight);
+  color: var(--heading-color);
 }
 
 .subtitle {

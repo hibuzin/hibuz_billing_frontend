@@ -157,7 +157,6 @@ const exportExcel = () => {
       {/* Header */}
       <div className={styles.header}>
         <div className={styles.headerLeft}>
-          <span className={styles.eyebrow}>Reports</span>
           <h1 className={styles.title}>GST Purchase Register</h1>
           <p className={styles.subtitle}>
             Track purchase invoices, distributor GSTIN, and tax breakdowns.

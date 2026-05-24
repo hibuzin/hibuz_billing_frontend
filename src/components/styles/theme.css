@@ -32,6 +32,11 @@
   --sidebar-icon: 15px;
 
   /* appbar control */
-  --admin-role: 15px
+  --admin-role: 15px;
+
+  /* headings */
+  --heading-text: 25px;
+  --heading-color: rgb(31, 30, 30);
+  --heading-fontweight:500;
  
 }

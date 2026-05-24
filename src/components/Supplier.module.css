@@ -1,7 +1,11 @@
-
+.container{
+  padding: 20px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  min-height: 100vh;
+}
 
 /* HEADER */
-
 .header {
   display: flex;
   justify-content: space-between;
@@ -10,8 +14,9 @@
 }
 
 .header h2 {
-  font-size: 22px;
-  color: #111;
+  font-size: var(--heading-text);
+  color: var(--heading-color);
+  font-weight: var(--heading-fontweight);
   margin-bottom: 4px;
 }
 
@@ -24,6 +29,7 @@
   width: 42px;
   height: 42px;
   border: none;
+  text-align: left;
   border-radius: 12px;
   background: #111;
   color: #fff;

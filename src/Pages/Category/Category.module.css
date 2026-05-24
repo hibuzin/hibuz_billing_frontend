@@ -13,9 +13,9 @@
 }
 
 .title {
-  font-size: 22px;
-  font-weight: 600;
-  color: #111;
+  font-size: var(--heading-text);
+  font-weight: var(--heading-fontweight);
+  color: var(--heading-color);
 }
 
 .addBtn {

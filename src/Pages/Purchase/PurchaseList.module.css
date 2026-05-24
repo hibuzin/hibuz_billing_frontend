@@ -1,7 +1,11 @@
-
+.container{
+  padding: 20px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  min-height: 100vh;
+}
 
 /* ─── HEADER ─── */
-
 .header {
   display: flex;
   align-items: center;
@@ -10,9 +14,9 @@
 }
 
 .header h2 {
-  font-size: 22px;
-  font-weight: 600;
-  color: #111;
+  font-size: var(--heading-text);
+  font-weight: var(--heading-fontweight);
+  color: var(--heading-color);
   margin-bottom: 4px;
 }
 

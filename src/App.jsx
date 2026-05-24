@@ -12,14 +12,12 @@ import { useState, useEffect } from "react";
 
 import Login from "./components/MyAccount/Login";
 import Customers from "./pages/Customers/Customers";
-import Products from "./pages/Products/Products";
 import Sales from "./pages/Sales";
 import Payment from "./pages/Payment";
 import Stocks from "./pages/Stocks";
 import GST from "./pages/GST/GST";
 import Analytics from "./pages/Analytics";
-import Offers from "./Pages/Settings";
-import Settings from "./pages/Settings";
+import Offers from "./Pages/Offers";
 import Home from "./pages/Home";
 
 import MyAccount from "./components/MyAccount/PersonIcon";
@@ -101,11 +99,6 @@ function MainLayout() {
           />
 
           <Route
-            path="/products"
-            element={<Products />}
-          />
-
-          <Route
             path="/sales"
             element={<Sales />}
           />
@@ -135,10 +128,6 @@ function MainLayout() {
             element={<Offers />}
           />
 
-          <Route
-            path="/settings"
-            element={<Settings />}
-          />
 
           <Route
             path="/createuser"
