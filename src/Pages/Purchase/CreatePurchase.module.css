@@ -1,7 +1,8 @@
 .container {
   overflow-y: auto;
-  background: #f3f3f3;
-  padding: 18px;
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 6;
 }
 
 .layout {

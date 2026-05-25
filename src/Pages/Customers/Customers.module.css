@@ -332,3 +332,71 @@ border-radius: 8px;
   border-radius: 10px;
   color: white;
 }
+
+.billSection {
+  margin-top: 20px;
+}
+
+.billList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.billCard {
+  padding: 12px;
+  border-radius: 12px;
+  background: #f5f5f5;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.billCard:hover {
+  background: #ececec;
+}
+
+.billOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.billDialog {
+  width: 90%;
+  max-width: 700px;
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.billHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.billTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.billTable th,
+.billTable td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.billTotal {
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: right;
+}

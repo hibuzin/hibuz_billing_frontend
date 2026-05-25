@@ -10,19 +10,22 @@ function Customers() {
   const [customers, setCustomers] = useState([]);
   const [search, setSearch] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] =
-  useState(false);
+    useState(false);
   const [selected, setSelected] = useState(null);
   const navigate = useNavigate();
   const addBtnRef = useRef(null);
+  const [customerBills, setCustomerBills] = useState([]);
+  const [selectedBill, setSelectedBill] = useState(null);
+  const [loadingBills, setLoadingBills] = useState(false);
 
-const rowRefs = useRef([]);
+  const rowRefs = useRef([]);
 
   const [toast, setToast] = useState({
-  message: "",
-  type: "success",
-});
+    message: "",
+    type: "success",
+  });
 
-const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const [editData, setEditData] = useState({
     name: "",
@@ -32,20 +35,20 @@ const [isEditing, setIsEditing] = useState(false);
   });
 
   useEffect(() => {
-  if (search.trim()) {
-    searchCustomers(search);
-  } else {
-    fetchCustomers();
-  }
-}, [search]);
+    if (search.trim()) {
+      searchCustomers(search);
+    } else {
+      fetchCustomers();
+    }
+  }, [search]);
 
   const showToast = (message, type = "success") => {
-  setToast({ message, type });
+    setToast({ message, type });
 
-  setTimeout(() => {
-    setToast({ message: "", type: "success" });
-  }, 2500);
-};
+    setTimeout(() => {
+      setToast({ message: "", type: "success" });
+    }, 2500);
+  };
 
   const fetchCustomers = () => {
     const token = localStorage.getItem("token");
@@ -70,33 +73,65 @@ const [isEditing, setIsEditing] = useState(false);
       .catch((err) => console.error("FETCH ERROR:", err));
   };
 
-  const searchCustomers = async (query) => {
-  try {
-    const token = localStorage.getItem("token");
+  //customers bill 
+  const fetchCustomerBills = async (customerId) => {
+    try {
+      setLoadingBills(true);
 
-    const res = await fetch(
-      `${API.customerSearch}?q=${query}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+      const token = localStorage.getItem("token");
 
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(
-        data.message || "Failed to search customers"
+      const res = await fetch(
+        `http://192.168.31.181:5000/api/bill/search/customer?search=${customerId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message);
+      }
+
+      setCustomerBills(data.data || []);
+
+    } catch (err) {
+      console.error(err);
+      setCustomerBills([]);
+    } finally {
+      setLoadingBills(false);
     }
+  };
 
-    setCustomers(data.data || []);
+  const searchCustomers = async (query) => {
+    try {
+      const token = localStorage.getItem("token");
 
-  } catch (err) {
-    console.error("SEARCH ERROR:", err);
-  }
-};
+      const res = await fetch(
+        `${API.customerSearch}?q=${query}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(
+          data.message || "Failed to search customers"
+        );
+      }
+
+      setCustomers(data.data || []);
+
+    } catch (err) {
+      console.error("SEARCH ERROR:", err);
+    }
+  };
 
   const openCustomer = (customer) => {
     setSelected(customer);
@@ -109,6 +144,7 @@ const [isEditing, setIsEditing] = useState(false);
     });
 
     setIsEditing(false);
+    fetchCustomerBills(customer.id);
   };
 
   const handleUpdate = async () => {
@@ -151,92 +187,92 @@ const [isEditing, setIsEditing] = useState(false);
     }
   };
 
-  
+
   const maxPts = Math.max(
     ...customers.map((c) => c.loyaltyPoints || 0),
     1
   );
 
   const handleDelete = async () => {
-  try {
-    const token = localStorage.getItem("token");
+    try {
+      const token = localStorage.getItem("token");
 
-    const res = await fetch(
-      `${API.customers}/${selected._id}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(
-        data.message || "Failed to delete customer"
+      const res = await fetch(
+        `${API.customers}/${selected._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(
+          data.message || "Failed to delete customer"
+        );
+      }
+
+      showToast(
+        "Customer deleted successfully",
+        "success"
+      );
+
+      setCustomers((prev) =>
+        prev.filter((c) => c._id !== selected._id)
+      );
+
+      setSelected(null);
+
+      setShowDeleteConfirm(false);
+
+    } catch (err) {
+      console.error("DELETE ERROR:", err);
+
+      showToast(err.message, "error");
     }
-
-    showToast(
-      "Customer deleted successfully",
-      "success"
-    );
-
-    setCustomers((prev) =>
-      prev.filter((c) => c._id !== selected._id)
-    );
-
-    setSelected(null);
-
-    setShowDeleteConfirm(false);
-
-  } catch (err) {
-    console.error("DELETE ERROR:", err);
-
-    showToast(err.message, "error");
-  }
-};
+  };
 
   return (
     <>
       <div className={styles.wrap}>
         <div className={styles.topSection}>
 
-  <h1 className={styles.title}>
-    Customers
-  </h1>
+          <h1 className={styles.title}>
+            Customers
+          </h1>
 
-  <div className={styles.searchRow}>
+          <div className={styles.searchRow}>
 
-    <div className={styles.searchBox}>
+            <div className={styles.searchBox}>
 
-      <FiSearch className={styles.searchIcon} />
+              <FiSearch className={styles.searchIcon} />
 
-      <input
-        type="text"
-        placeholder="Search by name, phone or ID..."
-        value={search}
-        onChange={(e) =>
-          setSearch(e.target.value)
-        }
-        className={styles.searchInput}
-      />
+              <input
+                type="text"
+                placeholder="Search by name, phone or ID..."
+                value={search}
+                onChange={(e) =>
+                  setSearch(e.target.value)
+                }
+                className={styles.searchInput}
+              />
 
-    </div>
+            </div>
 
-    <button
-      ref={addBtnRef}
-      className={styles.addBtn}
-      onClick={() =>
-        navigate("/create-customer")
-      }
-    >
-      <FiPlus />
-    </button>
+            <button
+              ref={addBtnRef}
+              className={styles.addBtn}
+              onClick={() =>
+                navigate("/create-customer")
+              }
+            >
+              <FiPlus />
+            </button>
 
-  </div>
+          </div>
         </div>
 
         <table className={styles.table}>
@@ -274,13 +310,12 @@ const [isEditing, setIsEditing] = useState(false);
                   <span
                     className={styles.ptsBar}
                     style={{
-                      width: `${
-                        maxPts
+                      width: `${maxPts
                           ? Math.round(
-                              (c.loyaltyPoints / maxPts) * 40
-                            )
+                            (c.loyaltyPoints / maxPts) * 40
+                          )
                           : 0
-                      }px`,
+                        }px`,
                     }}
                   />
                 </td>
@@ -320,12 +355,12 @@ const [isEditing, setIsEditing] = useState(false);
                   {isEditing ? "Cancel" : "Edit"}
                 </button>
 
-<button
-  className={styles.deleteBtn}
-  onClick={() => setShowDeleteConfirm(true)}
->
-  Delete
-</button>
+                <button
+                  className={styles.deleteBtn}
+                  onClick={() => setShowDeleteConfirm(true)}
+                >
+                  Delete
+                </button>
                 <button
                   className={styles.closeBtn}
                   onClick={() => setSelected(null)}
@@ -339,10 +374,10 @@ const [isEditing, setIsEditing] = useState(false);
 
             <div className={styles.dialogGrid}>
               {Object.entries(
-  isEditing
-    ? { ...selected, ...editData }
-    : selected
-).map(
+                isEditing
+                  ? { ...selected, ...editData }
+                  : selected
+              ).map(
                 ([key, value]) => {
                   if (key === "__v") return null;
 
@@ -354,12 +389,12 @@ const [isEditing, setIsEditing] = useState(false);
                       <label>{key}</label>
 
                       {isEditing &&
-                      [
-                        "name",
-                        "phone",
-                        "email",
-                        "address",
-                      ].includes(key) ? (
+                        [
+                          "name",
+                          "phone",
+                          "email",
+                          "address",
+                        ].includes(key) ? (
                         key === "address" ? (
                           <textarea
                             value={editData[key]}
@@ -387,15 +422,15 @@ const [isEditing, setIsEditing] = useState(false);
                       ) : (
                         <p>
                           {value === null ||
-                          value === undefined ||
-                          value === ""
+                            value === undefined ||
+                            value === ""
                             ? "—"
                             : typeof value ===
                               "object"
-                            ? JSON.stringify(
+                              ? JSON.stringify(
                                 value
                               )
-                            : value.toString()}
+                              : value.toString()}
                         </p>
                       )}
                     </div>
@@ -404,6 +439,42 @@ const [isEditing, setIsEditing] = useState(false);
               )}
             </div>
 
+<hr className={styles.divider} />
+
+<div className={styles.billSection}>
+
+  <h3>Customer Bills</h3>
+
+  {loadingBills ? (
+    <p>Loading bills...</p>
+  ) : customerBills.length === 0 ? (
+    <p>No bills found</p>
+  ) : (
+    <div className={styles.billList}>
+      {customerBills.map((bill) => (
+        <div
+          key={bill._id}
+          className={styles.billCard}
+          onClick={() => setSelectedBill(bill)}
+        >
+          <div>
+            #{bill._id.slice(-6)}
+          </div>
+
+          <div>
+            ₹{bill.summary?.grandTotal}
+          </div>
+
+          <div>
+            {new Date(
+              bill.createdAt
+            ).toLocaleDateString()}
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
             {isEditing && (
               <button
                 className={styles.updateBtn}
@@ -413,41 +484,117 @@ const [isEditing, setIsEditing] = useState(false);
               </button>
             )}
           </div>
-          {showDeleteConfirm && (
-  <div className={styles.confirmOverlay}>
-    <div className={styles.confirmBox}>
-      <h3>Delete Customer?</h3>
 
-      <p>
-         Are you sure you want to delete this customer?
-      </p>
+          {selectedBill && (
+  <div
+    className={styles.billOverlay}
+    onClick={() => setSelectedBill(null)}
+  >
+    <div
+      className={styles.billDialog}
+      onClick={(e) => e.stopPropagation()}
+    >
 
-      <div className={styles.confirmActions}>
-        <button
-          className={styles.cancelBtn}
-          onClick={() =>
-            setShowDeleteConfirm(false)
-          }
-        >
-          Cancel
-        </button>
+      <div className={styles.billHeader}>
+        <h2>Invoice</h2>
 
         <button
-          className={styles.confirmDeleteBtn}
-          onClick={handleDelete}
+          onClick={() => setSelectedBill(null)}
         >
-          Delete
+          ✕
         </button>
       </div>
+
+      <div className={styles.billInfo}>
+        <p>
+          <strong>Customer:</strong>{" "}
+          {selectedBill.customerId?.name}
+        </p>
+
+        <p>
+          <strong>Phone:</strong>{" "}
+          {selectedBill.customerId?.phone}
+        </p>
+
+        <p>
+          <strong>Payment:</strong>{" "}
+          {selectedBill.paymentMethod}
+        </p>
+
+        <p>
+          <strong>Date:</strong>{" "}
+          {new Date(
+            selectedBill.createdAt
+          ).toLocaleString()}
+        </p>
+      </div>
+
+      <table className={styles.billTable}>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {selectedBill.items.map((item) => (
+            <tr key={item._id}>
+              <td>{item.name}</td>
+              <td>{item.qty}</td>
+              <td>₹{item.price}</td>
+              <td>₹{item.finalPrice}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div className={styles.billTotal}>
+        Grand Total :
+        ₹{selectedBill.summary?.grandTotal}
+      </div>
+
     </div>
   </div>
 )}
+
+          {showDeleteConfirm && (
+            <div className={styles.confirmOverlay}>
+              <div className={styles.confirmBox}>
+                <h3>Delete Customer?</h3>
+
+                <p>
+                  Are you sure you want to delete this customer?
+                </p>
+
+                <div className={styles.confirmActions}>
+                  <button
+                    className={styles.cancelBtn}
+                    onClick={() =>
+                      setShowDeleteConfirm(false)
+                    }
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    className={styles.confirmDeleteBtn}
+                    onClick={handleDelete}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
       <Toast
-  message={toast.message}
-  type={toast.type}
-/>
+        message={toast.message}
+        type={toast.type}
+      />
     </>
   );
 }

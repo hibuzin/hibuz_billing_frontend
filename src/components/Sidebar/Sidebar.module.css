@@ -152,7 +152,7 @@
 
   cursor: pointer;
 
-  font-size: 15px;
+  font-size: var(--sidebar-font);
 
   transition: 0.2s ease;
 }
@@ -232,7 +232,7 @@
 }
 
 .arrow {
-  font-size: 11px;
+  font-size: var(--sidebar-font);
   color: #a1a1aa;
 
   display: flex;
@@ -259,16 +259,6 @@
 
   transition: background 0.25s ease;
   color: #ffffff;
-}
-
-.versionText {
-  margin-top: 20px;
-
-  font-size: 11px;
-  color: rgba(255,255,255,0.5);
-
-  text-align: center;
-  width: 100%;
 }
 
 
@@ -307,11 +297,6 @@
   color: #ffffff;
 }
 
-.divider {
-  height: 1px;
-  background: rgba(255,255,255,0.05);
-  margin: 6px 10px;
-}
 
 .topBar {
   height: 50px;

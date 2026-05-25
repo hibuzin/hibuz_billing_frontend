@@ -32,6 +32,9 @@ function Product() {
   const [editProduct, setEditProduct] =
     useState(null);
 
+    const [viewProduct, setViewProduct] =
+  useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -179,7 +182,7 @@ function Product() {
         item.flavor?.join(", ") || "",
 
       liters:
-        item.liters?.join(", ") || "",
+  item.litters?.join(", ") || "",
 
       mrps:
         item.mrps?.join(", ") || "",
@@ -229,7 +232,7 @@ function Product() {
           .split(",")
           .map((f) => f.trim()),
 
-        liters: editProduct.liters
+        litters: editProduct.liters
           .split(",")
           .map((l) => l.trim()),
 
@@ -343,7 +346,11 @@ function Product() {
 
       <tbody>
         {product.map((p, index) => (
-          <tr key={p._id}>
+          <tr
+  key={p._id}
+  onClick={() => setViewProduct(p)}
+  className={styles.row}
+>
             <td>{index + 1}</td>
 
             <td className={styles.nameCell}>
@@ -369,9 +376,10 @@ function Product() {
                   className={
                     styles.editBtn
                   }
-                  onClick={() =>
-                    openEdit(p)
-                  }
+                  onClick={(e) => {
+  e.stopPropagation();
+  openEdit(p);
+}}
                 >
                   <FaEdit />
                 </button>
@@ -380,11 +388,10 @@ function Product() {
                   className={
                     styles.deleteBtn
                   }
-                  onClick={() =>
-                    handleDelete(
-                      p._id
-                    )
-                  }
+                  onClick={(e) => {
+  e.stopPropagation();
+  handleDelete(p._id);
+}}
                   disabled={
                     deleteLoading ===
                     p._id
@@ -560,6 +567,64 @@ function Product() {
           </div>
         </div>
       )}
+
+      {viewProduct && (
+  <div
+    className={styles.modalOverlay}
+    onClick={() => setViewProduct(null)}
+  >
+    <div
+      className={styles.viewModal}
+      onClick={(e) => e.stopPropagation()}
+    >
+
+      <div className={styles.modalHeader}>
+        <h3>Product Details</h3>
+
+        <button
+          className={styles.closeBtn}
+          onClick={() => setViewProduct(null)}
+        >
+          ×
+        </button>
+      </div>
+
+      <div className={styles.viewGrid}>
+
+        {Object.entries(viewProduct).map(
+          ([key, value]) => {
+
+            if (key === "__v") return null;
+
+            return (
+              <div
+                key={key}
+                className={styles.viewField}
+              >
+                <label>{key}</label>
+
+                <p>
+                  {Array.isArray(value)
+                    ? value.join(", ")
+                    : typeof value === "object"
+                    ? JSON.stringify(
+                        value,
+                        null,
+                        2
+                      )
+                    : value?.toString() || "—"}
+                </p>
+              </div>
+            );
+          }
+        )}
+
+      </div>
+
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

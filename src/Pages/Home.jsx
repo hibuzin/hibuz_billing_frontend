@@ -124,7 +124,11 @@ export default function Home() {
                   <td>{t.createdAt}</td>
                   <td>{t.paymentMethod}</td>
                   <td>{t._id}</td>
-                  <td>{t.customerId || "N/A"}</td>
+                  <td>
+  {t.customerId
+    ? `${t.customerId.name}`
+    : "N/A"}
+</td>
                   <td>₹{t?.summary?.grandTotal || 0}</td>
                 </tr>
               ))

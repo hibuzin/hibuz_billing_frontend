@@ -427,11 +427,6 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
     </div>
   )}
 
-  {!collapsed && (
-    <p className={styles.versionText}>
-      Version {APP_VERSION}
-    </p>
-  )}
 
 </div>
     </div>

@@ -75,9 +75,9 @@ function CreateProduct() {
           .filter(Boolean),
 
         litters: form.liters
-          .split(",")
-          .map((item) => Number(item.trim()))
-          .filter((item) => !isNaN(item)),
+  .split(",")
+  .map((item) => item.trim())
+  .filter(Boolean),
 
         mrps: form.mrps
           .split(",")
