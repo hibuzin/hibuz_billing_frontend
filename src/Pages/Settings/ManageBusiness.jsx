@@ -31,6 +31,7 @@ function ManageBusiness() {
   return (
     <div className={styles.container}>
 
+ <h1 className={styles.title}>Manage Users</h1>
       {/* TOP SECTION */}
       <div className={styles.topSection}>
 
@@ -77,17 +78,17 @@ function ManageBusiness() {
               />
             ) : (
               <div className={styles.uploadText}>
-  <FiImage />
+                <FiImage />
 
-  <div>
-    Upload Logo
-    <br />
+                <div>
+                  Upload Logo
+                  <br />
 
-    <span>
-      PNG/JPG, max 5 MB.
-    </span>
-  </div>
-</div>
+                  <span>
+                    PNG/JPG, max 5 MB.
+                  </span>
+                </div>
+              </div>
             )}
 
           </label>
@@ -129,13 +130,13 @@ function ManageBusiness() {
 
 
 
-<div className={styles.field}>
-  <label>Email</label>
-  <div className={styles.box}>
-    {user?.CompanyEmail || "-"}
-  </div>
-</div>
-</div>
+        <div className={styles.field}>
+          <label>Email</label>
+          <div className={styles.box}>
+            {user?.CompanyEmail || "-"}
+          </div>
+        </div>
+      </div>
 
 
     </div>

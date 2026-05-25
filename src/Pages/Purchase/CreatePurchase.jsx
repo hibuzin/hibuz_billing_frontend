@@ -6,18 +6,16 @@ import Toast from "../../components/Toast";
 import { API } from "../../constants/api";
 
 function CreatePurchase() {
-  const emptyItem = {
-    productId: "",
-    flavor: "",
-    liters: "",
-    mrp: "",
-    qty: "",
-    costPrice: "",
-    sellingPrice: "",
-    unitType: "box",
-    unitValue: 1,
-    barcode: "",
-  };
+ const emptyItem = {
+  productId: "",
+  flavor: "",
+  litters: "",
+  mrp: "",
+  qty: "",
+  costPrice: "",
+  sellingPrice: "",
+  barcode: "",
+};
 
   const [form, setForm] = useState({
   supplierId: "",
@@ -188,10 +186,10 @@ const getLiterOptions = (productId) => {
     (p) => p._id === productId
   );
 
-  if (!product || !product.liters)
+  if (!product || !product.litters)
     return [];
 
-  return product.liters.map(
+  return product.litters.map(
     (l, i) => ({
       value: l,
       label: l,
@@ -334,27 +332,18 @@ const getLiterOptions = (productId) => {
   invoiceDate: form.invoiceDate,
 
   items: billItems.map((item) => ({
-          productId: item.productId,
-          flavor: item.flavor,
-          liters: item.liters,
-          mrp: Number(item.mrp),
-          qty: Number(item.qty),
-          costPrice: Number(
-            item.costPrice
-          ),
-          sellingPrice: Number(
-            item.sellingPrice
-          ),
-          unitType: item.unitType,
-          unitValue: Number(
-            item.unitValue
-          ),
-          barcode: item.barcode,
-        })),
-      };
+    productId: item.productId,
+    flavor: item.flavor,
+    mrp: Number(item.mrp),
+    qty: Number(item.qty),
+    costPrice: Number(item.costPrice),
+    sellingPrice: Number(item.sellingPrice),
+    barcode: item.barcode,
+  })),
+};
 
       const res = await fetch(
-        API.purchase,
+        API.createPurchase,
         {
           method: "POST",
 
@@ -518,10 +507,8 @@ const getLiterOptions = (productId) => {
                                 ?.flavor?.[0] ||
                               "",
 
-                            liters:
-                              product
-                                ?.liters?.[0] ||
-                              "",
+                            litters:
+  product?.litters?.[0] || "",
 
                             mrp:
                               product
@@ -586,7 +573,7 @@ const getLiterOptions = (productId) => {
                           ).find(
                             (l) =>
                               l.value ===
-                              currentItem.liters
+                              currentItem.litters
                           ) || null
                         }
                         onChange={(
@@ -595,9 +582,8 @@ const getLiterOptions = (productId) => {
                           setCurrentItem({
                             ...currentItem,
 
-                            liters:
-                              selected?.value ||
-                              "",
+                            litters:
+  selected?.value || "",
 
                             mrp:
                               selected?.mrp ||
@@ -703,24 +689,14 @@ const getLiterOptions = (productId) => {
                       />
                     </div>
 
-                    {/* UNIT TYPE */}
+                   
                     <div
                       className={styles.field}
-                    >
-                      <label>
-                        Unit Type
-                      </label>
+                     >
+                      
 
                       <select
-                        value={
-                          currentItem.unitType
-                        }
-                        onChange={(e) =>
-                          handleItemChange(
-                            "unitType",
-                            e.target.value
-                          )
-                        }
+                      
                       >
                         <option value="box">
                           Box
@@ -736,27 +712,7 @@ const getLiterOptions = (productId) => {
                       </select>
                     </div>
 
-                    {/* UNIT VALUE */}
-                    <div
-                      className={styles.field}
-                    >
-                      <label>
-                        Unit Value
-                      </label>
-
-                      <input
-                        type="number"
-                        value={
-                          currentItem.unitValue
-                        }
-                        onChange={(e) =>
-                          handleItemChange(
-                            "unitValue",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </div>
+                  
 
                     {/* BARCODE */}
                     <div
@@ -843,8 +799,7 @@ const getLiterOptions = (productId) => {
                             <p>
                               Liters
                               <span>
-                                {item.liters ||
-                                  "-"}
+                                {item.litters || "-"}
                               </span>
                             </p>
 
@@ -1044,10 +999,8 @@ const getLiterOptions = (productId) => {
                           ?.flavor?.[0] ||
                         "",
 
-                      liters:
-                        product
-                          ?.liters?.[0] ||
-                        "",
+                      litters:
+  product?.litters?.[0] || "",
 
                       mrp:
                         product
@@ -1108,7 +1061,7 @@ const getLiterOptions = (productId) => {
                     ).find(
                       (l) =>
                         l.value ===
-                        editItem.liters
+                        editItem.litters
                     ) || null
                   }
                   onChange={(
@@ -1117,7 +1070,7 @@ const getLiterOptions = (productId) => {
                     setEditItem({
                       ...editItem,
 
-                      liters:
+                      litters:
                         selected?.value ||
                         "",
 

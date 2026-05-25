@@ -259,7 +259,7 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
 
                 <button
                   className={styles.billBtn}
-                  onClick={() => navigate("/onboarding")}
+                  onClick={() => navigate("/bill")}
                 >
                   + Create Sale Invoice
                 </button>

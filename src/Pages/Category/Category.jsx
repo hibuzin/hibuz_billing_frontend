@@ -8,6 +8,10 @@ import { API } from "../../constants/api";
 function Category() {
   const [categories, setCategories] = useState([]);
   const [selected, setSelected] = useState(null);
+
+  const [deleteItem, setDeleteItem] =
+    useState(null);
+
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({ name: "" });
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -88,18 +92,20 @@ function Category() {
     } catch (err) {
       showToast(err.message, "error");
     }
+
   };
 
   const handleDelete = async () => {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`${API.categories}/${selected._id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(`${API.categories}/${deleteItem._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
       const data = await res.json();
 
@@ -108,10 +114,10 @@ function Category() {
       showToast("Category deleted successfully");
 
       setCategories((prev) =>
-        prev.filter((c) => c._id !== selected._id)
+        prev.filter((c) => c._id !== deleteItem._id)
       );
 
-      setSelected(null);
+      setDeleteItem(null);
       setShowDeleteConfirm(false);
     } catch (err) {
       showToast(err.message, "error");
@@ -149,33 +155,38 @@ function Category() {
                   <td>{c.name}</td>
 
                   <td>
-  <div className={styles.actions}>
+                    <div className={styles.actions}>
 
-    <button
-      className={styles.editBtn}
-      onClick={(e) => {
-        e.stopPropagation();
-        setSelected(c);
-        setEditData({ name: c.name });
-        setIsEditing(true);
-      }}
-    >
-      <FaEdit />
-    </button>
+                      <button
+                        className={styles.editBtn}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelected(c);
+                          setEditData({
+                            name: c.name || "",
+                            hsnCode: c.hsnCode || "",
+                            gstRate: c.gstRate || "",
+                            description: c.description || "",
+                          });
+                          setIsEditing(true);
+                        }}
+                      >
+                        <FaEdit />
+                      </button>
 
-    <button
-      className={styles.deleteBtn}
-      onClick={(e) => {
-        e.stopPropagation();
-        setSelected(c);
-        setShowDeleteConfirm(true);
-      }}
-    >
-      <FaTrash />
-    </button>
+                      <button
+                        className={styles.deleteBtn}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setDeleteItem(c);
+                          setShowDeleteConfirm(true);
+                        }}
+                      >
+                        <FaTrash />
+                      </button>
 
-  </div>
-</td>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -184,63 +195,151 @@ function Category() {
       </div>
 
       {selected && (
-  <div className={styles.overlay}>
-    <div className={styles.dialog}>
+        <div className={styles.overlay}>
+          <div className={styles.dialog}>
 
-      <div className={styles.dialogHeader}>
-        <div className={styles.dialogName}>
-          Category Details
+            <div className={styles.dialogHeader}>
+              <div className={styles.dialogName}>
+                Category Details
+              </div>
+
+              <button
+                className={styles.closeBtn}
+                onClick={() => setSelected(null)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <hr className={styles.divider} />
+
+            <div className={styles.dialogGrid}>
+
+              <div className={styles.field}>
+                <label>Name</label>
+
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editData.name || ""}
+                    onChange={(e) =>
+                      setEditData({
+                        ...editData,
+                        name: e.target.value,
+                      })
+                    }
+                  />
+                ) : (
+                  <p>{selected.name}</p>
+                )}
+              </div>
+
+              <div className={styles.field}>
+                <label>HSN Code</label>
+
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editData.hsnCode || ""}
+                    onChange={(e) =>
+                      setEditData({
+                        ...editData,
+                        hsnCode: e.target.value,
+                      })
+                    }
+                  />
+                ) : (
+                  <p>{selected.hsnCode}</p>
+                )}
+              </div>
+
+              <div className={styles.field}>
+                <label>GST Rate</label>
+
+                {isEditing ? (
+                  <input
+                    type="number"
+                    value={editData.gstRate || ""}
+                    onChange={(e) =>
+                      setEditData({
+                        ...editData,
+                        gstRate: e.target.value,
+                      })
+                    }
+                  />
+                ) : (
+                  <p>{selected.gstRate}%</p>
+                )}
+              </div>
+
+              <div className={styles.field}>
+                <label>Description</label>
+
+                {isEditing ? (
+                  <textarea
+                    value={editData.description || ""}
+                    onChange={(e) =>
+                      setEditData({
+                        ...editData,
+                        description: e.target.value,
+                      })
+                    }
+                  />
+                ) : (
+                  <p>{selected.description}</p>
+                )}
+              </div>
+
+              {isEditing && (
+                <div className={styles.updateWrap}>
+                  <button
+                    className={styles.updateBtn}
+                    onClick={handleUpdate}
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              )}
+            </div>
+
+          </div>
         </div>
+      )}
 
-        <button
-          className={styles.closeBtn}
-          onClick={() => setSelected(null)}
-        >
-          ✕
-        </button>
-      </div>
+      {showDeleteConfirm && (
+        <div className={styles.overlay}>
+          <div className={styles.deleteDialog}>
 
-      <hr className={styles.divider} />
+            <h3>Delete Category?</h3>
 
-      <div className={styles.dialogGrid}>
+            <p>
+              Are you sure you want to delete
+              this category?
+            </p>
 
-        <div className={styles.field}>
-          <label>ID</label>
-          <p>{selected._id}</p>
+            <div className={styles.deleteActions}>
+
+              <button
+                className={styles.cancelBtn}
+                onClick={() => {
+                  setShowDeleteConfirm(false);
+                  setDeleteItem(null);
+                }}
+              >
+                Cancel
+              </button>
+
+              <button
+                className={styles.confirmDeleteBtn}
+                onClick={handleDelete}
+              >
+                Delete
+              </button>
+
+            </div>
+          </div>
         </div>
-
-        <div className={styles.field}>
-          <label>Name</label>
-          <p>{selected.name}</p>
-        </div>
-
-        <div className={styles.field}>
-          <label>HSN Code</label>
-          <p>{selected.hsnCode}</p>
-        </div>
-
-        <div className={styles.field}>
-          <label>GST Rate</label>
-          <p>{selected.gstRate}%</p>
-        </div>
-
-        <div className={styles.field}>
-          <label>HSN Description</label>
-          <p>{selected.hsnId?.description}</p>
-        </div>
-
-        <div className={styles.field}>
-          <label>Created At</label>
-          <p>
-            {new Date(selected.createdAt).toLocaleString()}
-          </p>
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-)}
+      )}
 
       <Toast message={toast.message} type={toast.type} />
     </>

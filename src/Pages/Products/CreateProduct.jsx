@@ -9,8 +9,6 @@ function CreateProduct() {
     name: "",
     brand: "",
     categoryId: "",
-    hsnId: "",
-    gstRate: "",
     flavor: "",
     liters: "",
     mrps: "",
@@ -70,18 +68,16 @@ function CreateProduct() {
         name: form.name,
         brand: form.brand,
         categoryId: form.categoryId,
-        hsnId: form.hsnId,
-        gstRate: Number(form.gstRate),
 
         flavor: form.flavor
           .split(",")
           .map((item) => item.trim())
           .filter(Boolean),
 
-        liters: form.liters
+        litters: form.liters
           .split(",")
-          .map((item) => item.trim())
-          .filter(Boolean),
+          .map((item) => Number(item.trim()))
+          .filter((item) => !isNaN(item)),
 
         mrps: form.mrps
           .split(",")
@@ -118,8 +114,6 @@ function CreateProduct() {
         name: "",
         brand: "",
         categoryId: "",
-        hsnId: "",
-        gstRate: "",
         flavor: "",
         liters: "",
         mrps: "",
@@ -144,9 +138,6 @@ function CreateProduct() {
 
           <div className={styles.header}>
             <h2>Create Product</h2>
-            <p>
-              Add product details with variants
-            </p>
           </div>
 
           <form
@@ -192,12 +183,9 @@ function CreateProduct() {
                     );
 
                     setForm((prev) => ({
-                      ...prev,
-                      categoryId: e.target.value,
-                      hsnId: selectedCategory?.hsnId || "",
-                      gstRate:
-                        selectedCategory?.gstRate || "",
-                    }));
+  ...prev,
+  categoryId: e.target.value,
+}));
                   }}
                   required
                 >
@@ -217,28 +205,7 @@ function CreateProduct() {
               </div>
 
             </div>
-            <div className={styles.field}>
-              <label>HSN ID</label>
-
-              <input
-                type="text"
-                name="hsnId"
-                value={form.hsnId}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className={styles.field}>
-              <label>GST Rate</label>
-
-              <input
-                type="number"
-                name="gstRate"
-                value={form.gstRate}
-                onChange={handleChange}
-              />
-
-            </div>
+          
             <div className={styles.section}>
               <div className={styles.sectionHeader}>
                 <h3>Flavors</h3>

@@ -1,9 +1,9 @@
+import styles from "./Analytics.module.css";
+
 function Analytics() {
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Analytics</h1>
-
-      <p>View sales reports, charts, and business insights here.</p>
+    <div className={styles.container}>
+      <h1 className={styles.heading}>Analytics</h1>
     </div>
   );
 }

@@ -12,6 +12,13 @@
   margin-bottom: 34px;
 }
 
+.title {
+  font-size: var(--heading-text);
+  font-weight: var(--heading-fontweight);
+  color: var(--heading-color);
+  margin-bottom: 30px;
+}
+
 .uploadText {
   display: flex;
   flex-direction: column;

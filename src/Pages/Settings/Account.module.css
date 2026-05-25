@@ -24,9 +24,9 @@
 }
 
 .title {
-  font-size: 22px;
-  font-weight: 600;
-  color: #1a1a2e;
+   font-size: var(--heading-text);
+  font-weight: var(--heading-fontweight);
+  color: var(--heading-color);
   margin: 0 0 4px;
 }
 

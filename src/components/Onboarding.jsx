@@ -9,12 +9,17 @@ import { MdVerified } from "react-icons/md";
 function Onboarding() {
   const [lang, setLang] = useState("en");
 
-  const [form, setForm] = useState({
-    CompanyName: "",
-    CompanyPhone: "",
-    CompanyEmail: "",
-    password: "",
-  });
+const [form, setForm] = useState({
+  CompanyName: "",
+  CompanyPhone: "",
+  CompanyEmail: "",
+  password: "",
+  address: "",
+  state: "",
+  pincode: "",
+  city: "",
+  gstnumber: "",
+});
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");

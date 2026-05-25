@@ -1,17 +1,15 @@
 .container {
-  padding: 24px;
   display: flex;
   justify-content: center;
 }
 
 .card {
   width: 100%;
-  max-width: 950px;
 
   background: #ffffff;
 
   border: 1px solid #ececec;
-  border-radius: 26px;
+  border-radius: 6px;
 
   padding: 32px;
 
@@ -23,16 +21,9 @@
 }
 
 .header h2 {
-  font-size: 28px;
-  font-weight: 600;
-  color: #111111;
-
-  margin-bottom: 6px;
-}
-
-.header p {
-  font-size: 14px;
-  color: #777777;
+  font-size: var(--heading-text);
+  font-weight: var(--heading-fontweight);
+  color: var(--heading-color);
 }
 
 .form {
