@@ -1,26 +1,9 @@
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "./CreateCustomers.module.css";
 import Toast from "../../components/Toast";
 import { API } from "../../constants/api";
 
 function CreateCustomer() {
-
-  const nameRef = useRef(null);
-const phoneRef = useRef(null);
-const emailRef = useRef(null);
-const addressRef = useRef(null);
-
-const handleEnter = (e, nextRef) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-
-    if (nextRef) {
-      nextRef.current.focus();
-    } else {
-      handleSubmit(e);
-    }
-  }
-};
 
   const [form, setForm] = useState({
     name: "",
@@ -35,6 +18,28 @@ const handleEnter = (e, nextRef) => {
     message: "",
     type: "",
   });
+
+  const nameRef = useRef(null);
+  const phoneRef = useRef(null);
+  const emailRef = useRef(null);
+  const addressRef = useRef(null);
+  const submitRef = useRef(null);
+
+  useEffect(() => {
+    nameRef.current?.focus();
+  }, []);
+
+  const handleEnter = (e, nextRef) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+
+      if (nextRef?.current) {
+        nextRef.current.focus();
+      } else {
+        handleSubmit(e);
+      }
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,19 +69,16 @@ const handleEnter = (e, nextRef) => {
     try {
       setLoading(true);
 
-      const res = await fetch(
-        API.customers,
-        {
-          method: "POST",
+      const res = await fetch(API.customers, {
+        method: "POST",
 
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
 
-          body: JSON.stringify(form),
-        }
-      );
+        body: JSON.stringify(form),
+      });
 
       const data = await res.json();
 
@@ -98,6 +100,8 @@ const handleEnter = (e, nextRef) => {
         address: "",
       });
 
+      nameRef.current?.focus();
+
     } catch (err) {
       showToast(err.message, "error");
     } finally {
@@ -113,101 +117,106 @@ const handleEnter = (e, nextRef) => {
       />
 
       <div className={styles.container}>
-        <div className={styles.card}>
 
-          <div className={styles.header}>
-            <h2>Create Customer</h2>
+        <div className={styles.header}>
+          <h2>Create Customer</h2>
+        </div>
 
-            <p>
-              Add customer details to your system
-            </p>
+        <form
+          onSubmit={handleSubmit}
+          className={styles.form}
+        >
+
+          <div className={styles.sectionTitle}>
+            General Details
           </div>
 
-          <form
-            onSubmit={handleSubmit}
-            className={styles.form}
-          >
-            <div className={styles.grid}>
+          <div className={styles.grid}>
 
-              <div className={styles.field}>
-                <label>Customer Name</label>
+            <div className={styles.field}>
+              <label>Customer Name</label>
 
-                <input
-  ref={nameRef}
-  autoFocus
-  type="text"
-  name="name"
-  value={form.name}
-  onChange={handleChange}
-  onKeyDown={(e) =>
-    handleEnter(e, phoneRef)
-  }
-  required
-/>
-              </div>
-
-              <div className={styles.field}>
-                <label>Phone Number</label>
-
-                <input
-  ref={phoneRef}
-  type="text"
-  name="phone"
-  value={form.phone}
-  onChange={handleChange}
-  onKeyDown={(e) =>
-    handleEnter(e, emailRef)
-  }
-  required
-/>
-              </div>
-
-              <div className={styles.field}>
-                <label>Email Address</label>
-
-                <input
-  ref={emailRef}
-  type="email"
-  name="email"
-  value={form.email}
-  onChange={handleChange}
-  onKeyDown={(e) =>
-    handleEnter(e, addressRef)
-  }
-/>
-              </div>
-
-              <div
-                className={`${styles.field} ${styles.full}`}
-              >
-                <label>Address</label>
-
-                <textarea
-  ref={addressRef}
-  name="address"
-  value={form.address}
-  onChange={handleChange}
-  onKeyDown={(e) =>
-    handleEnter(e, null)
-  }
-  required
-/>
-              </div>
-
+              <input
+                ref={nameRef}
+                type="text"
+                name="name"
+                value={form.name}
+                placeholder="Enter customer name"
+                onChange={handleChange}
+                onKeyDown={(e) =>
+                  handleEnter(e, phoneRef)
+                }
+                required
+              />
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className={styles.btn}
-            >
-              {loading
-                ? "Creating..."
-                : "Create Customer"}
-            </button>
+            <div className={styles.field}>
+              <label>Phone Number</label>
 
-          </form>
-        </div>
+              <input
+                ref={phoneRef}
+                type="text"
+                name="phone"
+                value={form.phone}
+                placeholder="Enter phone number"
+                onChange={handleChange}
+                onKeyDown={(e) =>
+                  handleEnter(e, emailRef)
+                }
+                required
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label>Email Address</label>
+
+              <input
+                ref={emailRef}
+                type="email"
+                name="email"
+                value={form.email}
+                placeholder="Enter email address"
+                onChange={handleChange}
+                onKeyDown={(e) =>
+                  handleEnter(e, addressRef)
+                }
+              />
+            </div>
+
+            <div
+              className={`${styles.field} ${styles.full}`}
+            >
+              <label>Address</label>
+
+              <textarea
+                ref={addressRef}
+                name="address"
+                value={form.address}
+                placeholder="Enter address"
+                onChange={handleChange}
+                onKeyDown={(e) =>
+                  handleEnter(e, submitRef)
+                }
+                required
+              />
+            </div>
+
+            <div className={styles.buttonField}>
+              <button
+                ref={submitRef}
+                type="submit"
+                disabled={loading}
+                className={styles.btn}
+              >
+                {loading
+                  ? "Creating..."
+                  : "Create Customer"}
+              </button>
+            </div>
+
+          </div>
+
+        </form>
       </div>
     </>
   );

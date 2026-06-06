@@ -20,8 +20,8 @@ html, body {
 
 /* MAIN LAYOUT AREA (RIGHT SIDE CONTENT) */
 .main-content {
-  margin-left: 220px;          /* sidebar space */
-  padding: 35px 10px 12px 20px; /* 👈 reduced side padding (fix gap) */
+  margin-left: 220px;          
+  padding: 35px 10px 12px 20px; 
 
   min-height: 100vh;
 

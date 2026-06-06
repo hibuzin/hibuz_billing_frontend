@@ -10,38 +10,41 @@ import {
 
 import { useState, useEffect } from "react";
 
-import Login from "./components/MyAccount/Login";
+import Login from "./Pages/auth/Login";
 import Customers from "./pages/Customers/Customers";
-import Sales from "./pages/Sales";
-import Payment from "./pages/Payment";
-import Stocks from "./pages/Stocks";
+import Sales from "./Pages/Sales/Sales";
+import Payment from "./Pages/Payment/Payment";
+import Stocks from "./Pages/Stock/Stocks";
+import LowStocks from "./Pages/Stock/LowStock";
+import OutOfStock from "./Pages/Stock/OutOfStock";
 import GST from "./pages/GST/GST";
-import Analytics from "./pages/Analytics";
-import Offers from "./Pages/Offers";
-import Home from "./pages/Home";
+import Analytics from "./Pages/Analytics/Analytics";
+import Offers from "./Pages/Offers/Offers";
+import Home from "./Pages/Dashboard/Home";
 
 import MyAccount from "./components/MyAccount/PersonIcon";
-import Register from "./components/Register";
-import Onboarding from "./components/Onboarding";
+import Onboarding from "./Pages/auth/Onboarding";
 
 import "./components/styles/theme.css";
 
-import CreateUser from "./components/CreateUser";
-import CreateProduct from "./Pages/Products/CreateProduct";
-import CreateSupplier from "./components/CreateSupplier";
+import CreateUser from "./Pages/Settings/ManageUsers/CreateUser";
+import CreateProduct from "./Pages/Items/CreateItems";
+import ItemDetails from "./Pages/Items/ItemDetailsPage";
+import CreateSupplier from "./Pages/Suppliers/CreateSupplier";
+import SupplierDetails from "./Pages/Suppliers/SupplierDetails";
 
 import CreateCategory from "./Pages/Category/CreateCategory";
-
+import PurchaseBillView from "./Pages/Purchase/PurchaseBillView";
 import CreatePurchase from "./Pages/Purchase/CreatePurchase";
 
-import Product from "./Pages/Products/Product";
+import Product from "./Pages/Items/Items";
 import Category from "./Pages/Category/Category";
 
-import Supplier from "./components/Supplier";
+import Supplier from "./Pages/Suppliers/Supplier";
 
 import PurchaseList from "./Pages/Purchase/PurchaseList";
 
-import Bill from "./components/Bill";
+import POSBilling from "./Pages/POSBilling/POSBilling";
 
 import CreateCustomer from "./Pages/Customers/CreateCustomers";
 
@@ -54,12 +57,12 @@ import Returns from "./Pages/Return/Returns";
 import CreateHSN from "./Pages/HSN/CreateHSN";
 import HSNList from "./Pages/HSN/HSNList";
 
-import Account from "./Pages/Settings/Account";
-import ManageBusiness from "./pages/Settings/ManageBusiness";
-import InvoiceSettings from "./pages/Settings/InvoiceSettings";
-import PrintSettings from "./pages/Settings/PrintSettings";
-import ManageUsers from "./pages/Settings/ManageUsers";
-import HelpSupport from "./pages/Settings/HelpSupport";
+import Account from "./Pages/Settings/Account/Account";
+import ManageBusiness from "./Pages/Settings/ManageBusiness/ManageBusiness";
+import InvoiceSettings from "./Pages/Settings/InvoiceSetting/InvoiceSettings";
+import PrintSettings from "./Pages/Settings/PrintSetting/PrintSettings";
+import ManageUsers from "./Pages/Settings/ManageUsers/ManageUsers";
+import HelpSupport from "./Pages/Settings/Help/HelpSupport";
 
 import { API } from "./constants/api";
 
@@ -111,6 +114,15 @@ function MainLayout() {
           <Route
             path="/stocks"
             element={<Stocks />}
+          />
+
+          <Route
+            path="/lowstock"
+            element={<LowStocks />}
+          />
+
+          <Route path="/outofstock" 
+          element={<OutOfStock />} 
           />
 
           <Route
@@ -177,9 +189,20 @@ function MainLayout() {
           />
 
           <Route
+  path="/item/:id"
+  element={<ItemDetails />}
+/>
+
+
+          <Route
             path="/create-supplier"
             element={<CreateSupplier />}
           />
+
+<Route
+  path="/supplier/:id"
+  element={<SupplierDetails />}
+/>
 
           <Route
             path="/create-category"
@@ -211,10 +234,7 @@ function MainLayout() {
             element={<PurchaseList />}
           />
 
-          <Route
-            path="/bill"
-            element={<Bill />}
-          />
+          <Route path="/supplier/:supplierId/purchase/:purchaseId" element={<PurchaseBillView />} />
 
           <Route
             path="/create-customer"
@@ -260,11 +280,15 @@ function MainLayout() {
 function AppRoutes() {
   const location = useLocation();
 
+const token = localStorage.getItem("token");
+
   const [loading, setLoading] =
     useState(true);
 
   const [isRegistered, setIsRegistered] =
     useState(false);
+
+    
 
   useEffect(() => {
     checkSetup();
@@ -296,24 +320,36 @@ function AppRoutes() {
 
   // ROOT ROUTE
   if (location.pathname === "/") {
-    return isRegistered ? (
-      <Navigate to="/login" replace />
-    ) : (
-      <Navigate to="/onboarding" replace />
-    );
+
+  // token irundha direct home
+  if (token) {
+    return <Navigate to="/home" replace />;
   }
+
+  // token illa na old flow
+  return isRegistered ? (
+    <Navigate to="/login" replace />
+  ) : (
+    <Navigate to="/onboarding" replace />
+  );
+}
 
   // LOGIN ROUTE
   if (location.pathname === "/login") {
 
-    // already registered na login allow
-    if (isRegistered) {
-      return <Login />;
-    }
-
-    // register agala na onboarding ku redirect
-    return <Navigate to="/onboarding" replace />;
+  // already logged in
+  if (token) {
+    return <Navigate to="/home" replace />;
   }
+
+  // registered user
+  if (isRegistered) {
+    return <Login />;
+  }
+
+  // not registered
+  return <Navigate to="/onboarding" replace />;
+}
 
   // ONBOARDING ROUTE
   if (location.pathname === "/onboarding") {
@@ -329,6 +365,15 @@ function AppRoutes() {
   // REGISTER ROUTE
   if (location.pathname === "/register") {
     return <Register />;
+  }
+
+  if (!token) {
+  return <Navigate to="/login" replace />;
+}
+
+ if (location.pathname === "/posbilling") {
+    if (!token) return <Navigate to="/login" replace />;
+    return <POSBilling />;
   }
 
   return <MainLayout />;

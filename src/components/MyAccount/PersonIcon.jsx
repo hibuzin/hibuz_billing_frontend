@@ -1,6 +1,5 @@
 import styles from "./PersonIcon.module.css";
 import { useNavigate } from "react-router-dom";
-import Cashier from "./Cashier/Cashier";
 
 function MyAccount({ onClose }) {
   const user = JSON.parse(localStorage.getItem("user"));

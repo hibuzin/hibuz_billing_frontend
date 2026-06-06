@@ -39,139 +39,107 @@
   letter-spacing: 0.2px;
 }
 
-/* ADD BUTTON */
-
-.addBtn {
-  width: 42px;
-  height: 42px;
-  border: none;
-  border-radius: 12px;
-  background: #111;
-  color: #fff;
+.headerActions {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 12px;
+}
+
+.headerBtn {
+  border: none;
+  background: #4C3CCE;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.headerBtn:hover {
+  opacity: 0.9;
+}
+
+/* DELETE MODAL */
+
+.deleteModal {
+  width: 100%;
+  max-width: 360px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 24px;
+  border: 1px solid #ececec;
+  animation: popup 0.16s ease;
+}
+
+.deleteModal h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 10px;
+}
+
+.deleteModal p {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.deleteActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.cancelBtn {
+  height: 40px;
+  padding: 0 18px;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  background: #f5f5f5;
+  color: #444;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
-  font-size: 14px;
 }
 
-.addBtn:hover {
-  opacity: 0.85;
+.cancelBtn:hover {
+  background: #ebebeb;
 }
 
-
-/* ─── TABLE ─── */
-
-.tableWrapper {
-  width: 100%;
-  overflow-x: auto;
-  background: #fff;
-  border-radius: 16px;
-  border: 1px solid #e8e8e3;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table thead tr {
-  border-bottom: 1px solid #efefea;
-}
-
-.table th {
-  text-align: left;
-  padding: 13px 18px;
-  font-size: 11px;
+.confirmDeleteBtn {
+  height: 40px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 10px;
+  background: #dc2626;
+  color: #fff;
+  font-size: 13px;
   font-weight: 600;
-  color: #aaa;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-}
-
-.table td {
-  padding: 14px 18px;
-  font-size: 13.5px;
-  color: #222;
-  border-bottom: 1px solid #f5f5f0;
-}
-
-.tableRow {
   cursor: pointer;
-  transition: background 0.12s;
+  transition: 0.2s;
 }
 
-.tableRow:last-child td {
-  border-bottom: none;
+.confirmDeleteBtn:hover {
+  background: #b91c1c;
 }
 
-.tableRow:hover {
-  background: #fafaf7;
-}
 
-/* ─── ACTION BUTTONS ─── */
-
-.actionBtns {
-  display: flex;
-  gap: 7px;
-}
-
-.editBtn {
-  width: 32px;
-  height: 32px;
-  border: 1px solid #e8e8e3;
-  border-radius: 8px;
-  background: #fff;
-  color: #555;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 13px;
-  transition: background 0.12s, color 0.12s;
-}
-
-.editBtn:hover {
-  background: #111;
-  color: #fff;
-  border-color: #111;
-}
-
-.deleteBtn {
-  width: 32px;
-  height: 32px;
-  border: 1px solid #e8e8e3;
-  border-radius: 8px;
-  background: #fff;
-  color: #cc4444;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 13px;
-  transition: background 0.12s, color 0.12s;
-}
-
-.deleteBtn:hover {
-  background: #cc4444;
-  color: #fff;
-  border-color: #cc4444;
-}
-
-.deleteBtn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
 
 /* ─── MODAL OVERLAY ─── */
 
 .modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.28);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -181,9 +149,14 @@
 
 /* ─── DETAIL MODAL ─── */
 
+
 .detailModal {
   width: 100%;
   max-width: 620px;
+  max-height: 85vh;
+
+  overflow-y: auto;
+
   background: #fff;
   border-radius: 20px;
   padding: 28px;
@@ -441,4 +414,150 @@
 .submitBtn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.headerActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ─── TABLE ─── */
+
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 9px;
+  border: 1px solid #e8e8e3;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead tr {
+  border-bottom: 1px solid #efefea;
+}
+
+.table thead {
+  background: #fafafa;
+}
+
+
+.table th {
+  text-align: left;
+  padding: 13px 18px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #aaa;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.table td {
+  padding: 14px 18px;
+  font-size: 13.5px;
+  color: #222;
+  border-bottom: 1px solid #f5f5f0;
+}
+
+.tableRow {
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.tableRow:last-child td {
+  border-bottom: none;
+}
+
+.tableRow:hover {
+  background: #F1F0FC;
+}
+
+.table th,
+.table td {
+  padding: 10px 18px;
+  height: 50px;
+  vertical-align: middle;
+  border-bottom: 1px solid #e5e7eb;
+  border-right: 1px solid #d1d5db; 
+}
+
+.table th:last-child,
+.table td:last-child {
+  width: 70px;
+  text-align: center;
+  border-right: none;
+}
+
+.table td:last-child {
+  padding: 0;
+}
+
+.menuWrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+}
+
+.menuBtn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menuBtn:hover {
+  background: #f3f4f6;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 38px;
+  right: 10px;
+  min-width: 140px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  z-index: 100;
+}
+
+.dropdownMenu button {
+  width: 100%;
+  border: none;
+  background: none;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.editMenuItem:hover,
+.deleteMenuItem:hover {
+  background: #F1F0FC;
+}
+
+.deleteMenuItem {
+  color: #dc2626;
 }

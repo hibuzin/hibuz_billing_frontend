@@ -1,0 +1,107 @@
+.container {
+  padding: 20px;
+  background: #fff;
+  border-radius: 6px;
+  min-height: 100vh;
+}
+
+/* HEADER */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.header p {
+  font-size: 13px;
+  color: #777;
+}
+
+/* TABLE */
+
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #ececec;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead tr {
+  border-bottom: 1px solid #efefef;
+}
+
+.table th {
+  text-align: left;
+  padding: 14px 18px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table td {
+  padding: 15px 18px;
+  font-size: 13.5px;
+  color: #222;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background: #fafafa;
+}
+
+/* OUT OF STOCK BADGE */
+
+.outStock {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #ffe5e5;
+  color: #d11a2a;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+  .container {
+    padding: 14px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .table th,
+  .table td {
+    padding: 12px;
+    font-size: 12px;
+  }
+
+}

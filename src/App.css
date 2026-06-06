@@ -2,3 +2,10 @@ body {
   margin: 0;
   padding: 0;
 }
+
+body.modalOpen .appBar {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px);
+  transition: 0.25s ease;
+}

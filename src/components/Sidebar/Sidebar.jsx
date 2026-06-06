@@ -113,7 +113,7 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
     },
 
     {
-      name: lang === "ta" ? "பொருட்கள்" : "PRODUCTS",
+      name: lang === "ta" ? "பொருட்கள்" : "ITEMS",
       icon: <FaBox />,
       children: [
         {
@@ -122,27 +122,23 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
         },
 
         {
-          name: lang === "ta" ? "பொருட்கள்" : "Product",
+          name: lang === "ta" ? "பொருட்கள்" : "Item",
           path: "/product"
         },
       ],
     },
 
     {
-      name: lang === "ta" ? "சப்ளையர்கள்" : "SUPPLIER",
-      icon: <FaTruckLoading />,
-      children: [
-        {
-          name: lang === "ta" ? "சப்ளையர்" : "Supplier",
-          path: "/supplier"
-        },
+  name: lang === "ta" ? "சப்ளையர்கள்" : "SUPPLIER",
+  path: "/supplier",
+  icon: <FaTruckLoading />
+},
 
-        {
-          name: lang === "ta" ? "கொள்முதல்" : "Purchase",
-          path: "/purchase"
-        },
-      ],
-    },
+{
+  name: lang === "ta" ? "கொள்முதல்" : "PURCHASE",
+  path: "/purchase",
+  icon: <FaFileInvoice />
+},
 
     {
       name: lang === "ta" ? "விற்பனை" : "SALES",
@@ -168,9 +164,9 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
       name: lang === "ta" ? "சரக்கு" : "STOCKS",
       icon: <MdInventory />,
       children: [
-        { name: lang === "ta" ? "கிடைக்கும்" : "Available", path: "/stocks/available" },
-        { name: lang === "ta" ? "குறைந்தது" : "Low Stock", path: "/stocks/low" },
-        { name: lang === "ta" ? "இல்லை" : "Out of Stock", path: "/stocks/out" },
+        { name: lang === "ta" ? "கிடைக்கும்" : "Available", path: "/stocks" },
+        { name: lang === "ta" ? "குறைந்தது" : "Low Stock", path: "/lowstock" },
+        { name: lang === "ta" ? "இல்லை" : "Out of Stock", path: "/outofstock" },
       ],
     },
 
@@ -259,7 +255,7 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
 
                 <button
                   className={styles.billBtn}
-                  onClick={() => navigate("/bill")}
+                  onClick={() => navigate("/posbilling")}
                 >
                   + Create Sale Invoice
                 </button>

@@ -22,10 +22,17 @@ export const API = {
 
   //bill
   bill:`${BASE_URL}/bill`,
+  scan: `${BASE_URL}/scan`,
+  holdBill: `${BASE_URL}/hold-bill/hold`,
 
   //supplier 
   createsupplier:`${BASE_URL}/supplier/add`,
   suppliers: `${BASE_URL}/supplier`,
+  supplierPurchases: (id) =>
+  `${BASE_URL}/supplier/${id}/purchases`,
+  supplierProductSummary: (id) => `${BASE_URL}/supplier/${id}/product-wise-summary`,
+  supplierbalance:`${BASE_URL}/supplier/supplier-balances`,
+ 
 
   // category
 categories: `${BASE_URL}/category`,
@@ -36,8 +43,14 @@ products: `${BASE_URL}/productadd`,
 
 
 // purchase
-purchase: `${BASE_URL}/purchase/`,
+purchase: `${BASE_URL}/purchase`,
 createPurchase: `${BASE_URL}/purchase/purchase`,
+purchaseById: (id) => `${BASE_URL}/purchase/${id}`, 
+
+// stock
+stock: `${BASE_URL}/stock`,
+ stockValue: `${BASE_URL}/stock/stock-value`,
+ stock: `${BASE_URL}/stock/stock`,
 
 };
 

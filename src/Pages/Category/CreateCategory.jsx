@@ -9,19 +9,28 @@ import Toast from "../../components/Toast";
 import { API } from "../../constants/api";
 
 function CreateCategory() {
+
   const [form, setForm] = useState({
     name: "",
     hsnCode: "",
-    description: "",
     gstRate: "",
   });
 
   const [loading, setLoading] = useState(false);
 
-  const [message, setMessage] = useState("");
-  const [type, setType] = useState("");
+  const [toast, setToast] = useState({
+    message: "",
+    type: "",
+  });
 
-  const inputRef = useRef(null);
+  const nameRef = useRef(null);
+  const hsnRef = useRef(null);
+  const gstRef = useRef(null);
+  const submitRef = useRef(null);
+
+  useEffect(() => {
+    nameRef.current?.focus();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,25 +41,51 @@ function CreateCategory() {
     }));
   };
 
+  const showToast = (message, type) => {
+    setToast({ message, type });
+
+    setTimeout(() => {
+      setToast({
+        message: "",
+        type: "",
+      });
+    }, 2500);
+  };
+
+  const handleKeyDown = (e, nextRef) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+
+      if (nextRef?.current) {
+        nextRef.current.focus();
+      } else {
+        handleSubmit(e);
+      }
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!form.name.trim()) {
-      setMessage("Category name is required");
-      setType("error");
-      return;
+      return showToast(
+        "Category name is required",
+        "error"
+      );
     }
 
     if (!form.hsnCode.trim()) {
-      setMessage("HSN Code is required");
-      setType("error");
-      return;
+      return showToast(
+        "HSN code is required",
+        "error"
+      );
     }
 
     if (!form.gstRate) {
-      setMessage("GST Rate is required");
-      setType("error");
-      return;
+      return showToast(
+        "GST rate is required",
+        "error"
+      );
     }
 
     const token = localStorage.getItem("token");
@@ -62,6 +97,7 @@ function CreateCategory() {
         API.categories,
         {
           method: "POST",
+
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -70,9 +106,7 @@ function CreateCategory() {
           body: JSON.stringify({
             name: form.name.trim(),
             hsnCode: form.hsnCode.trim(),
-            description:
-              form.description.trim(),
-            gstRate: Number(form.gstRate),
+            gstRate: form.gstRate,
           }),
         }
       );
@@ -86,112 +120,144 @@ function CreateCategory() {
         );
       }
 
-      setMessage(
-        "Category created successfully"
+      showToast(
+        "Category created successfully",
+        "success"
       );
-
-      setType("success");
 
       setForm({
         name: "",
         hsnCode: "",
-        description: "",
         gstRate: "",
       });
-    } catch (err) {
-      setMessage(
-        err.message || "Something went wrong"
-      );
 
-      setType("error");
+      nameRef.current?.focus();
+
+    } catch (err) {
+      showToast(
+        err.message || "Something went wrong",
+        "error"
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
-
   return (
-    <div className={styles.page}>
+    <>
       <Toast
-        message={message}
-        type={type}
+        message={toast.message}
+        type={toast.type}
       />
 
-      <div className={styles.card}>
-        <h2 className={styles.title}>
-          Create Category
-        </h2>
+      <div className={styles.container}>
+
+        <div className={styles.header}>
+          <h2>Create Category</h2>
+        </div>
 
         <form
           onSubmit={handleSubmit}
           className={styles.form}
         >
-          <div className={styles.field}>
-            <label>Category Name</label>
 
-            <input
-              ref={inputRef}
-              type="text"
-              name="name"
-              placeholder="Enter category name"
-              value={form.name}
-              onChange={handleChange}
-            />
+          <div className={styles.sectionTitle}>
+            Category Details
           </div>
 
-          <div className={styles.field}>
-            <label>HSN Code</label>
+          <div className={styles.grid}>
 
-            <input
-              type="text"
-              name="hsnCode"
-              placeholder="Enter HSN code"
-              value={form.hsnCode}
-              onChange={handleChange}
-            />
+            <div className={styles.field}>
+              <label>Category Name</label>
+
+              <input
+                ref={nameRef}
+                type="text"
+                name="name"
+                value={form.name}
+                placeholder="Enter category name"
+                onChange={handleChange}
+                onKeyDown={(e) =>
+                  handleKeyDown(e, hsnRef)
+                }
+                required
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label>HSN Code</label>
+
+              <input
+                ref={hsnRef}
+                type="text"
+                name="hsnCode"
+                value={form.hsnCode}
+                placeholder="Enter HSN code"
+                onChange={handleChange}
+                onKeyDown={(e) =>
+                  handleKeyDown(e, gstRef)
+                }
+                required
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label>GST Rate</label>
+
+              <select
+                ref={gstRef}
+                name="gstRate"
+                value={form.gstRate}
+                onChange={handleChange}
+                onKeyDown={(e) =>
+                  handleKeyDown(e, submitRef)
+                }
+                required
+              >
+                <option value="">
+                  Select GST Rate
+                </option>
+
+                <option value="none">
+                  None
+                </option>
+
+                <option value="5">
+                  5%
+                </option>
+
+                <option value="12">
+                  12%
+                </option>
+
+                <option value="18">
+                  18%
+                </option>
+
+                <option value="28">
+                  28%
+                </option>
+              </select>
+            </div>
+
           </div>
 
-          <div className={styles.field}>
-            <label>Description</label>
-
-            <textarea
-              name="description"
-              placeholder="Enter description"
-              value={form.description}
-              onChange={handleChange}
-              rows="4"
-            />
+          <div className={styles.buttonWrapper}>
+            <button
+              ref={submitRef}
+              type="submit"
+              disabled={loading}
+              className={styles.btn}
+            >
+              {loading
+                ? "Creating..."
+                : "Create Category"}
+            </button>
           </div>
 
-          <div className={styles.field}>
-            <label>GST Rate (%)</label>
-
-            <input
-              type="number"
-              name="gstRate"
-              placeholder="Enter GST rate"
-              value={form.gstRate}
-              onChange={handleChange}
-            />
-          </div>
-
-          <button
-            type="submit"
-            className={styles.button}
-            disabled={loading}
-          >
-            {loading
-              ? "Creating..."
-              : "Create Category"}
-          </button>
         </form>
       </div>
-    </div>
+    </>
   );
 }
 
