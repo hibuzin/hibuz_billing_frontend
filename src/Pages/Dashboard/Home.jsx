@@ -54,7 +54,7 @@ export default function Home() {
   }
 };
 
-  const fetchTransactions = async () => {
+const fetchTransactions = async () => {
   try {
     const res = await fetch(
       `${API.bill}?limit=5`,
@@ -63,7 +63,13 @@ export default function Home() {
 
     const json = await res.json();
 
-    setTransactions(Array.isArray(json?.data) ? json.data : []);
+    const list = Array.isArray(json?.data) ? json.data : [];
+
+    setTransactions(
+      list
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // newest first
+        .slice(0, 5) // only last 5
+    );
   } catch (err) {
     setTransactions([]);
   }
