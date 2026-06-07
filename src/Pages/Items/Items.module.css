@@ -46,7 +46,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 15px;
-  margin-bottom: 8px;
+  margin-bottom: 18px;
 }
 
 .cardRow {
@@ -70,6 +70,8 @@
 .cardRow p {
   margin: 0;
 }
+
+
 
 /* Stock Value */
 .stockCard {
@@ -137,16 +139,116 @@
 
 .table th,
 .table td {
-  padding: 20px 18px;
-  vertical-align: middle;
+  vertical-align: top;
   font-size: 13px;
+  font-weight: 550;
   color: #111;
   border-bottom: 1px solid #e5e7eb;
   border-right: 1px solid #d1d5db; 
 }
 
+.menuBtn svg {
+  font-size: 14px; 
+  color: #6b7280;
+}
+
 .table th {
+    padding: 12px 18px;
+
   text-align: left;
+}
+.table td {
+  padding: 16px 18px;
+  font-weight: 350;
+}
+
+/* SEARCH */
+
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.searchGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.searchRow .addBtn {
+  margin-left: auto;
+}
+
+.createBtnWrapper {
+  margin-left: auto;
+}
+
+.searchBox {
+  width: 280px;
+  height: 36px;
+  background: white;
+  border: 1px solid #dfe3eb;
+  border-radius: 6px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 14px;
+  gap: 10px;
+}
+.searchIcon {
+  color: #8b8b98;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.searchInput {
+  flex: 1;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  background: transparent;
+}
+
+.searchInput::placeholder {
+  color: #9ca3af;
+}
+
+.placeholderWrapper {
+  position: relative;
+  flex: 1;
+  height: 36px;
+  overflow: hidden;
+}
+
+.placeholderSlider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: transform 0.4s ease-in-out;
+}
+
+.placeholderSlider span {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+.searchInput {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  position: relative;
+  z-index: 1;
 }
 
 .table th:last-child {
@@ -175,7 +277,7 @@
 
 .menuBtn {
   width: 32px;
-  height: 32px;
+  height: 62px;
   border: none;
   background: transparent;
   border-radius: 8px;

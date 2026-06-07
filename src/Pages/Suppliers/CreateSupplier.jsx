@@ -5,15 +5,25 @@ import { API } from "../../constants/api";
 
 function CreateSupplier() {
   const [form, setForm] = useState({
-    supplierName: "",
-    mobile: "",
-    gstNumber: "",
-    email: "",
-    address: "",
-    city: "",
-    state: "",
-    pincode: "",
-  });
+  supplierName: "",
+  mobile: "",
+  panNumber: "",
+  gstNumber: "",
+  email: "",
+  address: "",
+  city: "",
+  state: "",
+  pincode: "",
+  contactPerson: "",
+
+  bankDetails: {
+    accountHolderName: "",
+    bankName: "",
+    accountNumber: "",
+    ifscCode: "",
+    branchName: "",
+  },
+});
 
   const [loading, setLoading] = useState(false);
 
@@ -54,14 +64,25 @@ function CreateSupplier() {
 
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+  const { name, value } = e.target;
 
-    setForm((prev) => ({
-      ...prev,
+  setForm((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+};
+
+const handleBankChange = (e) => {
+  const { name, value } = e.target;
+
+  setForm((prev) => ({
+    ...prev,
+    bankDetails: {
+      ...prev.bankDetails,
       [name]: value,
-    }));
-  };
-
+    },
+  }));
+};
   const showToast = (message, type) => {
     setToast({ message, type });
 
@@ -108,16 +129,26 @@ function CreateSupplier() {
         "success"
       );
 
-      setForm({
-        supplierName: "",
-        mobile: "",
-        gstNumber: "",
-        email: "",
-        address: "",
-        city: "",
-        state: "",
-        pincode: "",
-      });
+     setForm({
+  supplierName: "",
+  mobile: "",
+  panNumber: "",
+  gstNumber: "",
+  email: "",
+  address: "",
+  city: "",
+  state: "",
+  pincode: "",
+  contactPerson: "",
+
+  bankDetails: {
+    accountHolderName: "",
+    bankName: "",
+    accountNumber: "",
+    ifscCode: "",
+    branchName: "",
+  },
+});
 
     } catch (err) {
       showToast(err.message, "error");
@@ -186,6 +217,30 @@ function CreateSupplier() {
             </div>
 
             <div className={styles.field}>
+  <label>Contact Person</label>
+
+  <input
+    type="text"
+    name="contactPerson"
+    value={form.contactPerson}
+    placeholder="Enter contact person"
+    onChange={handleChange}
+  />
+</div>
+
+<div className={styles.field}>
+  <label>PAN Number</label>
+
+  <input
+    type="text"
+    name="panNumber"
+    value={form.panNumber}
+    placeholder="Enter PAN number"
+    onChange={handleChange}
+  />
+</div>
+
+            <div className={styles.field}>
               <label>GST Number</label>
 
               <input
@@ -217,6 +272,12 @@ function CreateSupplier() {
                 }
               />
             </div>
+
+            <div className={styles.sectionTitle}>
+  Address Details
+</div>
+
+
 
             <div
               className={`${styles.field} ${styles.full}`}
@@ -286,6 +347,70 @@ function CreateSupplier() {
                 required
               />
             </div>
+
+            <div className={styles.sectionTitle}>
+  Bank Details
+</div>
+
+<div className={styles.field}>
+  <label>Account Holder Name</label>
+
+  <input
+    type="text"
+    name="accountHolderName"
+    value={form.bankDetails.accountHolderName}
+    placeholder="Enter account holder name"
+    onChange={handleBankChange}
+  />
+</div>
+
+<div className={styles.field}>
+  <label>Bank Name</label>
+
+  <input
+    type="text"
+    name="bankName"
+    value={form.bankDetails.bankName}
+    placeholder="Enter bank name"
+    onChange={handleBankChange}
+  />
+</div>
+
+<div className={styles.field}>
+  <label>Account Number</label>
+
+  <input
+    type="text"
+    name="accountNumber"
+    value={form.bankDetails.accountNumber}
+    placeholder="Enter account number"
+    onChange={handleBankChange}
+  />
+</div>
+
+<div className={styles.field}>
+  <label>IFSC Code</label>
+
+  <input
+    type="text"
+    name="ifscCode"
+    value={form.bankDetails.ifscCode}
+    placeholder="Enter IFSC code"
+    onChange={handleBankChange}
+  />
+</div>
+
+<div className={styles.field}>
+  <label>Branch Name</label>
+
+  <input
+    type="text"
+    name="branchName"
+    value={form.bankDetails.branchName}
+    placeholder="Enter branch name"
+    onChange={handleBankChange}
+  />
+</div>
 
             <div className={styles.buttonField}>
               <button

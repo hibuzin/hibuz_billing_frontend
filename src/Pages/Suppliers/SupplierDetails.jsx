@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { FaArrowUp, FaArrowLeft , } from "react-icons/fa";
+import { FaArrowUp, FaArrowLeft, } from "react-icons/fa";
 
-  import {
+import {
   FiFileText,
   FiEdit,
   FiTrash2,
@@ -172,31 +172,31 @@ function SupplierDetails() {
             {/* Header */}
             <div className={styles.mainHeader}>
               <button className={styles.backBtn} onClick={() => navigate(-1)}>
-  <FaArrowLeft />
-</button>
+                <FaArrowLeft />
+              </button>
               <div>
                 <div className={styles.headerName}>{supplier?.name}</div>
               </div>
               <div className={styles.headerActions}>
-  <button className={styles.invoiceBtn}>
-    <FiFileText className={styles.btnIcon} />
-    <span>Create Sales Invoice</span>
-    <FiChevronDown className={styles.dropdownIcon} />
-  </button>
+                <button className={styles.invoiceBtn}>
+                  <FiFileText className={styles.btnIcon} />
+                  <span>Create Sales Invoice</span>
+                  <FiChevronDown className={styles.dropdownIcon} />
+                </button>
 
-  <button className={styles.editBtn}>
-    <FiEdit className={styles.btnIcon} />
-    <span>Edit</span>
-  </button>
+                <button className={styles.editBtn}>
+                  <FiEdit className={styles.btnIcon} />
+                  <span>Edit</span>
+                </button>
 
-  <button className={styles.iconBtn}>
-    <FiTrash2 />
-  </button>
+                <button className={styles.iconBtn}>
+                  <FiTrash2 />
+                </button>
 
-  <button className={styles.keyBtn}>
-    <FiCreditCard />
-  </button>
-</div>
+                <button className={styles.keyBtn}>
+                  <FiCreditCard />
+                </button>
+              </div>
             </div>
 
             {/* Tabs */}
@@ -267,80 +267,80 @@ function SupplierDetails() {
 
               {/* Profile Tab */}
               {activeTab === "profile" && (
-  <div className={styles.profileGrid}>
+                <div className={styles.profileGrid}>
 
-    {/* General Details */}
-    <div className={styles.profileCard}>
-      <h3 className={styles.cardHeading}>
-        General Details
-      </h3>
+                  {/* General Details */}
+                  <div className={styles.profileCard}>
+                    <h3 className={styles.cardHeading}>
+                      General Details
+                    </h3>
 
-      <div className={styles.profileRow}>
-        <span className={styles.lbl}>Name</span>
-        <span className={styles.val}>
-          {supplier?.supplierName || "-"}
-        </span>
-      </div>
+                    <div className={styles.profileRow}>
+                      <span className={styles.lbl}>Name</span>
+                      <span className={styles.val}>
+                        {supplier?.supplierName || "-"}
+                      </span>
+                    </div>
 
-      <div className={styles.profileRow}>
-        <span className={styles.lbl}>Mobile</span>
-        <span className={styles.val}>
-          {supplier?.mobile || "-"}
-        </span>
-      </div>
+                    <div className={styles.profileRow}>
+                      <span className={styles.lbl}>Mobile</span>
+                      <span className={styles.val}>
+                        {supplier?.mobile || "-"}
+                      </span>
+                    </div>
 
-      <div className={styles.profileRow}>
-        <span className={styles.lbl}>Email</span>
-        <span className={styles.val}>
-          {supplier?.email || "-"}
-        </span>
-      </div>
-    </div>
+                    <div className={styles.profileRow}>
+                      <span className={styles.lbl}>Email</span>
+                      <span className={styles.val}>
+                        {supplier?.email || "-"}
+                      </span>
+                    </div>
+                  </div>
 
-    {/* Business Details */}
-    <div className={styles.profileCard}>
-      <h3 className={styles.cardHeading}>
-        Business Details
-      </h3>
+                  {/* Business Details */}
+                  <div className={styles.profileCard}>
+                    <h3 className={styles.cardHeading}>
+                      Business Details
+                    </h3>
 
-      <div className={styles.profileRow}>
-        <span className={styles.lbl}>GST No</span>
-        <span className={styles.val}>
-          {supplier?.gstNumber || "-"}
-        </span>
-      </div>
+                    <div className={styles.profileRow}>
+                      <span className={styles.lbl}>GST No</span>
+                      <span className={styles.val}>
+                        {supplier?.gstNumber || "-"}
+                      </span>
+                    </div>
 
-      <div className={styles.profileRow}>
-        <span className={styles.lbl}>Address</span>
-        <span className={styles.val}>
-          {supplier?.address || "-"}
-        </span>
-      </div>
+                    <div className={styles.profileRow}>
+                      <span className={styles.lbl}>Address</span>
+                      <span className={styles.val}>
+                        {supplier?.address || "-"}
+                      </span>
+                    </div>
 
-      <div className={styles.profileRow}>
-        <span className={styles.lbl}>City</span>
-        <span className={styles.val}>
-          {supplier?.city || "-"}
-        </span>
-      </div>
+                    <div className={styles.profileRow}>
+                      <span className={styles.lbl}>City</span>
+                      <span className={styles.val}>
+                        {supplier?.city || "-"}
+                      </span>
+                    </div>
 
-      <div className={styles.profileRow}>
-        <span className={styles.lbl}>State</span>
-        <span className={styles.val}>
-          {supplier?.state || "-"}
-        </span>
-      </div>
+                    <div className={styles.profileRow}>
+                      <span className={styles.lbl}>State</span>
+                      <span className={styles.val}>
+                        {supplier?.state || "-"}
+                      </span>
+                    </div>
 
-      <div className={styles.profileRow}>
-        <span className={styles.lbl}>Pincode</span>
-        <span className={styles.val}>
-          {supplier?.pincode || "-"}
-        </span>
-      </div>
-    </div>
+                    <div className={styles.profileRow}>
+                      <span className={styles.lbl}>Pincode</span>
+                      <span className={styles.val}>
+                        {supplier?.pincode || "-"}
+                      </span>
+                    </div>
+                  </div>
 
-  </div>
-)}
+                </div>
+              )}
 
               {activeTab === "productReport" && (
                 <>

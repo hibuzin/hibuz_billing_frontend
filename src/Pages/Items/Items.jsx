@@ -2,12 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import styles from "./items.module.css";
 import { useNavigate } from "react-router-dom";
 import { TrendingUp, PackageMinus, ExternalLink, PackageX } from 'lucide-react';
-import {
-  FaPlus,
-  FaTrash,
-  FaEdit,
-  FaEllipsisV,
-} from "react-icons/fa";
+
 import {
   FaBoxes,
   FaExclamationTriangle,
@@ -16,6 +11,14 @@ import {
 
 import Toast from "../../components/Toast";
 import { API } from "../../constants/api";
+import {
+  FaPlus,
+  FaTrash,
+  FaEdit,
+  FaEllipsisV,
+  FaSearch,
+  FaBarcode,
+} from "react-icons/fa";
 
 function Item() {
   const [product, setProduct] =
@@ -52,6 +55,7 @@ function Item() {
   const [stockValue, setStockValue] = useState(0);
 
   const menuRef = useRef(null);
+  const [search, setSearch] = useState("");
 
   const navigate = useNavigate();
 
@@ -85,6 +89,29 @@ function Item() {
       );
     };
   }, []);
+
+  const placeholders = [
+  "Search by Name",
+  "Search by HSN Code",
+];
+
+const [placeholderIndex, setPlaceholderIndex] = useState(0);
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    setPlaceholderIndex((prev) => prev + 1);
+  }, 2000);
+
+  return () => clearInterval(interval);
+}, []);
+
+useEffect(() => {
+  if (placeholderIndex === placeholders.length - 1) {
+    setTimeout(() => {
+      setPlaceholderIndex(0);
+    }, 400); // transition duration
+  }
+}, [placeholderIndex]);
 
   // stock value 
 
@@ -155,6 +182,35 @@ function Item() {
       setLoading(false);
     }
   };
+
+  const searchProducts = async (value) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    if (!value.trim()) {
+      fetchProduct();
+      return;
+    }
+
+    const res = await fetch(
+      `${API.products}/search?search=${encodeURIComponent(value)}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await res.json();
+
+    if (data.success) {
+      setProduct(data.data || []);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
 
   // FETCH CATEGORIES
 
@@ -372,12 +428,7 @@ function Item() {
           <h2>items</h2>
         </div>
 
-        <button
-          className={styles.addBtn}
-          onClick={() => navigate("/create-product")}
-        >
-          <span>Create items</span>
-        </button>
+        
       </div>
 
       <div className={styles.cardsRow}>
@@ -427,6 +478,51 @@ function Item() {
         </div>
 
       </div>
+
+     <div className={styles.searchRow}>
+  <div className={styles.searchBox}>
+  <FaSearch className={styles.searchIcon} />
+
+  <div className={styles.placeholderWrapper}>
+   <div
+  className={styles.placeholderSlider}
+  style={{
+    transform: `translateY(-${placeholderIndex * 36}px)`,
+  }}
+>
+  {placeholders.map((text, i) => (
+    <span key={i}>{text}</span>
+  ))}
+</div>
+
+    <input
+  type="text"
+  value={search}
+  onChange={(e) => {
+    const value = e.target.value;
+    setSearch(value);
+    searchProducts(value);
+  }}
+  className={styles.searchInput}
+/>
+  </div>
+</div>
+
+  <div className={styles.searchBox}>
+    <FaBarcode className={styles.searchIcon} />
+    <input
+      type="text"
+      placeholder="Search Barcode"
+      className={styles.searchInput}
+    />
+  </div>
+  <button
+          className={styles.addBtn}
+          onClick={() => navigate("/create-product")}
+        >
+          <span>Create items</span>
+        </button>
+</div>
       {/* PRODUCTS */}
       <div className={styles.tableWrapper}>
         {loading ? (
@@ -451,24 +547,25 @@ function Item() {
 
             <tbody>
              {product.map((p, index) => (
-  <tr
-    key={p._id}
-    onClick={() => navigate(`/item/${p._id}`)}
-  >
+ <tr
+  key={p._id || p.productId}
+  onClick={() =>
+    navigate(`/item/${p._id || p.productId}`)
+  }
+>
                   <td>{index + 1}</td>
 
                   <td className={styles.nameCell}>
-                    {p.name}
-                  </td>
+  {p.name || p.productName}
+</td>
 
-                  <td>
-                    {p.brand || "—"}
-                  </td>
+<td>
+  {p.brand || "—"}
+</td>
 
-                  <td>
-                    {p.categoryId?.name ||
-                      "—"}
-                  </td>
+<td>
+  {p.categoryId?.name || p.categoryName || "—"}
+</td>
 
                   <td>
                     <div
