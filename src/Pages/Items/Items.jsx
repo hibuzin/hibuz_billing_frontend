@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import styles from "./items.module.css";
+import styles from "./Items.module.css";
 import { useNavigate } from "react-router-dom";
 import { TrendingUp, PackageMinus, ExternalLink, PackageX } from 'lucide-react';
 
