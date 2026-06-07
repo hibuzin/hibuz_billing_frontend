@@ -12,7 +12,8 @@ function ItemDetails() {
     const [data, setData] = useState(null);
     const [products, setProducts] = useState([]);
     const [activeTab, setActiveTab] = useState("itemDetails");
-    const [switching, setSwitching] = useState(false); // soft loading — no blank screen
+    const [switching, setSwitching] = useState(false);
+    const [search, setSearch] = useState("");
 
     // Fetch all products once
     useEffect(() => {
@@ -27,7 +28,6 @@ function ItemDetails() {
         fetchProducts();
     }, []);
 
-    // Fetch item details on id change — no blank flash
     const fetchItemDetails = useCallback(async () => {
         try {
             setSwitching(true);
@@ -46,6 +46,46 @@ function ItemDetails() {
         }
     }, [id]);
 
+    const searchProducts = async (value) => {
+        try {
+            const token = localStorage.getItem("token");
+
+            if (!value.trim()) {
+                const res = await fetch(API.products, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    setProducts(data.data || []);
+                }
+
+                return;
+            }
+
+            const res = await fetch(
+                `${API.products}/search?search=${encodeURIComponent(value)}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            const data = await res.json();
+
+            if (data.success) {
+                setProducts(data.data || []);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+
     useEffect(() => {
         fetchItemDetails();
     }, [fetchItemDetails]);
@@ -63,7 +103,17 @@ function ItemDetails() {
                 {/* LEFT PANEL */}
                 <div className={styles.leftPanel}>
                     <div className={styles.searchBox}>
-                        <input type="text" placeholder="Search Items" />
+                        <input
+                            type="text"
+                            placeholder="Search Items"
+                            value={search}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                setSearch(value);
+                                searchProducts(value);
+                            }}
+                            className={styles.searchInput}
+                        />
                     </div>
 
                     <button className={styles.createBtn} onClick={() => navigate("/create-product")}>
@@ -78,7 +128,7 @@ function ItemDetails() {
                                 onClick={() => item._id !== id && navigate(`/item/${item._id}`)}
                             >
                                 <div className={styles.itemTop}>
-                                    <h4>{item.name}</h4>
+                                    <h4>{item.name || item.productName}</h4>
                                 </div>
                                 <div className={styles.itemBottom}>
                                     <span>{item.stock || 0} PCS</span>
@@ -94,7 +144,10 @@ function ItemDetails() {
                     {/* HEADER */}
                     <div className={styles.header}>
                         <div className={styles.headerLeft}>
-                            <button className={styles.backBtn} onClick={() => navigate(-1)}>
+                            <button
+                                className={styles.backBtn}
+                                onClick={() => navigate("/product")}
+                            >
                                 <FaArrowLeft />
                             </button>
                             <h2>{product.productName}</h2>
@@ -242,32 +295,13 @@ function ItemDetails() {
                     {/* TAB: STOCK DETAILS */}
                     {activeTab === "stockDetails" && (
                         <div className={styles.stockDetailsTab}>
-                            <div className={styles.summaryCards}>
-                                {[
-                                    { label: "Total Purchased", value: `${summary.totalPurchasedQty} PCS` },
-                                    { label: "Total Received", value: `${summary.totalReceivedQty} PCS` },
-                                    { label: "Total Pending", value: `${summary.totalPendingQty} PCS` },
-                                    { label: "Cost Value", value: `₹ ${summary.totalCostValue.toLocaleString("en-IN")}` },
-                                    { label: "Selling Value", value: `₹ ${summary.totalSellingValue.toLocaleString("en-IN")}` },
-                                    { label: "Expected Profit", value: `₹ ${summary.expectedProfit.toLocaleString("en-IN")}`, profit: true },
-                                ].map(({ label, value, profit }) => (
-                                    <div key={label} className={styles.summaryCard}>
-                                        <p className={styles.label}>{label}</p>
-                                        <h3 className={profit ? styles.profit : ""}>{value}</h3>
-                                    </div>
-                                ))}
-                            </div>
+
 
                             <div className={styles.tableWrapper}>
                                 <table className={styles.table}>
                                     <thead>
                                         <tr>
-                                            <th>Invoice No</th>
                                             <th>Date</th>
-                                            <th>Flavor</th>
-                                            <th>Cost Price</th>
-                                            <th>Selling Price</th>
-                                            <th>MRP</th>
                                             <th>Purchased Qty</th>
                                             <th>Received Qty</th>
                                             <th>Pending Qty</th>
@@ -277,12 +311,7 @@ function ItemDetails() {
                                     <tbody>
                                         {stockData.map((item) => (
                                             <tr key={item.purchaseId}>
-                                                <td>{item.invoiceNo}</td>
                                                 <td>{new Date(item.invoiceDate).toLocaleDateString("en-IN")}</td>
-                                                <td>{item.flavor || "-"}</td>
-                                                <td>₹ {item.costPrice}</td>
-                                                <td>₹ {item.sellingPrice}</td>
-                                                <td>₹ {item.mrp}</td>
                                                 <td>{item.purchasedQty}</td>
                                                 <td>{item.receivedQty}</td>
                                                 <td>{item.pendingQty}</td>

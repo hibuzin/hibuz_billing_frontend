@@ -356,11 +356,14 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
           ) : (
             <>
               <li
-                className={styles.backItem}
-                onClick={() => setSettingsMode(false)}
-              >
-                <span>← Back to Dashboard</span>
-              </li>
+  className={styles.backItem}
+  onClick={() => {
+    setSettingsMode(false);
+    navigate("/home");
+  }}
+>
+  <span>← Back to Dashboard</span>
+</li>
               {settingsMenu.map((item, index) => {
 
                 if (item.divider) {

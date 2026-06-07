@@ -128,6 +128,10 @@
   border: 1px solid #e8e8e3;
 }
 
+.table tbody tr:hover {
+  background: #F1F0FC;
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -160,6 +164,8 @@
 .table td {
   padding: 16px 18px;
   font-weight: 350;
+  cursor: pointer;
+
 }
 
 /* SEARCH */
@@ -204,6 +210,15 @@
   flex-shrink: 0;
 }
 
+.searchInput {
+  flex: 1;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  background: transparent;
+}
+
 .searchInput::placeholder {
   color: #9ca3af;
 }
@@ -211,15 +226,16 @@
 .placeholderWrapper {
   position: relative;
   flex: 1;
+  height: 36px;
+  overflow: hidden;
 }
-
 
 .placeholderSlider {
   position: absolute;
-  left: 0;
   top: 0;
-  z-index: 1;
-  pointer-events: none;
+  left: 0;
+  width: 100%;
+  transition: transform 0.4s ease-in-out;
 }
 
 .placeholderSlider span {
@@ -267,7 +283,7 @@
 
 .menuBtn {
   width: 32px;
-  height: 62px;
+  height: 32px;
   border: none;
   background: transparent;
   border-radius: 8px;
