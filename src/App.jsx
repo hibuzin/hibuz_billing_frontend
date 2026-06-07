@@ -11,13 +11,13 @@ import {
 import { useState, useEffect } from "react";
 
 import Login from "./Pages/auth/Login";
-import Customers from "./pages/Customers/Customers";
+import Customers from "./Pages/Customers/Customers";
 import Sales from "./Pages/Sales/Sales";
 import Payment from "./Pages/Payment/Payment";
 import Stocks from "./Pages/Stock/Stocks";
 import LowStocks from "./Pages/Stock/LowStock";
 import OutOfStock from "./Pages/Stock/OutOfStock";
-import GST from "./pages/GST/GST";
+import GST from "./Pages/GST/GST";
 import Analytics from "./Pages/Analytics/Analytics";
 import Offers from "./Pages/Offers/Offers";
 import Home from "./Pages/Dashboard/Home";
