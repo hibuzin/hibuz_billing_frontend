@@ -1,4 +1,4 @@
-const BASE_URL = "http://192.168.31.181:5000/api";
+const BASE_URL = "https://pos-backend-6uh4.onrender.com/api";
 
 export const API = {
 
