@@ -91,27 +91,27 @@ function Item() {
   }, []);
 
   const placeholders = [
-  "Search by Name",
-  "Search by HSN Code",
-];
+    "Search by Name",
+    "Search by HSN Code",
+  ];
 
-const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
 
-useEffect(() => {
-  const interval = setInterval(() => {
-    setPlaceholderIndex((prev) => prev + 1);
-  }, 2000);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholderIndex((prev) => prev + 1);
+    }, 2000);
 
-  return () => clearInterval(interval);
-}, []);
+    return () => clearInterval(interval);
+  }, []);
 
-useEffect(() => {
-  if (placeholderIndex === placeholders.length - 1) {
-    setTimeout(() => {
-      setPlaceholderIndex(0);
-    }, 400); // transition duration
-  }
-}, [placeholderIndex]);
+  useEffect(() => {
+    if (placeholderIndex === placeholders.length - 1) {
+      setTimeout(() => {
+        setPlaceholderIndex(0);
+      }, 400); // transition duration
+    }
+  }, [placeholderIndex]);
 
   // stock value 
 
@@ -184,33 +184,33 @@ useEffect(() => {
   };
 
   const searchProducts = async (value) => {
-  try {
-    const token = localStorage.getItem("token");
+    try {
+      const token = localStorage.getItem("token");
 
-    if (!value.trim()) {
-      fetchProduct();
-      return;
-    }
-
-    const res = await fetch(
-      `${API.products}/search?search=${encodeURIComponent(value)}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      if (!value.trim()) {
+        fetchProduct();
+        return;
       }
-    );
 
-    const data = await res.json();
+      const res = await fetch(
+        `${API.products}/search?search=${encodeURIComponent(value)}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    if (data.success) {
-      setProduct(data.data || []);
+      const data = await res.json();
+
+      if (data.success) {
+        setProduct(data.data || []);
+      }
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
-  }
-};
+  };
 
   // FETCH CATEGORIES
 
@@ -428,7 +428,7 @@ useEffect(() => {
           <h2>items</h2>
         </div>
 
-        
+
       </div>
 
       <div className={styles.cardsRow}>
@@ -479,50 +479,52 @@ useEffect(() => {
 
       </div>
 
-     <div className={styles.searchRow}>
-  <div className={styles.searchBox}>
-  <FaSearch className={styles.searchIcon} />
+      <div className={styles.searchRow}>
+        <div className={styles.searchBox}>
+          <FaSearch className={styles.searchIcon} />
 
-  <div className={styles.placeholderWrapper}>
-   <div
-  className={styles.placeholderSlider}
-  style={{
-    transform: `translateY(-${placeholderIndex * 36}px)`,
-  }}
->
-  {placeholders.map((text, i) => (
-    <span key={i}>{text}</span>
-  ))}
-</div>
+          <div className={styles.placeholderWrapper}>
+            {!search && (
+              <div
+                className={styles.placeholderSlider}
+                style={{
+                  transform: `translateY(-${placeholderIndex * 36}px)`,
+                }}
+              >
+                {placeholders.map((text, i) => (
+                  <span key={i}>{text}</span>
+                ))}
+              </div>
+            )}
 
-    <input
-  type="text"
-  value={search}
-  onChange={(e) => {
-    const value = e.target.value;
-    setSearch(value);
-    searchProducts(value);
-  }}
-  className={styles.searchInput}
-/>
-  </div>
-</div>
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => {
+                const value = e.target.value;
+                setSearch(value);
+                searchProducts(value);
+              }}
+              className={styles.searchInput}
+            />
+          </div>
+        </div>
 
-  <div className={styles.searchBox}>
-    <FaBarcode className={styles.searchIcon} />
-    <input
-      type="text"
-      placeholder="Search Barcode"
-      className={styles.searchInput}
-    />
-  </div>
-  <button
+        <div className={styles.searchBox}>
+          <FaBarcode className={styles.searchIcon} />
+          <input
+            type="text"
+            placeholder="Search Barcode"
+            className={styles.searchInput}
+          />
+        </div>
+        <button
           className={styles.addBtn}
           onClick={() => navigate("/create-product")}
         >
           <span>Create items</span>
         </button>
-</div>
+      </div>
       {/* PRODUCTS */}
       <div className={styles.tableWrapper}>
         {loading ? (
@@ -546,26 +548,26 @@ useEffect(() => {
             </thead>
 
             <tbody>
-             {product.map((p, index) => (
- <tr
-  key={p._id || p.productId}
-  onClick={() =>
-    navigate(`/item/${p._id || p.productId}`)
-  }
->
+              {product.map((p, index) => (
+                <tr
+                  key={p._id || p.productId}
+                  onClick={() =>
+                    navigate(`/item/${p._id || p.productId}`)
+                  }
+                >
                   <td>{index + 1}</td>
 
                   <td className={styles.nameCell}>
-  {p.name || p.productName}
-</td>
+                    {p.name || p.productName}
+                  </td>
 
-<td>
-  {p.brand || "—"}
-</td>
+                  <td>
+                    {p.brand || "—"}
+                  </td>
 
-<td>
-  {p.categoryId?.name || p.categoryName || "—"}
-</td>
+                  <td>
+                    {p.categoryId?.name || p.categoryName || "—"}
+                  </td>
 
                   <td>
                     <div

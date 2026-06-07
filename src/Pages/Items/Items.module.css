@@ -204,15 +204,6 @@
   flex-shrink: 0;
 }
 
-.searchInput {
-  flex: 1;
-  height: 100%;
-  border: none;
-  outline: none;
-  font-size: 13px;
-  background: transparent;
-}
-
 .searchInput::placeholder {
   color: #9ca3af;
 }
@@ -220,16 +211,15 @@
 .placeholderWrapper {
   position: relative;
   flex: 1;
-  height: 36px;
-  overflow: hidden;
 }
+
 
 .placeholderSlider {
   position: absolute;
-  top: 0;
   left: 0;
-  width: 100%;
-  transition: transform 0.4s ease-in-out;
+  top: 0;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .placeholderSlider span {
