@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./Home.module.css";
-
+import { API } from "../../constants/api";
 import {
   BarChart,
   Bar,
@@ -16,7 +16,7 @@ export default function Home() {
   const [salesData, setSalesData] = useState([]);
   const [transactions, setTransactions] = useState([]);
 
-  const BASE_URL = "http://192.168.31.181:5000";
+
   const token = localStorage.getItem("token");
 
   const authHeaders = {
@@ -33,41 +33,41 @@ export default function Home() {
   }, []);
 
   const fetchSalesReport = async (type) => {
-    try {
-      const res = await fetch(
-        `${BASE_URL}/api/bill/sales-check?type=${type}`,
-        { headers: authHeaders }
-      );
+  try {
+    const res = await fetch(
+      `${API.bill}/sales-check?type=${type}`,
+      { headers: authHeaders }
+    );
 
-      const json = await res.json();
-      const d = json?.data;
+    const json = await res.json();
+    const d = json?.data;
 
-      setSalesData([
-        {
-          name: type,
-          bills: d?.totalBills || 0,
-          sales: d?.totalSales || 0,
-        },
-      ]);
-    } catch (err) {
-      setSalesData([]);
-    }
-  };
+    setSalesData([
+      {
+        name: type,
+        bills: d?.totalBills || 0,
+        sales: d?.totalSales || 0,
+      },
+    ]);
+  } catch (err) {
+    setSalesData([]);
+  }
+};
 
   const fetchTransactions = async () => {
-    try {
-      const res = await fetch(
-        `${BASE_URL}/api/bill?limit=5`,
-        { headers: authHeaders }
-      );
+  try {
+    const res = await fetch(
+      `${API.bill}?limit=5`,
+      { headers: authHeaders }
+    );
 
-      const json = await res.json();
+    const json = await res.json();
 
-      setTransactions(Array.isArray(json?.data) ? json.data : []);
-    } catch (err) {
-      setTransactions([]);
-    }
-  };
+    setTransactions(Array.isArray(json?.data) ? json.data : []);
+  } catch (err) {
+    setTransactions([]);
+  }
+};
 
   return (
     <div className={styles.page}>
