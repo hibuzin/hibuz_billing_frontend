@@ -73,7 +73,7 @@ function Login() {
     showToast("Login successful!", "success");
 
     setTimeout(() => {
-      window.location.href = "/home";
+      navigate("/home");
     }, 1000);
 
   } catch (error) {

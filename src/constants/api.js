@@ -47,4 +47,5 @@ export const API = {
   // stock
   stock: `${BASE_URL}/stock`,
   stockValue: `${BASE_URL}/stock/stock-value`,
+  stock: `${BASE_URL}/stock/stock`,
 };
