@@ -1,8 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Select from "react-select";
 import { FiTrash2, FiPlus, FiSave, FiArrowLeft } from "react-icons/fi";
 import { MdQrCodeScanner } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 import styles from "./CreatePurchase.module.css";
+import AddItemsModal from "./AddItemsModal";
 import Toast from "../../components/Toast";
 import { API } from "../../constants/api";
 
@@ -10,7 +12,7 @@ function CreatePurchase() {
   const emptyItem = {
     productId: "",
     mrp: "",
-    qty: "1",
+    qty: "",
     costPrice: "",
     sellingPrice: "",
     barcode: "",
@@ -27,12 +29,13 @@ function CreatePurchase() {
     notes: "",
   });
 
-  const [billItems, setBillItems] = useState([{ ...emptyItem }]);
+  const [billItems, setBillItems] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState({ message: "", type: "" });
-
+  const [showItemModal, setShowItemModal] = useState(false);
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
   const balanceAmount =
@@ -54,7 +57,7 @@ function CreatePurchase() {
       ((Number(item.qty) || 0) *
         (Number(item.costPrice) || 0) *
         (Number(item.tax) || 0)) /
-        100,
+      100,
     0
   );
 
@@ -104,7 +107,6 @@ function CreatePurchase() {
   const getProductOptions = () =>
     products.map((p) => ({ value: p._id, label: p.name, product: p }));
 
-
   const updateItem = (index, field, value) => {
     setBillItems((prev) => {
       const updated = [...prev];
@@ -113,33 +115,39 @@ function CreatePurchase() {
     });
   };
 
-const handleProductSelect = (index, selected) => {
-  const product = selected?.product;
+  const handleProductSelect = (index, selected) => {
+    const product = selected?.product;
+    setBillItems((prev) => {
+      const updated = [...prev];
+      updated[index] = {
+        ...updated[index],
+        productId: product?._id || "",
+        mrp: product?.mrp || "",
+        costPrice: product?.costPrice || "",
+        sellingPrice: product?.sellingPrice || "",
+        barcode: product?.barcode || "",
+      };
+      return updated;
+    });
+  };
 
-  setBillItems((prev) => {
-    const updated = [...prev];
-
-    updated[index] = {
-      ...updated[index],
-      productId: product?._id || "",
-      mrp: product?.mrp || "",
-      costPrice: product?.costPrice || "",
-      sellingPrice: product?.sellingPrice || "",
-      barcode: product?.barcode || "",
-    };
-
-    return updated;
-  });
-};
-
-  const addRow = () => {
-    setBillItems((prev) => [...prev, { ...emptyItem }]);
+  const handleAddItems = (newItems) => {
+    setBillItems((prev) => {
+      const existing = prev.filter((i) => i.productId);
+      const existingIds = new Set(existing.map((i) => i.productId));
+      const toAdd = newItems.filter((i) => !existingIds.has(i.productId));
+      return [...existing, ...toAdd];
+    });
   };
 
   const removeRow = (index) => {
     if (billItems.length === 1) return;
     setBillItems((prev) => prev.filter((_, i) => i !== index));
   };
+
+  const selectedSupplier = suppliers.find(
+    (s) => s._id === form.supplierId
+  );
 
   const supplierOptions = suppliers.map((s) => ({
     value: s._id,
@@ -161,14 +169,14 @@ const handleProductSelect = (index, selected) => {
         supplierBillAmount: Number(form.supplierBillAmount),
         paidAmount: Number(form.paidAmount),
         balanceAmount,
-       items: validItems.map((item) => ({
-  productId: item.productId,
-  qty: Number(item.qty),
-  costPrice: Number(item.costPrice),
-  mrp: Number(item.mrp),
-  sellingPrice: Number(item.sellingPrice),
-  barcode: item.barcode,
-})),
+        items: validItems.map((item) => ({
+          productId: item.productId,
+          qty: Number(item.qty),
+          costPrice: Number(item.costPrice),
+          mrp: Number(item.mrp),
+          sellingPrice: Number(item.sellingPrice),
+          barcode: item.barcode,
+        })),
       };
 
       const res = await fetch(API.createPurchase, {
@@ -213,15 +221,8 @@ const handleProductSelect = (index, selected) => {
       background: "#fff",
       cursor: "pointer",
     }),
-    valueContainer: (base) => ({
-      ...base,
-      padding: "0 8px",
-      height: "30px",
-    }),
-    indicatorsContainer: (base) => ({
-      ...base,
-      height: "30px",
-    }),
+    valueContainer: (base) => ({ ...base, padding: "0 8px", height: "30px" }),
+    indicatorsContainer: (base) => ({ ...base, height: "30px" }),
     option: (base, state) => ({
       ...base,
       fontSize: "13px",
@@ -247,17 +248,19 @@ const handleProductSelect = (index, selected) => {
       <Toast message={toast.message} type={toast.type} />
 
       <div className={styles.page}>
-
         {/* TOP BAR */}
         <div className={styles.topBar}>
           <div className={styles.topLeft}>
-            <button className={styles.backBtn}>
+            <button
+              className={styles.backBtn}
+              onClick={() => navigate("/purchase")}
+            >
               <FiArrowLeft size={16} />
               <span>Create Purchase Invoice</span>
             </button>
           </div>
           <div className={styles.topRight}>
-            <button className={styles.btnOutline} onClick={() => {}}>
+            <button className={styles.btnOutline} onClick={() => { }}>
               Save &amp; New
             </button>
             <button
@@ -273,57 +276,62 @@ const handleProductSelect = (index, selected) => {
 
         {/* INVOICE BODY */}
         <div className={styles.invoiceBody}>
-
-          {/* BILL FROM + INVOICE META */}
+          {/* HEADER SECTION */}
           <div className={styles.headerSection}>
-
-            {/* LEFT - Bill From */}
             <div className={styles.billFrom}>
               <p className={styles.sectionLabel}>Bill From</p>
               <div className={styles.partyBox}>
                 <Select
                   options={supplierOptions}
                   placeholder="+ Add Party"
-                  value={
-                    supplierOptions.find((s) => s.value === form.supplierId) || null
-                  }
-                  onChange={(sel) =>
-                    setForm((prev) => ({ ...prev, supplierId: sel?.value || "" }))
-                  }
+                  menuPortalTarget={document.body}
                   styles={{
                     ...selectStyles,
-                    control: (base, state) => ({
+
+                    control: (base) => ({
                       ...base,
+                      width: "100%",
+                      height: "100%",
+                      minHeight: "100%",
                       border: "none",
                       boxShadow: "none",
                       background: "transparent",
-                      fontSize: "14px",
-                      fontWeight: 500,
-                      color: "#1a73e8",
-                      minHeight: "40px",
+                      cursor: "pointer",
                     }),
-                    placeholder: (base) => ({
+
+                    valueContainer: (base) => ({
                       ...base,
-                      color: "#1a73e8",
-                      fontSize: "14px",
-                      fontWeight: 500,
+                      height: "100%",
+                      justifyContent: "center",
+                    }),
+
+                    indicatorsContainer: () => ({
+                      display: "none",
+                    }),
+
+                    indicatorSeparator: () => ({
+                      display: "none",
                     }),
                   }}
+                  onChange={(sel) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      supplierId: sel?.value || "",
+                    }))
+                  }
                 />
               </div>
             </div>
 
-            {/* RIGHT - Invoice Meta */}
             <div className={styles.invoiceMeta}>
               <div className={styles.metaRow}>
                 <div className={styles.metaField}>
-                  <label>Purchase Inv No.</label>
+                  <label>purchase Inv No.</label>
                   <input
                     type="text"
                     name="invoiceNo"
                     value={form.invoiceNo}
                     onChange={handleChange}
-                    placeholder="16"
                   />
                 </div>
                 <div className={styles.metaField}>
@@ -335,10 +343,7 @@ const handleProductSelect = (index, selected) => {
                     onChange={handleChange}
                   />
                 </div>
-                <div className={styles.metaField}>
-                  <label>Original Inv No.</label>
-                  <input type="text" placeholder="" />
-                </div>
+
               </div>
               <div className={styles.metaRow}>
                 <div className={styles.metaField}>
@@ -351,18 +356,9 @@ const handleProductSelect = (index, selected) => {
                     placeholder="0"
                   />
                 </div>
-                <div className={styles.metaField}>
-                  <label>Due Date</label>
-                  <input
-                    type="date"
-                    name="dueDate"
-                    value={form.dueDate}
-                    onChange={handleChange}
-                  />
-                </div>
+
               </div>
             </div>
-
           </div>
 
           {/* ITEMS TABLE */}
@@ -390,15 +386,12 @@ const handleProductSelect = (index, selected) => {
                   return (
                     <tr key={index} className={styles.itemRow}>
                       <td className={styles.colNo}>{index + 1}</td>
-
                       <td className={styles.colItem}>
                         <Select
                           options={getProductOptions()}
                           placeholder="Search item..."
                           value={
-                            getProductOptions().find(
-                              (p) => p.value === item.productId
-                            ) || null
+                            getProductOptions().find((p) => p.value === item.productId) || null
                           }
                           onChange={(sel) => handleProductSelect(index, sel)}
                           styles={selectStyles}
@@ -408,52 +401,38 @@ const handleProductSelect = (index, selected) => {
                           className={styles.descInput}
                           placeholder="Enter Description (optional)"
                           value={item.barcode}
-                          onChange={(e) =>
-                            updateItem(index, "barcode", e.target.value)
-                          }
+                          onChange={(e) => updateItem(index, "barcode", e.target.value)}
                         />
                       </td>
-
-                    
-
                       <td className={styles.colMrp}>
                         <input
                           type="number"
                           className={styles.cellInput}
                           value={item.mrp}
-                          onChange={(e) =>
-                            updateItem(index, "mrp", e.target.value)
-                          }
+                          onChange={(e) => updateItem(index, "mrp", e.target.value)}
                           placeholder="0"
                         />
                       </td>
-
                       <td className={styles.colQty}>
                         <div className={styles.qtyCell}>
                           <input
                             type="number"
                             className={styles.cellInput}
                             value={item.qty}
-                            onChange={(e) =>
-                              updateItem(index, "qty", e.target.value)
-                            }
+                            onChange={(e) => updateItem(index, "qty", e.target.value)}
                           />
                           <span className={styles.unit}>PCS</span>
                         </div>
                       </td>
-
                       <td className={styles.colPrice}>
                         <input
                           type="number"
                           className={styles.cellInput}
                           value={item.costPrice}
-                          onChange={(e) =>
-                            updateItem(index, "costPrice", e.target.value)
-                          }
+                          onChange={(e) => updateItem(index, "costPrice", e.target.value)}
                           placeholder="0"
                         />
                       </td>
-
                       <td className={styles.colDiscount}>
                         <div className={styles.discountCell}>
                           <div className={styles.discRow}>
@@ -463,9 +442,7 @@ const handleProductSelect = (index, selected) => {
                               className={styles.cellInput}
                               placeholder="0"
                               value={item.discountPct || ""}
-                              onChange={(e) =>
-                                updateItem(index, "discountPct", e.target.value)
-                              }
+                              onChange={(e) => updateItem(index, "discountPct", e.target.value)}
                             />
                           </div>
                           <div className={styles.discRow}>
@@ -475,21 +452,16 @@ const handleProductSelect = (index, selected) => {
                               className={styles.cellInput}
                               placeholder="0"
                               value={item.discount || ""}
-                              onChange={(e) =>
-                                updateItem(index, "discount", e.target.value)
-                              }
+                              onChange={(e) => updateItem(index, "discount", e.target.value)}
                             />
                           </div>
                         </div>
                       </td>
-
                       <td className={styles.colTax}>
                         <select
                           className={styles.taxSelect}
                           value={item.tax || ""}
-                          onChange={(e) =>
-                            updateItem(index, "tax", e.target.value)
-                          }
+                          onChange={(e) => updateItem(index, "tax", e.target.value)}
                         >
                           <option value="">None</option>
                           <option value="5">5%</option>
@@ -507,11 +479,9 @@ const handleProductSelect = (index, selected) => {
                           ).toFixed(0)}
                         </div>
                       </td>
-
                       <td className={styles.colAmount}>
                         ₹ {lineTotal.toLocaleString("en-IN")}
                       </td>
-
                       <td className={styles.colAction}>
                         <button
                           className={styles.deleteRowBtn}
@@ -529,12 +499,16 @@ const handleProductSelect = (index, selected) => {
 
             {/* ADD ITEM + SCAN BAR */}
             <div className={styles.addItemBar}>
-              <button className={styles.addItemBtn} onClick={addRow} type="button">
+              <button
+                className={styles.addItemBtn}
+                onClick={() => setShowItemModal(true)}
+                type="button"
+              >
                 <FiPlus size={14} />
                 Add Item
               </button>
               <button className={styles.scanBtn} type="button">
-                <MdQrCodeScanner size={16} />
+                <MdQrCodeScanner size={40} />
                 Scan Barcode
               </button>
             </div>
@@ -550,36 +524,26 @@ const handleProductSelect = (index, selected) => {
 
           {/* FOOTER */}
           <div className={styles.invoiceFooter}>
-
-            {/* LEFT - Notes */}
             <div className={styles.footerLeft}>
               <button className={styles.addLink}>+ Add Notes</button>
               <button className={styles.addLink}>+ Add Terms and Conditions</button>
             </div>
-
-            {/* RIGHT - Totals */}
             <div className={styles.totalsPanel}>
               <button className={styles.addLink}>+ Add Additional Charges</button>
-
               <div className={styles.totalLine}>
                 <span>Taxable Amount</span>
                 <span>₹ {subtotal.toLocaleString("en-IN")}</span>
               </div>
-
               <div className={styles.totalLine}>
                 <span>+ Add Discount</span>
                 <span>- ₹ {totalDiscount.toLocaleString("en-IN")}</span>
               </div>
-
               <div className={styles.divider} />
-
               <div className={styles.totalLineBold}>
                 <span>Total Amount</span>
                 <span>₹ {totalAmount.toLocaleString("en-IN")}</span>
               </div>
-
               <div className={styles.divider} />
-
               <div className={styles.totalLine}>
                 <span>Amount Paid</span>
                 <div className={styles.paidInput}>
@@ -598,19 +562,25 @@ const handleProductSelect = (index, selected) => {
                   </select>
                 </div>
               </div>
-
               <div className={styles.balanceLine}>
                 <span>Balance Amount</span>
                 <span className={balanceAmount > 0 ? styles.balRed : styles.balGreen}>
                   ₹ {balanceAmount.toLocaleString("en-IN")}
                 </span>
               </div>
-
             </div>
           </div>
-
         </div>
       </div>
+
+      {/* MODAL */}
+      {showItemModal && (
+        <AddItemsModal
+          products={products}
+          onClose={() => setShowItemModal(false)}
+          onAddItems={handleAddItems}
+        />
+      )}
     </>
   );
 }
