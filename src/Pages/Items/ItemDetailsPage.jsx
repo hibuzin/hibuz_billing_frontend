@@ -32,7 +32,7 @@ function ItemDetails() {
         try {
             setSwitching(true);
             const token = localStorage.getItem("token");
-            const res = await fetch(`${API.stock}/${id}`, {
+            const res = await fetch(`${API.stockList}/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             const json = await res.json();

@@ -15,7 +15,6 @@
   
 }
 
-
 /* TOP FIXED */
 
 .topFixed {
@@ -41,7 +40,7 @@
 }
 
 .menuWrapper::-webkit-scrollbar-thumb {
-  background: transparent; /* hidden but scroll works */
+  background: transparent; 
 }
 
 .topBar {
@@ -183,20 +182,6 @@
   font-size: var(--sidebar-font);
 }
 
-.item {
-  padding: 0 14px;
-  height: 40px;
-  cursor: pointer;
-  gap: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between; 
-   border-radius: 40px;
-  border-left: 3px ;
-  transition: background 0.25s ease, border 0.25s ease;
-  color: #ffffff;
-}
-
 .menuItem {
   display: flex;
   align-items: center;
@@ -222,13 +207,6 @@
   font-weight: 600;
 
   transition: 0.2s ease;
-}
-
-.icon {
-  font-size: var(--sidebar-icon);
-  display: flex;
-  align-items: center;
-  color: #ffffff;
 }
 
 .arrow {
@@ -297,14 +275,6 @@
   color: #ffffff;
 }
 
-
-.topBar {
-  height: 50px;
-  display: flex;
-  align-items: center;
-  padding-left: 14px;
-}
-
 .toggleBtn {
   font-size: 16px;
   color: #ffffff;
@@ -320,29 +290,28 @@
   padding: 0;
   border-left: none;  
 }
+
 .collapsed .topBar {
-  justify-content: flex;
+  justify-content: flex-start;
   padding-left: 14px;
 }
 
 .collapsed .menuItem {
-  justify-content: flex;
+  justify-content: flex-start;
 }
 
-.icon {
+.menuItem .icon {
   font-size: var(--sidebar-icon);
-  min-width: 20px;  
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
 }
+
+
 
 .collapsed .arrow {
   display: none;
 } 
 
 .text {
+  font-size: 13px;
   white-space: nowrap;
   transition: opacity 0.2s ease;
 }
@@ -352,35 +321,10 @@
   pointer-events: none;
 }
 
-
-
-.icon {
-  font-size: var(--sidebar-icon);
-  display: flex;
-  align-items: center;
-}
-
-.settingsText {
-  font-size: 12px;
-}
-
-.settingsSidebar {
-  background: #ffffff;
-}
-
-.settingsDivider {
-  height: 2px;
-
-  margin: 12px 16px;
-
-  background: rgba(255,255,255,0.08);
-}
-
 .settingsButton {
   padding: 10px 12px;
   border-radius: 14px;
   cursor: pointer;
-
   transition: background 0.25s ease;
 }
 
@@ -400,108 +344,69 @@
   color: #fff;
 }
 
-.settingsText {
-  font-size: 13px;
+/* ===== COMMON SIDEBAR STYLES ===== */
+
+.item,
+.subItem,
+.settingsText,
+.menuItem span {
+  font-size: var(--sidebar-font);
 }
 
-.securityRow {
-  margin-top: 18px;
-
-  display: flex;
-  align-items: center;
-  gap: 18px;
-
-  color:
-    rgba(255,255,255,0.45);
-
-  font-size: 11px;
+.businessText h4 {
+  font-size: 14px;
 }
 
-.secureItem {
-  display: flex;
-  align-items: center;
-  gap: 5px;
+.businessText p {
+  font-size: 12px;
 }
 
-.isoText {
-  font-size: 10px;
-  font-weight: 700;
-}
-
+/* ===== SETTINGS SIDEBAR ===== */
 
 .settingsSidebar {
   background: #ffffff;
 }
 
-/* MAIN MENU ITEMS */
-
-.settingsSidebar .item {
-  color: #111827;
+.settingsDivider {
+  height: 2px;
+  margin: 12px 16px;
+  background: rgba(255,255,255,0.08);
 }
 
-/* ICONS */
+.settingsSidebar .item,
+.settingsSidebar .subItem,
+.settingsSidebar .settingsText,
+.settingsSidebar .menuItem span,
+.settingsSidebar .text {
+  color: #111827;
+}
 
 .settingsSidebar .icon {
   color: #111827;
+  font-size: var(--sidebar-icon);
+  
 }
-
-/* MENU TEXT */
-
-.settingsSidebar .menuItem span {
-  color: #111827;
-}
-
-/* BUSINESS NAME */
-
-.settingsSidebar .businessText h4 {
-  color: #111827;
-}
-
-/* PHONE */
-
-.settingsSidebar .businessText p {
-  color: #6b7280;
-}
-
-/* SUB MENU */
-
-.settingsSidebar .subItem {
-  color: #374151;
-}
-
-/* SETTINGS TEXT */
-
-.settingsSidebar .settingsText {
-  color: #111827;
-}
-
-/* VERSION */
-
-.settingsSidebar .versionText {
-  color: rgba(0,0,0,0.5);
-}
-
-/* ARROW */
 
 .settingsSidebar .arrow {
   color: #6b7280;
 }
 
-/* DIVIDER */
-
-.settingsSidebar .settingsDivider {
-  background: rgba(0,0,0,0.08);
+.settingsSidebar .businessText h4 {
+  color: #111827;
 }
 
-/* BOTTOM SETTINGS AREA */
+.settingsSidebar .businessText p {
+  color: #6b7280;
+}
+
+.settingsSidebar .settingsDivider {
+  background: rgba(0, 0, 0, 0.08);
+}
 
 .settingsSidebar .bottomSettings {
   background: #ffffff;
-  border-top: 1px solid rgba(0,0,0,0.08);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
-
-
-/* HOVER */
 
 .settingsSidebar .item:hover,
 .settingsSidebar .settingsButton:hover,
@@ -509,46 +414,18 @@
   background: #1e3a8a;
 }
 
-/* HOVER TEXT WHITE */
+.settingsSidebar .active {
+  background: #1e3a8a;
+  color: #ffffff;
+}
 
 .settingsSidebar .item:hover .menuItem span,
 .settingsSidebar .item:hover .icon,
 .settingsSidebar .item:hover .arrow,
-.settingsSidebar .subItem:hover {
-  color: #ffffff;
-}
-
-/* ACTIVE ITEM */
-
-.settingsSidebar .active {
-  background: #1e3a8a;
-  color: #ffffff;
-}
-
-/* ACTIVE ITEM TEXT */
-
-.settingsSidebar .active .icon,
+.settingsSidebar .subItem:hover,
+.settingsSidebar .active,
 .settingsSidebar .active .menuItem span,
+.settingsSidebar .active .icon,
 .settingsSidebar .active .arrow {
-  color: #ffffff;
-}
-
-/* KEEP ACTIVE ITEM DARK BLUE EVEN ON HOVER */
-
-.settingsSidebar .active:hover {
-  background: #1e3a8a;
-  color: #ffffff;
-}
-
-.settingsSidebar .active:hover .icon,
-.settingsSidebar .active:hover .menuItem span,
-.settingsSidebar .active:hover .arrow {
-  color: #ffffff;
-}
-
-/* ACTIVE ITEM */
-
-.settingsSidebar .active {
-  background: #1e3a8a;
   color: #ffffff;
 }

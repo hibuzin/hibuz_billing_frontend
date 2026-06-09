@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import styles from "./ManageUsers.module.css";
+import { API } from "../../../constants/api";
 
 function ManageUsers() {
   const navigate = useNavigate();
@@ -18,25 +19,21 @@ function ManageUsers() {
 
       // ADMINS
       const adminRes = await fetch(
-        "http://192.168.31.181:5000/api/super-admin/admins",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+        API.adminUsers, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const adminData = await adminRes.json();
 
       // CASHIERS
-      const cashierRes = await fetch(
-        "http://192.168.31.181:5000/api/super-admin/cashiers",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+
+      const cashierRes = await fetch(API.cashierUsers, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const cashierData = await cashierRes.json();
 
@@ -69,11 +66,11 @@ function ManageUsers() {
         </div>
 
         <button
-          className={styles.addBtn}
-          onClick={() => navigate("/createuser")}
-        >
-          <FaPlus />
-        </button>
+  className={styles.addBtn}
+  onClick={() => navigate("/createuser")}
+>
+  Create User
+</button>
       </div>
 
       <div className={styles.card}>
@@ -85,6 +82,7 @@ function ManageUsers() {
               <th>Email</th>
               <th>Phone</th>
               <th>Role</th>
+              <th></th>
             </tr>
           </thead>
 
@@ -103,15 +101,15 @@ function ManageUsers() {
 
                 <td>
                   <span
-                    className={`${styles.role} ${
-                      u.role === "Admin"
-                        ? styles.admin
-                        : styles.cashier
-                    }`}
+                    className={`${styles.role} ${u.role === "Admin"
+                      ? styles.admin
+                      : styles.cashier
+                      }`}
                   >
                     {u.role}
                   </span>
                 </td>
+                
               </tr>
             ))}
           </tbody>

@@ -129,16 +129,16 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
     },
 
     {
-  name: lang === "ta" ? "சப்ளையர்கள்" : "SUPPLIER",
-  path: "/supplier",
-  icon: <FaTruckLoading />
-},
+      name: lang === "ta" ? "சப்ளையர்கள்" : "SUPPLIER",
+      path: "/supplier",
+      icon: <FaTruckLoading />
+    },
 
-{
-  name: lang === "ta" ? "கொள்முதல்" : "PURCHASE",
-  path: "/purchase",
-  icon: <FaFileInvoice />
-},
+    {
+      name: lang === "ta" ? "கொள்முதல்" : "PURCHASE",
+      path: "/purchase",
+      icon: <FaFileInvoice />
+    },
 
     {
       name: lang === "ta" ? "விற்பனை" : "SALES",
@@ -147,6 +147,7 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
         { name: lang === "ta" ? "இன்றைய விற்பனை" : "Today Sale", path: "/sales/today" },
         { name: lang === "ta" ? "வார விற்பனை" : "Week Sale", path: "/sales/week" },
         { name: lang === "ta" ? "மாத விற்பனை" : "Monthly Sale", path: "/sales/month" },
+        { name: lang === "ta" ? "அதிகம் விற்பனையாகும் பொருட்கள்" : "Top Selling Products", path: "topsellingproduct" },
       ],
     },
 
@@ -322,7 +323,9 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
                     <div className={styles.menuItem}>
                       <span className={styles.icon}>{item.icon}</span>
 
-                      {!collapsed && <span>{item.name}</span>}
+                      {!collapsed && <span className={styles.text}>
+                        {item.name}
+                      </span>}
                     </div>
 
                     {!collapsed && item.children && (
@@ -356,14 +359,14 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
           ) : (
             <>
               <li
-  className={styles.backItem}
-  onClick={() => {
-    setSettingsMode(false);
-    navigate("/home");
-  }}
->
-  <span>← Back to Dashboard</span>
-</li>
+                className={styles.backItem}
+                onClick={() => {
+                  setSettingsMode(false);
+                  navigate("/home");
+                }}
+              >
+                <span>← Back to Dashboard</span>
+              </li>
               {settingsMenu.map((item, index) => {
 
                 if (item.divider) {
@@ -374,8 +377,8 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
                   <li
                     key={index}
                     className={`${styles.item} ${location.pathname === item.path
-                        ? styles.active
-                        : ""
+                      ? styles.active
+                      : ""
                       }`}
                     onClick={() => {
 
@@ -404,30 +407,30 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
 
       <div className={styles.bottomSettings}>
 
-  {!settingsMode && (
-    <div
-      className={styles.settingsButton}
-      onClick={() => {
-        setSettingsMode(true);
-        navigate("/account");
-      }}
-    >
-      <div className={styles.menuItem}>
-        <span className={styles.icon}>
-          <FaCog />
-        </span>
+        {!settingsMode && (
+          <div
+            className={styles.settingsButton}
+            onClick={() => {
+              setSettingsMode(true);
+              navigate("/account");
+            }}
+          >
+            <div className={styles.menuItem}>
+              <span className={styles.icon}>
+                <FaCog />
+              </span>
 
-        {!collapsed && (
-          <span className={styles.settingsText}>
-            Settings
-          </span>
+              {!collapsed && (
+                <span className={styles.settingsText}>
+                  Settings
+                </span>
+              )}
+            </div>
+          </div>
         )}
+
+
       </div>
-    </div>
-  )}
-
-
-</div>
     </div>
 
   );

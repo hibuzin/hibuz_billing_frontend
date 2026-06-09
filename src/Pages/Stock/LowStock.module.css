@@ -114,3 +114,19 @@
   padding: 30px;
   color: #888;
 }
+
+.filters {
+  display: flex;
+  gap: 10px;
+}
+
+.limitInput {
+  width: 120px;
+  height: 38px;
+  border: 1px solid #dcdfe4;
+  border-radius: 8px;
+  padding: 0 12px;
+  outline: none;
+  font-size: 13px;
+  background: #fff;
+}

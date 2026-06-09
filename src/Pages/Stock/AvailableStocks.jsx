@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from "./Stocks.module.css";
+import styles from "./AvailableStocks.module.css";
 import Toast from "../../components/Toast";
 import { API } from "../../constants/api";
 

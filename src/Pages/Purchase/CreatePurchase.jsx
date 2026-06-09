@@ -64,6 +64,13 @@ function CreatePurchase() {
   const totalAmount = subtotal - totalDiscount + totalTax;
 
   useEffect(() => {
+  setForm((prev) => ({
+    ...prev,
+    supplierBillAmount: totalAmount,
+  }));
+}, [totalAmount]);
+
+  useEffect(() => {
     fetchSuppliers();
     fetchProducts();
   }, []);

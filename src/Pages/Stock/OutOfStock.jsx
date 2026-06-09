@@ -16,7 +16,7 @@ function OutOfStock() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`${API.stock}`, {
+      const res = await fetch(`${API.outofstock}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -1,0 +1,107 @@
+.page {
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 6px;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.search {
+  width: 260px;
+  padding: 10px 14px;
+  border: 1px solid #dcdfe4;
+  border-radius: 10px;
+  outline: none;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.card span {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.card h3 {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.tableContainer {
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead {
+  background: #f8fafc;
+}
+
+.table th {
+  text-align: left;
+  padding: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.table td {
+  padding: 14px;
+  border-top: 1px solid #eef2f7;
+  font-size: 13px;
+}
+
+.table tbody tr:hover {
+  background: #fafafa;
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.productName {
+  font-weight: 600;
+}
+
+.productInfo small {
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.qtyBadge {
+  background: #ecfdf5;
+  color: #059669;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+}

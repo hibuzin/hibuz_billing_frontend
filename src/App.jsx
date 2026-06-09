@@ -14,7 +14,7 @@ import Login from "./Pages/auth/Login";
 import Customers from "./Pages/Customers/Customers";
 import Sales from "./Pages/Sales/Sales";
 import Payment from "./Pages/Payment/Payment";
-import Stocks from "./Pages/Stock/Stocks";
+import Stocks from "./Pages/Stock/AvailableStocks";
 import LowStocks from "./Pages/Stock/LowStock";
 import OutOfStock from "./Pages/Stock/OutOfStock";
 import GST from "./Pages/GST/GST";
@@ -43,6 +43,8 @@ import Category from "./Pages/Category/Category";
 import Supplier from "./Pages/Suppliers/Supplier";
 
 import PurchaseList from "./Pages/Purchase/PurchaseList";
+
+import TopSellingProducts from "./Pages/Sales/TopSellingProducts";
 
 import POSBilling from "./Pages/POSBilling/POSBilling";
 
@@ -212,6 +214,11 @@ function MainLayout() {
           <Route
             path="/create-purchase"
             element={<CreatePurchase />}
+          />
+
+          <Route
+            path="/topsellingproduct"
+            element={<TopSellingProducts />}
           />
 
           <Route

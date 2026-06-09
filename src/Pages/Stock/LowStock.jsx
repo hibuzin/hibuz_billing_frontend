@@ -9,71 +9,51 @@ function LowStocks() {
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
   const [search, setSearch] = useState("");
+  const [limit, setLimit] = useState("");
 
   useEffect(() => {
     fetchLowStocks();
   }, []);
 
   const fetchLowStocks = async () => {
-    try {
+  try {
+    setLoading(true);
+    const token = localStorage.getItem("token");
 
-      setLoading(true);
+    const res = await fetch(`${API.stock}/low-stock?limit=50`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-      const token = localStorage.getItem("token");
+    const data = await res.json();
 
-      const res = await fetch(`${API.stock}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-
-        // LOW STOCK ONLY
-        const lowStocks = (data.data || []).filter(
-          (item) => item.status === "Low Stock"
-        );
-
-        // REMOVE DUPLICATES
-        const uniqueStocks = lowStocks.filter(
-          (item, index, self) =>
-            index ===
-            self.findIndex(
-              (s) =>
-                s.productId === item.productId &&
-                s.flavor === item.flavor &&
-                s.mrp === item.mrp &&
-                s.litters === item.litters
-            )
-        );
-
-        setStocks(uniqueStocks);
-
-      } else {
-        setToast({
-          type: "error",
-          message: "Failed to load low stocks",
-        });
-      }
-
-    } catch (err) {
-      console.log(err);
-
-      setToast({
-        type: "error",
-        message: "Failed to load low stocks",
-      });
-
-    } finally {
-      setLoading(false);
+    if (data.success) {
+      const lowStocks = (data.data || []).filter(
+        (item) => item.status === "Low Stock"
+      );
+      setStocks(lowStocks);
     }
-  };
+  } catch (err) {
+    console.log(err);
+  } finally {
+    setLoading(false);
+  }
+};
 
-  const filteredStocks = stocks.filter((item) =>
-    item.productName.toLowerCase().includes(search.toLowerCase())
-  );
+const filteredStocks = stocks.filter((item) => {
+  const matchesSearch =
+    item.productName?.toLowerCase().includes(search.toLowerCase()) ||
+    item.brand?.toLowerCase().includes(search.toLowerCase()) ||
+    item.barcode?.toLowerCase().includes(search.toLowerCase());
+
+  const matchesLimit =
+    !limit || item.currentStock <= Number(limit);
+
+  return matchesSearch && matchesLimit;
+});
+
+console.log("stocks:", stocks);
+console.log("limit value:", limit);
+console.log("filtered:", filteredStocks);
 
   return (
     <div className={styles.container}>
@@ -91,13 +71,23 @@ function LowStocks() {
           </p>
         </div>
 
-        <input
-          type="text"
-          placeholder="Search product..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className={styles.searchInput}
-        />
+        <div className={styles.filters}>
+  <input
+    type="text"
+    placeholder="Search product..."
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    className={styles.searchInput}
+  />
+
+  <input
+    type="number"
+    placeholder="Stock Limit"
+    value={limit}
+    onChange={(e) => setLimit(e.target.value)}
+    className={styles.limitInput}
+  />
+</div>
 
       </div>
 

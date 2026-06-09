@@ -14,6 +14,8 @@ export const API = {
   users: `${BASE_URL}/users`,
   admins: `${BASE_URL}/admins`,
   cashiers: `${BASE_URL}/cashier`,
+  adminUsers: `${BASE_URL}/super-admin/admins`,
+cashierUsers: `${BASE_URL}/super-admin/cashiers`,
 
   // customers
   customers: `${BASE_URL}/customer/customers`,
@@ -47,5 +49,9 @@ export const API = {
   // stock
   stock: `${BASE_URL}/stock`,
   stockValue: `${BASE_URL}/stock/stock-value`,
-  stock: `${BASE_URL}/stock/stock`,
+  stockList: `${BASE_URL}/stock/stock`,
+  outofstock:`${BASE_URL}/stock/out-of-stock`,
+
+  //sales
+  topselling:`${BASE_URL}/stock/top-selling-products`,
 };
