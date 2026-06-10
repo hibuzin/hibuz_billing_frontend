@@ -101,37 +101,37 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
 
 
     {
-      name: lang === "ta" ? "முகப்பு பலகம்" : "DASHBOARD",
+      name: lang === "ta" ? "முகப்பு பலகம்" : "Dashboard",
       path: "/home",
       icon: <FaHome />
     },
 
     {
-      name: lang === "ta" ? "வாடிக்கையாளர்கள்" : "CUSTOMERS",
+      name: lang === "ta" ? "வாடிக்கையாளர்கள்" : "Customers",
       path: "/customers",
       icon: <FaUsers />
     },
 
     {
-      name: lang === "ta" ? "பொருட்கள்" : "ITEMS",
+      name: lang === "ta" ? "பொருட்கள்" : "Items",
       path: "/product",
       icon: <FaBox />,
     },
 
     {
-      name: lang === "ta" ? "சப்ளையர்கள்" : "SUPPLIER",
+      name: lang === "ta" ? "சப்ளையர்கள்" : "Suppliers",
       path: "/supplier",
       icon: <FaTruckLoading />
     },
 
     {
-      name: lang === "ta" ? "கொள்முதல்" : "PURCHASE",
+      name: lang === "ta" ? "கொள்முதல்" : "Purchase",
       path: "/purchase",
       icon: <FaFileInvoice />
     },
 
     {
-      name: lang === "ta" ? "விற்பனை" : "SALES",
+      name: lang === "ta" ? "விற்பனை" : "Sales",
       icon: <RiMoneyDollarCircleLine />,
       children: [
         { name: lang === "ta" ? "இன்றைய விற்பனை" : "Today Sale", path: "/sales/today" },
@@ -142,7 +142,7 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
     },
 
     {
-      name: lang === "ta" ? "கட்டணம்" : "PAYMENT",
+      name: lang === "ta" ? "கட்டணம்" : "Payment",
       icon: <MdPayments />,
       children: [
         { name: lang === "ta" ? "பணம்" : "Cash", path: "/payment/cash" },
@@ -152,7 +152,7 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
     },
 
     {
-      name: lang === "ta" ? "சரக்கு" : "STOCKS",
+      name: lang === "ta" ? "சரக்கு" : "Stocks",
       icon: <MdInventory />,
       children: [
         { name: lang === "ta" ? "கிடைக்கும்" : "Available", path: "/stocks" },
@@ -162,20 +162,20 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
     },
 
     {
-      name: lang === "ta" ? "ஜிஎஸ்டி" : "GST",
+      name: lang === "ta" ? "ஜிஎஸ்டி" : "Gst",
       path: "/gst",
       icon: <FaChartBar />,
       onlyRole: "super_admin"
     },
 
     {
-      name: lang === "ta" ? "பகுப்பாய்வு" : "ANALYTICS",
+      name: lang === "ta" ? "பகுப்பாய்வு" : "Analytics",
       path: "/analytics",
       icon: <FaChartBar />
     },
 
     {
-      name: lang === "ta" ? "சலுகைகள்" : "OFFERS",
+      name: lang === "ta" ? "சலுகைகள்" : "Offers",
       path: "/offers",
       icon: <FaTags />
     },

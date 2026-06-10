@@ -551,7 +551,7 @@ function Item() {
     <th>No</th>
     <th>Name</th>
     <th>HSN Code</th>
-    <th>BareCode</th>
+    <th>BarCode</th>
     <th>Qty</th>
     <th>Selling Price</th>
     <th>Purchase Price</th>
