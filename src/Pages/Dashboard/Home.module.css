@@ -63,23 +63,37 @@
 }
 
 /* OVERVIEW */
+/* OVERVIEW */
 .overviewGrid {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 900px) {
+  .overviewGrid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .cardGreen,
 .cardRed,
 .cardGreay {
-  flex: 1;
-  padding: 16px;
-  border-radius: 12px;
-  background: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  background: #fff;
+  padding: 15px;      /* same as infoCard */
+  border-radius: 8px; /* same as infoCard */
+  cursor: pointer;
+  transition: 0.2s;
 }
 
+.cardGreen:hover,
+.cardRed:hover,
+.cardGreay:hover {
+  transform: translateY(-2px);
+}
+
+/* Keep your existing colors & borders */
 .cardGreen {
   background: linear-gradient(135deg, #ecfdf5, #ffffff);
   border: 1px solid #bbf7d0;
@@ -90,19 +104,23 @@
   border: 1px solid #fecaca;
 }
 
-.cardGreay{
-    background: linear-gradient(135deg, #e5f4ff, #fffcfc);
+.cardGreay {
+  background: linear-gradient(135deg, #e5f4ff, #fffcfc);
   border: 1px solid #9e9999;
 }
+
 .cardLabel {
-  font-size: 13px;
-  color: #6b7280;
+  margin: 0;
+  font-size: 14px; /* same as first card p */
+  color: inherit;
 }
 
 .amount {
-  font-size: 22px;
-  font-weight: 700;
   margin-top: 8px;
+  font-size: 20px; /* same as first card h2 */
+  font-family: Inter, sans-serif;
+  font-weight: 300;
+  color: #292d35;
 }
 
 /* TABLE */

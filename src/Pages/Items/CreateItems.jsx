@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./CreateItems.module.css";
 import Toast from "../../components/Toast";
 import { API } from "../../constants/api";
+import { useNavigate } from "react-router-dom";
+import { FiArrowLeft } from "react-icons/fi";
 
 function CreateProduct() {
   const [form, setForm] = useState({
@@ -12,6 +14,7 @@ function CreateProduct() {
     mrp: "",
     costPrice: "",
     sellingPrice: "",
+     description: "",
     barcode: "",
   });
 
@@ -28,8 +31,10 @@ function CreateProduct() {
   const mrpRef = useRef(null);
   const costRef = useRef(null);
   const sellingRef = useRef(null);
+  const descriptionRef = useRef(null);
   const barcodeRef = useRef(null);
   const submitRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (nameRef.current) nameRef.current.focus();
@@ -109,15 +114,16 @@ function CreateProduct() {
       setLoading(true);
       const token = localStorage.getItem("token");
       const payload = {
-        name: form.name,
-        categoryId: form.categoryId,
-        hsnCode: form.hsnCode,
-        gstRate: Number(form.gstRate),
-        mrp: Number(form.mrp),
-        costPrice: Number(form.costPrice),
-        sellingPrice: Number(form.sellingPrice),
-        barcode: form.barcode,
-      };
+  name: form.name,
+  categoryId: form.categoryId,
+  hsnCode: form.hsnCode,
+  gstRate: Number(form.gstRate),
+  mrp: Number(form.mrp),
+  costPrice: Number(form.costPrice),
+  sellingPrice: Number(form.sellingPrice),
+  barcode: form.barcode,
+  description: form.description,
+};
 
 
       const res = await fetch(API.createProduct, {
@@ -132,15 +138,16 @@ function CreateProduct() {
       if (!res.ok) throw new Error(data.message || "Failed to create item");
       showToast("Item created successfully", "success");
       setForm({
-        name: "",
-        categoryId: "",
-        hsnCode: "",
-        gstRate: "",
-        mrp: "",
-        costPrice: "",
-        sellingPrice: "",
-        barcode: "",
-      });
+  name: "",
+  categoryId: "",
+  hsnCode: "",
+  gstRate: "",
+  mrp: "",
+  costPrice: "",
+  sellingPrice: "",
+  barcode: "",
+  description: "",
+});
     } catch (err) {
       showToast(err.message, "error");
     } finally {
@@ -154,9 +161,17 @@ function CreateProduct() {
 
       <div className={styles.container}>
 
-        <div className={styles.pageHeader}>
-          <h2>Create Item</h2>
-        </div>
+        <div className={styles.header}>
+  <button
+    type="button"
+    className={styles.backBtn}
+    onClick={() => navigate("/product")}
+  >
+    <FiArrowLeft size={18} />
+  </button>
+
+  <h2>Create Customer</h2>
+</div>
 
         <form onSubmit={handleSubmit} className={styles.form}>
 
@@ -288,6 +303,20 @@ function CreateProduct() {
         placeholder="Selling Price"
       />
     </div>
+
+<div className={`${styles.field} ${styles.full}`}>
+  <label>Description</label>
+
+  <textarea
+    ref={descriptionRef}
+    name="description"
+    value={form.description}
+    onChange={handleChange}
+    onKeyDown={(e) => handleKeyDown(e, submitRef)}
+    placeholder="Enter product description"
+    rows={4}
+  />
+</div>
 
   </div>
 

@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./CreateCustomers.module.css";
 import Toast from "../../components/Toast";
 import { API } from "../../constants/api";
+import { useNavigate } from "react-router-dom";
+import { FiArrowLeft } from "react-icons/fi";
 
 function CreateCustomer() {
 
@@ -24,6 +26,7 @@ function CreateCustomer() {
   const emailRef = useRef(null);
   const addressRef = useRef(null);
   const submitRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     nameRef.current?.focus();
@@ -119,8 +122,16 @@ function CreateCustomer() {
       <div className={styles.container}>
 
         <div className={styles.header}>
-          <h2>Create Customer</h2>
-        </div>
+  <button
+    type="button"
+    className={styles.backBtn}
+    onClick={() => navigate("/customers")}
+  >
+    <FiArrowLeft size={18} />
+  </button>
+
+  <h2>Create Customer</h2>
+</div>
 
         <form
           onSubmit={handleSubmit}

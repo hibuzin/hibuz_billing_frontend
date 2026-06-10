@@ -109,42 +109,49 @@
 .cardsRow {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-  margin-bottom: 24px;
-  cursor: pointer;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 900px) {
+  .cardsRow {
+    grid-template-columns: 1fr;
+  }
 }
 
 .primaryCard,
 .infoCard {
-  background: white;
-  border-radius: 10px;
-  padding: 12px;
-  border: 1px solid #e5e7ef;
+  border-radius: 8px;
+  padding: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+  border: 1px solid #f1ebeb;
 }
 
-.primaryCard {
-  background: #F1F0FC;
-  border: 2px solid #BFBAEB;
+.primaryCard:hover,
+.infoCard:hover {
+  transform: translateY(-2px);
 }
 
 .primaryCard p,
 .infoCard p {
-  font-size: 10px;
-  color: #666;
-  margin-bottom: 10px;
+  margin: 0;
+  font-size: 14px;
 }
 
 .primaryCard h2,
 .infoCard h2 {
-  font-size: 25px;
-  font-weight: 700;
-  color: #222;
+  margin-top: 8px;
+  font-size: 20px;
+  font-family: Inter, sans-serif;
+  font-weight: 300;
+  text-align: left;
 }
 
 .cardTitle {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .cardIcon {
@@ -163,19 +170,20 @@
 }
 
 .collectIcon {
-  font-size: 16px;
   color: #3eab66;
 }
 
 .payIcon {
-  font-size: 16px;
   color: #e36e6e; 
 }
 
-
+.cardIcon,
+.collectIcon,
+.payIcon {
+  font-size: 14px;
+}
 
 .cardIcon {
-  font-size: 16px;
   display: flex;
   align-items: center;
    color: #7981e0;
@@ -634,6 +642,7 @@
   vertical-align: middle;
   border-bottom: 1px solid #e5e7eb;
   border-right: 1px solid #d1d5db; 
+  cursor: pointer;
 }
 
 .table th:last-child,

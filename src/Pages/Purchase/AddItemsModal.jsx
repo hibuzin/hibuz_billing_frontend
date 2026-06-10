@@ -36,21 +36,26 @@ function AddItemsModal({ products, onClose, onAddItems }) {
     const selectedCount = Object.keys(quantities).length;
 
     const handleAddToBill = () => {
-        const items = Object.entries(quantities).map(([productId, qty]) => {
-            const p = products.find((x) => x._id === productId);
-            return {
-                productId,
-                mrp: p?.mrp || "",
-                qty: String(qty),
-                costPrice: p?.costPrice || "",
-                sellingPrice: p?.sellingPrice || "",
-                barcode: p?.barcode || "",
-                discount: "",
-            };
-        });
-        onAddItems(items);
-        onClose();
-    };
+    const items = Object.entries(quantities).map(([productId, qty]) => {
+        const p = products.find((x) => x._id === productId);
+
+        return {
+            productId,
+            hsnCode: p?.hsnCode || "",
+            description: p?.description || "",
+            tax: p?.gstRate || "",
+            mrp: p?.mrp || "",
+            qty: String(qty),
+            costPrice: p?.costPrice || "",
+            sellingPrice: p?.sellingPrice || "",
+            barcode: p?.barcode || "",
+            discount: "",
+        };
+    });
+
+    onAddItems(items);
+    onClose();
+};
 
     return (
         <div className={styles.overlay}>

@@ -9,7 +9,33 @@
 }
 
 .header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin-bottom: 20px;
+}
+
+.backBtn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.backBtn:hover {
+  background: none;
+  border-color: none;
+  color: #1b1b1c;
+}
+
+.header h2 {
+  margin: 0;
 }
 
 .header h2 {
@@ -57,7 +83,7 @@
 
 .field input,
 .field select {
-  height: 36px;
+  height: var(--field-height);
   border: 1px solid #dddddd;
   border-radius: 4px;
   padding: 0 14px;

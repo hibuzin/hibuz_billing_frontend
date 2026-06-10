@@ -87,6 +87,12 @@
   background: #fafafa;
 }
 
+.table th:not(:last-child),
+.table td:not(:last-child) {
+  border-bottom: 1px solid #e5e7eb;
+  border-right: 1px solid #d1d5db;
+}
+
 .productName {
   font-weight: 600;
   color: #111827;

@@ -807,3 +807,14 @@
   background: #c4c1f5;
   cursor: not-allowed;
 }
+
+.cellInput::-webkit-outer-spin-button,
+.cellInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.cellInput {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}

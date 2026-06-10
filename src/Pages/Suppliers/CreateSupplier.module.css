@@ -9,9 +9,34 @@
 }
 
 .header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin-bottom: 20px;
 }
 
+.backBtn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.backBtn:hover {
+  background: none;
+  border-color: none;
+  color: #1b1b1c;
+}
+
+.header h2 {
+  margin: 0;
+}
 
 .header h2 {
   font-size: var(--heading-text);
@@ -60,7 +85,7 @@
 
 .field input,
 .field select {
-  height: 36px;
+  height: var(--field-height);
   border: 1px solid #dddddd;
   border-radius: 4px;
   padding: 0 14px;
@@ -87,20 +112,17 @@
 }
 
 .field textarea {
+  width: 30%;
   min-height: 90px;
-
-  padding: 12px;
-  border: 1px solid #dddddd;
-  border-radius: 4px;
-  background: #ffffff;
-  font-size: 12px;
-  color: #111111;
-
-  outline: none;
+  padding: 10px 12px;
+  border: 1px solid #dcdfe4;
+  border-radius: 8px;
+  font-size: 14px;
   resize: vertical;
-
-  transition: border 0.2s ease;
+  outline: none;
+  font-family: inherit;
 }
+
 
 
 .buttonField {
@@ -122,4 +144,31 @@
 
 .btn:hover {
   background: #000;
+}
+
+.gstWrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.gstWrapper input {
+  flex: 1;
+}
+
+.gstBtn {
+  height: 32px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 6px;
+  background: #4C3CCE;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.gstBtn:hover {
+  background: #7164D8;
 }

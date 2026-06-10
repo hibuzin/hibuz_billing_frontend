@@ -7,11 +7,37 @@
   min-height: 100vh;
 }
 
-.pageHeader {
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin-bottom: 20px;
 }
 
-.pageHeader h2 {
+.backBtn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.backBtn:hover {
+  background: none;
+  border-color: none;
+  color: #1b1b1c;
+}
+
+.header h2 {
+  margin: 0;
+}
+
+.header h2 {
   font-size: var(--heading-text);
   font-weight: var(--heading-font-weight);
   color: var(--heading-color);
@@ -95,7 +121,7 @@
 
 .field input,
 .field select {
-  height: 38px;
+  height: var(--field-height);
   border: 1px solid #dddddd;
   border-radius: 4px;
   padding: 0 14px;
@@ -139,6 +165,22 @@
 .submitBtn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+
+.field textarea {
+  width: 100%;
+  min-height: 90px;
+  padding: 10px 12px;
+  border: 1px solid #dcdfe4;
+  border-radius: 8px;
+  font-size: 14px;
+  resize: vertical;
+  outline: none;
+  font-family: inherit;
+}
+
+.field textarea:focus {
+  border-color: #4C3CCE;
 }
 
 /* Modal */

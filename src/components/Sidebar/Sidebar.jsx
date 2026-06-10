@@ -114,18 +114,8 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
 
     {
       name: lang === "ta" ? "பொருட்கள்" : "ITEMS",
+      path: "/product",
       icon: <FaBox />,
-      children: [
-        {
-          name: lang === "ta" ? "வகைகள்" : "Category",
-          path: "/category"
-        },
-
-        {
-          name: lang === "ta" ? "பொருட்கள்" : "Item",
-          path: "/product"
-        },
-      ],
     },
 
     {

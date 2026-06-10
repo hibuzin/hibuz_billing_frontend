@@ -19,6 +19,7 @@ function CreatePurchase() {
     costPrice: "",
     sellingPrice: "",
     discount: "",
+    description: "",
   };
 
   const [form, setForm] = useState({
@@ -52,9 +53,9 @@ function CreatePurchase() {
 
   const handleAddToBill = () => {
     const selected = scannedItems.map(item => ({
-      ...item,
-      quantity: selectedItems[item.productId]?.qty || 1,
-    }));
+  ...item,
+  quantity: selectedItems[item.productId]?.qty || 1,
+}));
     handleAddItems(selected);
     setShowBarcodeModal(false);
     setScannedItems([]);
@@ -88,26 +89,26 @@ function CreatePurchase() {
       html5QrCodeRef.current = html5QrCode;
 
       html5QrCode.start(
-  { facingMode: "environment" },
-  {
-    fps: 10,
-    qrbox: { width: 350, height: 150 },
-    formatsToSupport: [
-      Html5QrcodeSupportedFormats.EAN_13,
-      Html5QrcodeSupportedFormats.EAN_8,
-      Html5QrcodeSupportedFormats.CODE_128,
-      Html5QrcodeSupportedFormats.CODE_39,
-      Html5QrcodeSupportedFormats.UPC_A,
-      Html5QrcodeSupportedFormats.UPC_E,
-    ]
-  },
+        { facingMode: "environment" },
+        {
+          fps: 10,
+          qrbox: { width: 350, height: 150 },
+          formatsToSupport: [
+            Html5QrcodeSupportedFormats.EAN_13,
+            Html5QrcodeSupportedFormats.EAN_8,
+            Html5QrcodeSupportedFormats.CODE_128,
+            Html5QrcodeSupportedFormats.CODE_39,
+            Html5QrcodeSupportedFormats.UPC_A,
+            Html5QrcodeSupportedFormats.UPC_E,
+          ]
+        },
         async (decodedText) => {
           console.log("Scanned:", decodedText);
           if (scannedItems.find(i => i.barcode === decodedText)) return;
           try {
             const res = await fetch(API.scanProduct(decodedText), {
-  headers: { Authorization: `Bearer ${token}` },
-});
+              headers: { Authorization: `Bearer ${token}` },
+            });
             const data = await res.json();
             if (data.success) {
               setScannedItems(prev => [...prev, data.data]);
@@ -191,6 +192,7 @@ function CreatePurchase() {
   };
 
   const fetchProducts = async () => {
+
     try {
       const res = await fetch(API.products, {
         headers: { Authorization: `Bearer ${token}` },
@@ -220,21 +222,27 @@ function CreatePurchase() {
   };
 
   const handleProductSelect = (index, selected) => {
-    const product = selected?.product;
-    setBillItems((prev) => {
-      const updated = [...prev];
-      updated[index] = {
-        ...updated[index],
-        productId: product?._id || "",
-        hsnCode: product?.hsnCode || "",
-        barcode: product?.barcode || "",
-        mrp: product?.mrp || "",
-        costPrice: product?.costPrice || "",
-        sellingPrice: product?.sellingPrice || "",
-      };
-      return updated;
-    });
-  };
+ const product = selected?.product;  
+
+  setBillItems((prev) => {
+    const updated = [...prev];
+
+    updated[index] = {
+      ...updated[index],
+      productId: product?._id || "",
+      hsnCode: product?.hsnCode || "",
+      barcode: product?.barcode || "",
+      mrp: product?.mrp || "",
+      costPrice: product?.costPrice || "",
+      sellingPrice: product?.sellingPrice || "",
+      description: product?.description || "",
+      tax: product?.gstRate || "",
+    };
+
+    return updated;
+  });
+};
+
 
   const handleAddItems = (newItems) => {
     setBillItems((prev) => {
@@ -504,12 +512,15 @@ function CreatePurchase() {
                           styles={selectStyles}
                           isSearchable
                         />
+
                         <input
-                          className={styles.descInput}
-                          placeholder="Enter Description (optional)"
-                          value={item.barcode}
-                          onChange={(e) => updateItem(index, "barcode", e.target.value)}
-                        />
+  type="text"
+  className={styles.descInput}
+  value={item.description || ""}
+  onChange={(e) => updateItem(index, "description", e.target.value)}
+  placeholder="Enter Description (optional)"
+/>
+
                       </td>
 
                       <td className={styles.colHsn}>

@@ -23,13 +23,14 @@
   /* text */
   --text-primary: #111;
   --text-secondary: #6b7280;
+  --field-height: 38px;
 
   /* dropdown accent */
   --dropdown-hover: #0d5835;
 
   /* sidebar sizes */
-  --sidebar-font: 12px;
-  --sidebar-icon: 15px;
+  --sidebar-font: 10px;
+  --sidebar-icon: 12px;
 
   /* appbar control */
   --admin-role: 15px;
