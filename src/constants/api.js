@@ -25,6 +25,7 @@ cashierUsers: `${BASE_URL}/super-admin/cashiers`,
   bill: `${BASE_URL}/bill`,
   scan: `${BASE_URL}/scan`,
   holdBill: `${BASE_URL}/hold-bill/hold`,
+  scanProduct: `${BASE_URL}/scan/scan/${barcode}`,
 
   // supplier
   createsupplier: `${BASE_URL}/supplier/add`,

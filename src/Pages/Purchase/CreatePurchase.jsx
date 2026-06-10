@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Select from "react-select";
-import { FiTrash2, FiPlus, FiSave, FiArrowLeft } from "react-icons/fi";
+import { FiTrash2, FiPlus, FiSave, FiArrowLeft, FiSearch, FiGrid } from "react-icons/fi";
 import { MdQrCodeScanner } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
 import styles from "./CreatePurchase.module.css";
 import AddItemsModal from "./AddItemsModal";
 import Toast from "../../components/Toast";
@@ -11,11 +12,12 @@ import { API } from "../../constants/api";
 function CreatePurchase() {
   const emptyItem = {
     productId: "",
+    hsnCode: "",
+    barcode: "",
     mrp: "",
     qty: "",
     costPrice: "",
     sellingPrice: "",
-    barcode: "",
     discount: "",
   };
 
@@ -35,8 +37,103 @@ function CreatePurchase() {
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState({ message: "", type: "" });
   const [showItemModal, setShowItemModal] = useState(false);
+  const [showBarcodeModal, setShowBarcodeModal] = useState(false);
+
+  const [itemSearch, setItemSearch] = useState('');
+  const [selectedItems, setSelectedItems] = useState({});
+
+  const handleQtyChange = (id, delta) => {
+    setSelectedItems(prev => {
+      const current = prev[id]?.qty || 0;
+      const newQty = Math.max(0, current + delta);
+      return { ...prev, [id]: { qty: newQty } };
+    });
+  };
+
+  const handleAddToBill = () => {
+    const selected = scannedItems.map(item => ({
+      ...item,
+      quantity: selectedItems[item.productId]?.qty || 1,
+    }));
+    handleAddItems(selected);
+    setShowBarcodeModal(false);
+    setScannedItems([]);
+    setSelectedItems({});
+    setShowCamera(false);
+  };
+
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+
+  const [showCamera, setShowCamera] = useState(false);
+  const [scannedItems, setScannedItems] = useState([]);
+
+  const html5QrCodeRef = useRef(null);
+
+  useEffect(() => {
+
+    console.log("showCamera:", showCamera);
+    if (!showCamera) return;
+    console.log("Starting camera...");
+    if (!showCamera) {
+      if (html5QrCodeRef.current) {
+        html5QrCodeRef.current.stop().catch(() => { });
+        html5QrCodeRef.current = null;
+      }
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      const html5QrCode = new Html5Qrcode("qr-reader");
+      html5QrCodeRef.current = html5QrCode;
+
+      html5QrCode.start(
+  { facingMode: "environment" },
+  {
+    fps: 10,
+    qrbox: { width: 350, height: 150 },
+    formatsToSupport: [
+      Html5QrcodeSupportedFormats.EAN_13,
+      Html5QrcodeSupportedFormats.EAN_8,
+      Html5QrcodeSupportedFormats.CODE_128,
+      Html5QrcodeSupportedFormats.CODE_39,
+      Html5QrcodeSupportedFormats.UPC_A,
+      Html5QrcodeSupportedFormats.UPC_E,
+    ]
+  },
+        async (decodedText) => {
+          console.log("Scanned:", decodedText);
+          if (scannedItems.find(i => i.barcode === decodedText)) return;
+          try {
+            const res = await fetch(API.scanProduct(decodedText), {
+  headers: { Authorization: `Bearer ${token}` },
+});
+            const data = await res.json();
+            if (data.success) {
+              setScannedItems(prev => [...prev, data.data]);
+              setSelectedItems(prev => ({
+                ...prev,
+                [data.data.productId]: { qty: 1 }
+              }));
+            }
+          } catch {
+            showToast("Scan failed", "error");
+          }
+        },
+        (error) => {
+          console.log("Scanner Error:", error);
+        }
+      ).catch(() => showToast("Camera error", "error"));
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+      if (html5QrCodeRef.current) {
+        html5QrCodeRef.current.stop().catch(() => { });
+        html5QrCodeRef.current = null;
+      }
+    };
+  }, [showCamera]);
 
   const balanceAmount =
     Number(form.supplierBillAmount || 0) - Number(form.paidAmount || 0);
@@ -64,11 +161,11 @@ function CreatePurchase() {
   const totalAmount = subtotal - totalDiscount + totalTax;
 
   useEffect(() => {
-  setForm((prev) => ({
-    ...prev,
-    supplierBillAmount: totalAmount,
-  }));
-}, [totalAmount]);
+    setForm((prev) => ({
+      ...prev,
+      supplierBillAmount: totalAmount,
+    }));
+  }, [totalAmount]);
 
   useEffect(() => {
     fetchSuppliers();
@@ -129,10 +226,11 @@ function CreatePurchase() {
       updated[index] = {
         ...updated[index],
         productId: product?._id || "",
+        hsnCode: product?.hsnCode || "",
+        barcode: product?.barcode || "",
         mrp: product?.mrp || "",
         costPrice: product?.costPrice || "",
         sellingPrice: product?.sellingPrice || "",
-        barcode: product?.barcode || "",
       };
       return updated;
     });
@@ -375,6 +473,8 @@ function CreatePurchase() {
                 <tr>
                   <th className={styles.colNo}>NO</th>
                   <th className={styles.colItem}>ITEMS</th>
+                  <th className={styles.colHsn}>HSN</th>
+                  <th className={styles.colBarcode}>BARCODE</th>
                   <th className={styles.colMrp}>MRP</th>
                   <th className={styles.colQty}>QTY</th>
                   <th className={styles.colPrice}>PRICE/ITEM (₹)</th>
@@ -411,6 +511,31 @@ function CreatePurchase() {
                           onChange={(e) => updateItem(index, "barcode", e.target.value)}
                         />
                       </td>
+
+                      <td className={styles.colHsn}>
+                        <input
+                          type="text"
+                          className={styles.cellInput}
+                          value={item.hsnCode || ""}
+                          onChange={(e) =>
+                            updateItem(index, "hsnCode", e.target.value)
+                          }
+                          placeholder="HSN"
+                        />
+                      </td>
+
+                      <td className={styles.colBarcode}>
+                        <input
+                          type="text"
+                          className={styles.cellInput}
+                          value={item.barcode || ""}
+                          onChange={(e) =>
+                            updateItem(index, "barcode", e.target.value)
+                          }
+                          placeholder="Barcode"
+                        />
+                      </td>
+
                       <td className={styles.colMrp}>
                         <input
                           type="number"
@@ -514,7 +639,11 @@ function CreatePurchase() {
                 <FiPlus size={14} />
                 Add Item
               </button>
-              <button className={styles.scanBtn} type="button">
+              <button
+                className={styles.scanBtn}
+                type="button"
+                onClick={() => { setShowBarcodeModal(true); setShowCamera(true); }}
+              >
                 <MdQrCodeScanner size={40} />
                 Scan Barcode
               </button>
@@ -587,6 +716,103 @@ function CreatePurchase() {
           onClose={() => setShowItemModal(false)}
           onAddItems={handleAddItems}
         />
+      )}
+
+      {showBarcodeModal && (
+        <div className={styles.addItemsOverlay}>
+          <div className={styles.addItemsModal}>
+            <div className={styles.addItemsHeader}>
+              <h2>Add Items to Bill</h2>
+              <button className={styles.closeBtn} onClick={() => setShowBarcodeModal(false)}>✕</button>
+            </div>
+
+            <div className={styles.addItemsToolbar}>
+              <div className={styles.searchWrapper}>
+                <FiSearch className={styles.searchIcon} />
+                <input
+                  autoFocus
+                  type="text"
+                  placeholder="Search by Item/ Serial no./ HSN code/ SKU/ Custom Field / Category"
+                  className={styles.searchInput}
+                  value={itemSearch}
+                  onChange={(e) => setItemSearch(e.target.value)}
+                />
+                <FiGrid className={styles.barcodeIcon} onClick={() => setShowCamera(true)} style={{ cursor: 'pointer' }} />
+              </div>
+              <select className={styles.categorySelect}>
+                <option value="">Select Category</option>
+              </select>
+              <button className={styles.createNewBtn}>Create New Item</button>
+            </div>
+
+            {/* Camera Scanner - always in DOM */}
+            <div style={{ padding: '0 24px 12px', display: showCamera ? 'block' : 'none' }}>
+              <div id="qr-reader" style={{ width: '100%' }} />
+              <button onClick={() => setShowCamera(false)} style={{ marginTop: 8, fontSize: 13 }}>Close Camera</button>
+            </div>
+
+            <div className={styles.addItemsTableWrapper}>
+              <table className={styles.addItemsTable}>
+                <thead>
+                  <tr>
+                    <th>Item Name</th>
+                    <th>Item Code</th>
+                    <th>Stock</th>
+                    <th>MRP</th>
+                    <th>Sales Price</th>
+                    <th>Purchase Price</th>
+                    <th>Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {scannedItems.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className={styles.emptyState}>Scan items to add them to your invoice</td>
+                    </tr>
+                  ) : (
+                    scannedItems.map((item) => (
+                      <tr key={item.productId}>
+                        <td>{item.productName}</td>
+                        <td>{item.barcode}</td>
+                        <td>-</td>
+                        <td>{item.mrp}</td>
+                        <td>{item.sellingPrice}</td>
+                        <td>{item.costPrice}</td>
+                        <td>
+                          <div className={styles.qtyStepper}>
+                            <button onClick={() => handleQtyChange(item.productId, -1)}>−</button>
+                            <span>{selectedItems[item.productId]?.qty || 1}</span>
+                            <button onClick={() => handleQtyChange(item.productId, 1)}>+</button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            <div className={styles.shortcuts}>
+              <span>Keyboard Shortcuts :</span>
+              <span>Change Quantity <kbd>Enter</kbd></span>
+              <span>Move between items <kbd>↑</kbd> <kbd>↓</kbd></span>
+            </div>
+
+            <div className={styles.addItemsFooter}>
+              <span>{scannedItems.length} Item(s) Selected</span>
+              <div>
+                <button className={styles.cancelBtn} onClick={() => setShowBarcodeModal(false)}>Cancel [ESC]</button>
+                <button
+                  className={styles.addToBillBtn}
+                  disabled={scannedItems.length === 0}
+                  onClick={handleAddToBill}
+                >
+                  Add to Bill [F7]
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

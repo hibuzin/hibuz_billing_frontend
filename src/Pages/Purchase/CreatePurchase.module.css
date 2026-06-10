@@ -238,6 +238,7 @@
 /* ── TABLE SECTION ── */
 .tableSection {
   border-bottom: 1px solid #e8eaed;
+  overflow-x: auto;
 }
 
 .itemsTable {
@@ -276,16 +277,26 @@
   vertical-align: top;
 }
 
+.itemsTable th:not(:last-child),
+.itemsTable td:not(:last-child) {
+  border-right: 1px solid #d1d5db;
+}
+
+.itemsTable th,
+.itemsTable td {
+  border-bottom: 1px solid #e5e7eb;
+}
+
 /* Column widths */
-.colNo       { width: 40px; text-align: center; }
-.colItem     { width: 220px; }
-.colMrp      { width: 80px; }
-.colQty      { width: 90px; }
-.colPrice    { width: 110px; }
-.colDiscount { width: 110px; }
-.colTax      { width: 100px; }
-.colAmount   { width: 100px; text-align: right; font-weight: 600; }
-.colAction   { width: 40px; text-align: center; }
+.colItem     { width: 180px; }
+.colHsn      { width: 70px; }
+.colBarcode  { width: 110px; }
+.colMrp      { width: 65px; }
+.colQty      { width: 70px; }
+.colPrice    { width: 90px; }
+.colDiscount { width: 90px; }
+.colTax      { width: 80px; }
+.colAmount   { width: 90px; }
 
 /* ── CELL INPUTS ── */
 .cellInput {
@@ -335,9 +346,7 @@
   gap: 4px;
 }
 
-.qtyCell .cellInput {
-  flex: 1;
-}
+
 
 .unit {
   font-size: 11px;
@@ -597,4 +606,204 @@
 
 .balGreen {
   color: #2e7d32;
+}
+
+.barcodeOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.barcodeModal {
+  width: 700px;
+  max-width: 90%;
+  background: #fff;
+  border-radius: 10px;
+  padding: 24px;
+  position: relative;
+}
+
+.closeBtn {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  border: none;
+  background: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.barcodeInput {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+/* Overlay */
+.addItemsOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Modal */
+.addItemsModal {
+  background: #fff;
+  border-radius: 12px;
+  width: 900px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Header */
+.addItemsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+}
+.addItemsHeader h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111;
+}
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #555;
+}
+
+/* Toolbar */
+.addItemsToolbar {
+  display: flex;
+  gap: 12px;
+  padding: 0 24px 16px;
+  align-items: center;
+}
+.searchWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  border: 2px solid #6c63ff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  gap: 8px;
+}
+.searchInput {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 14px;
+}
+.searchIcon { color: #888; }
+.barcodeIcon { color: #888; cursor: pointer; }
+
+.categorySelect {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #555;
+  min-width: 160px;
+}
+.createNewBtn {
+  background: #6c63ff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Table */
+.addItemsTableWrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 24px;
+}
+.addItemsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.addItemsTable thead tr {
+  background: #f5f5f5;
+}
+.addItemsTable th {
+  text-align: left;
+  padding: 12px 14px;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 1px solid #eee;
+}
+.emptyState {
+  text-align: center;
+  padding: 80px 0;
+  color: #aaa;
+  font-size: 14px;
+}
+
+/* Shortcuts */
+.shortcuts {
+  padding: 12px 24px;
+  font-size: 13px;
+  color: #666;
+  display: flex;
+  gap: 24px;
+  border-top: 1px solid #eee;
+}
+.shortcuts kbd {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+/* Footer */
+.addItemsFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-top: 1px solid #eee;
+}
+.cancelBtn {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 12px;
+}
+.addToBillBtn {
+  background: #6c63ff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.addToBillBtn:disabled {
+  background: #c4c1f5;
+  cursor: not-allowed;
 }
