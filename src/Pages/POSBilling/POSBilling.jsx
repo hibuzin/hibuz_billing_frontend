@@ -358,6 +358,8 @@ function POSBilling() {
         },
       ]);
 
+      setScreenNo((prev) => prev + 1);
+
       setScannedItems([]);
       setCodes([]);
       setScanCode("");
@@ -585,42 +587,37 @@ function POSBilling() {
 
       {/* ── Tab Row ── */}
       <div className={styles.tabsRow}>
-        <div
-          className={!activeHoldId ? styles.tabActive : styles.tabHold}
-          onClick={() => {
-            setActiveHoldId(null);
+  {holdTabs.map((tab) => (
+    <div
+      key={tab.holdId}
+      className={activeHoldId === tab.holdId ? styles.tabActive : styles.tabHold}
+      onClick={() => resumeHoldBill(tab.holdId)}
+    >
+      Billing Screen {tab.screenNo}
+    </div>
+  ))}
 
-            setScannedItems([]);
-            setCodes([]);
-            setScanCode("");
-            setSearchResults([]);
-            setShowDropdown(false);
-          }}
-        >
-          Billing Screen {screenNo}
-        </div>
+  <div
+    className={!activeHoldId ? styles.tabActive : styles.tabHold}
+    onClick={() => {
+      setActiveHoldId(null);
+      setScannedItems([]);
+      setCodes([]);
+      setScanCode("");
+      setSearchResults([]);
+      setShowDropdown(false);
+    }}
+  >
+    Billing Screen {screenNo}
+  </div>
 
-        {holdTabs.map((tab) => (
-          <div
-            key={tab.holdId}
-            className={
-              activeHoldId === tab.holdId
-                ? styles.tabActive
-                : styles.tabHold
-            }
-            onClick={() => resumeHoldBill(tab.holdId)}
-          >
-            Billing Screen {tab.screenNo}
-          </div>
-        ))}
-
-        <div
-          className={styles.tabAdd}
-          onClick={holdBill}
-        >
-          + Hold Bill & Create Another
-        </div>
-      </div>
+  <div
+    className={styles.tabAdd}
+    onClick={holdBill}
+  >
+    + Hold Bill & Create Another
+  </div>
+</div>
 
       {/* ── Main Body ── */}
       <div className={styles.mainBody}>
