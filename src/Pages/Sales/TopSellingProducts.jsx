@@ -92,9 +92,9 @@ function TopSellingProducts() {
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>#</th>
+              <th>No</th>
+              <th>Item Code</th>
               <th>Product</th>
-              <th>Barcode</th>
               <th>Qty Sold</th>
               <th>Sales Amount</th>
               <th>GST</th>
@@ -119,6 +119,7 @@ function TopSellingProducts() {
                 (item, index) => (
                   <tr key={item.productId}>
                     <td>{index + 1}</td>
+                    <td>{item.barcode}</td>
 
                     <td>
                       <div
@@ -140,7 +141,6 @@ function TopSellingProducts() {
                       </div>
                     </td>
 
-                    <td>{item.barcode}</td>
 
                     <td>
                       <span

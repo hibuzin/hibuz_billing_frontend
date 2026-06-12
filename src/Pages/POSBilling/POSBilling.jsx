@@ -17,6 +17,7 @@ function Receipt({ bill, onClose, onPrint }) {
   const dateStr = now.toLocaleDateString("en-GB");
   const timeStr = now.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
 
+
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.receipt} onClick={(e) => e.stopPropagation()}>
@@ -136,17 +137,31 @@ function POSBilling() {
   const [toast, setToast] = useState({ message: "", type: "success" });
   const [searchResults, setSearchResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
-
-
+  const [holdTabs, setHoldTabs] = useState([]);
+  const [activeHoldId, setActiveHoldId] = useState(null);
+  const [screenNo, setScreenNo] = useState(1);
 
   const scanInputRef = useRef(null);
 
+  const getEffectivePrice = (item) => {
+    const qty = item.qty || 1;
+    const slabs = item.priceLevel?.slabs;
+    if (item.priceLevel?.pricingType === "slab" && Array.isArray(slabs)) {
+      const matched = slabs.find(
+        (s) => qty >= s.minQty && (s.maxQty === null || qty <= s.maxQty)
+      );
+      if (matched && matched.price > 0) return matched.price;
+    }
+    return item.sellingPrice || item.mrp || 0;
+  };
+
   const subtotal = scannedItems.reduce(
-    (sum, it) => sum + Number(it.sellingPrice || 0) * (it.qty || 1),
+    (sum, it) => sum + getEffectivePrice(it) * (it.qty || 1),
     0
   );
   const tax = subtotal * 0.05;
   const total = subtotal + tax;
+
 
   useEffect(() => {
     scanInputRef.current?.focus();
@@ -233,9 +248,26 @@ function POSBilling() {
 
       setBill(data.data);
       showToast("Bill generated successfully", "success");
+
+      if (activeHoldId) {
+        try {
+          await fetch(`${API.holdBill}/${activeHoldId}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` },
+          });
+        } catch (e) {
+          console.log("Failed to delete hold:", e);
+        }
+        setHoldTabs((prev) => prev.filter((t) => t.holdId !== activeHoldId));
+        setActiveHoldId(null);
+      }
+
       setCodes([]);
       setScannedItems([]);
       setScanCode("");
+      setActiveHoldId(null);
+      setScreenNo((prev) => (prev % 5) + 1);
+      setActiveHoldId(null);
     } catch (err) {
       showToast(err.message, "error");
     } finally {
@@ -243,7 +275,34 @@ function POSBilling() {
     }
   };
 
+  const generatePreviewBill = async (previewCodes) => {
+    try {
+      const res = await fetch(API.bill, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          codes: previewCodes,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setBill(data.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const holdBill = async () => {
+    if (holdTabs.length >= 5) {
+      showToast("Maximum 5 billing screens only", "error");
+      return;
+    }
     if (scannedItems.length === 0) {
       showToast("Please add items", "error");
       return;
@@ -257,7 +316,7 @@ function POSBilling() {
         items: scannedItems.map((item) => ({
           productId: item.productId,
           qty: item.qty,
-          sellingPrice: item.sellingPrice || item.mrp, 
+          sellingPrice: item.sellingPrice || item.mrp,
           mrp: item.mrp,
           gst: item.gst || 0,
           barcode: item.barcode,
@@ -266,7 +325,7 @@ function POSBilling() {
       };
 
       console.log("Hold Bill Payload:", JSON.stringify(payload, null, 2));
-    
+
 
       const res = await fetch(API.holdBill, {
         method: "POST",
@@ -277,7 +336,7 @@ function POSBilling() {
         body: JSON.stringify(payload),
       });
 
-      
+
       const data = await res.json();
 
       console.log("Server response:", data);
@@ -290,7 +349,15 @@ function POSBilling() {
         "success"
       );
 
-      // Clear current screen
+      setHoldTabs((prev) => [
+        ...prev,
+        {
+          holdId: data.data._id,
+          holdNo: data.data.holdNo,
+          screenNo: prev.length + 1,
+        },
+      ]);
+
       setScannedItems([]);
       setCodes([]);
       setScanCode("");
@@ -301,6 +368,95 @@ function POSBilling() {
       showToast(err.message, "error");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const resumeHoldBill = async (holdId) => {
+    try {
+      setLoading(true);
+
+      const res = await fetch(
+        `${API.holdBill}/${holdId}`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message);
+      }
+
+      const hold = data.data;
+
+      setActiveHoldId(hold._id);
+
+      setScannedItems(
+        hold.items.map((item) => ({
+          productId: item.productId,
+          productName: item.name,
+          brand: item.brand,
+          barcode: item.barcode,
+          mrp: item.mrp,
+          sellingPrice: item.sellingPrice,
+          flavor: item.flavor,
+          gst: item.gst,
+          qty: item.qty,
+        }))
+      );
+      setCodes(
+        hold.items.flatMap((item) =>
+          Array(item.qty).fill(item.barcode)
+        )
+      );
+
+      showToast(`Hold #${hold.holdNo} loaded`);
+    } catch (err) {
+      showToast(err.message, "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  const buildHoldPayload = () => ({
+    customerName: "Walk-in Customer",
+    items: scannedItems.map((item) => ({
+      productId: item.productId,
+      qty: item.qty,
+      sellingPrice: item.sellingPrice || item.mrp,
+      mrp: item.mrp,
+      gst: item.gst || 0,
+      barcode: item.barcode,
+      flavor: item.flavor || "",
+    })),
+  });
+
+  const updateHoldBill = async () => {
+    try {
+      const res = await fetch(
+        `${API.holdBill}/${activeHoldId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(buildHoldPayload()),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message);
+      }
+
+      showToast("Hold bill updated");
+    } catch (err) {
+      showToast(err.message, "error");
     }
   };
 
@@ -342,6 +498,7 @@ function POSBilling() {
       brand: product.brand,
       barcode: product.barcode,
       mrp: product.mrp || 0,
+      priceLevel: product.priceLevel || null,
       sellingPrice: product.sellingPrice || 0,
       flavor: product.flavor || "",
       qty: 1,
@@ -351,6 +508,7 @@ function POSBilling() {
       const existing = prev.find(
         (p) => p.barcode === product.barcode
       );
+
 
       if (existing) {
         return prev.map((p) =>
@@ -427,15 +585,40 @@ function POSBilling() {
 
       {/* ── Tab Row ── */}
       <div className={styles.tabsRow}>
-        <div className={styles.tabActive}>
-          Billing Screen 1 <kbd>[CTRL+1]</kbd>
-          <span className={styles.tabClose} onClick={() => navigate(-1)}>✕</span>
+        <div
+          className={!activeHoldId ? styles.tabActive : styles.tabHold}
+          onClick={() => {
+            setActiveHoldId(null);
+
+            setScannedItems([]);
+            setCodes([]);
+            setScanCode("");
+            setSearchResults([]);
+            setShowDropdown(false);
+          }}
+        >
+          Billing Screen {screenNo}
         </div>
+
+        {holdTabs.map((tab) => (
+          <div
+            key={tab.holdId}
+            className={
+              activeHoldId === tab.holdId
+                ? styles.tabActive
+                : styles.tabHold
+            }
+            onClick={() => resumeHoldBill(tab.holdId)}
+          >
+            Billing Screen {tab.screenNo}
+          </div>
+        ))}
+
         <div
           className={styles.tabAdd}
           onClick={holdBill}
         >
-          + Hold Bill & Create Another <kbd>[CTRL+B]</kbd>
+          + Hold Bill & Create Another
         </div>
       </div>
 
@@ -489,13 +672,18 @@ function POSBilling() {
                     className={styles.searchItem}
                     onClick={() => addSearchProduct(item)}
                   >
-                    <div>
-                      <strong>{item.productName}</strong>
-                      <small> ({item.brand})</small>
+                    <div className={styles.searchLeft}>
+                      <div className={styles.searchName}>
+                        {item.productName}
+                      </div>
+
+                      <div className={styles.searchStock}>
+                        Stock : {item.stock ?? 0}
+                      </div>
                     </div>
 
-                    <div>
-                      ₹{item.mrp || 0}
+                    <div className={styles.searchPrice}>
+                      ₹{item.sellingPrice || item.mrp || 0}
                     </div>
                   </div>
                 ))}
@@ -505,57 +693,80 @@ function POSBilling() {
 
           {/* Table */}
           <div className={styles.tableWrap}>
-            <div className={styles.tableHead}>
-              <span>NO</span>
-              <span>ITEMS</span>
-              <span>BARCODE</span>
-              <span>MRP</span>
-              <span>SP (₹)</span>
-              <span>DISC (%)</span>
-              <span>QUANTITY</span>
-              <span>AMOUNT (₹)</span>
-            </div>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>NO</th>
+                  <th>ITEMS</th>
+                  <th>BARCODE</th>
+                  <th>MRP</th>
+                  <th>SP (₹)</th>
+                  <th>DISC (%)</th>
+                  <th>QUANTITY</th>
+                  <th>AMOUNT (₹)</th>
+                </tr>
+              </thead>
 
-            {scannedItems.length === 0 ? (
-              <div className={styles.emptyState}>
-                Scan a barcode to add items
-              </div>
-            ) : (
-              scannedItems.map((item, idx) => (
-                <div className={styles.tableRow} key={`${item.barcode}-${idx}`}>
-                  <span>{idx + 1}</span>
-                  <span className={styles.itemName}>
-                    {item.productName}
-                    {item.flavor ? (
-                      <span className={styles.itemSub}> · {item.flavor}</span>
-                    ) : null}
-                  </span>
-                  <span className={styles.muted}>{item.barcode}</span>
-                  <span className={styles.muted}>₹{item.mrp || 0}</span>
-                  <span>₹{item.sellingPrice}</span>
-                  <span className={styles.muted}>0</span>
-                  <span className={styles.qtyCell}>
-                    <input
-                      className={styles.qtyInput}
-                      type="number"
-                      min={1}
-                      value={item.qty}
-                      onChange={(e) => updateQty(item.barcode, e.target.value)}
-                    />
-                    <span className={styles.pcsLabel}>PCS</span>
-                  </span>
-                  <span className={styles.amtCell}>
-                    ₹{(Number(item.sellingPrice) * item.qty).toFixed(2)}
-                    <button
-                      className={styles.deleteBtn}
-                      onClick={() => removeItem(item.barcode)}
-                    >
-                      🗑
-                    </button>
-                  </span>
-                </div>
-              ))
-            )}
+              <tbody>
+                {scannedItems.length === 0 ? (
+                  <tr>
+                    <td colSpan="8" className={styles.emptyState}>
+                      Scan a barcode to add items
+                    </td>
+                  </tr>
+                ) : (
+                  scannedItems.map((item, idx) => (
+                    <tr key={`${item.barcode}-${idx}`}>
+                      <td>{idx + 1}</td>
+
+                      <td>
+                        {item.productName}
+                        {item.flavor && (
+                          <span className={styles.itemSub}>
+                            {" "}· {item.flavor}
+                          </span>
+                        )}
+                      </td>
+
+                      <td>{item.barcode}</td>
+
+                      <td>₹{item.mrp || 0}</td>
+
+                      <td>₹{getEffectivePrice(item)}</td>
+
+                      <td>0</td>
+
+                      <td>
+                        <div className={styles.qtyCell}>
+                          <input
+                            className={styles.qtyInput}
+                            type="number"
+                            min={1}
+                            value={item.qty}
+                            onChange={(e) =>
+                              updateQty(item.barcode, e.target.value)
+                            }
+                          />
+                          <span>PCS</span>
+                        </div>
+                      </td>
+
+                      <td>
+                        <div className={styles.amtCell}>
+                          ₹{(getEffectivePrice(item) * item.qty).toFixed(2)}
+                          <button
+                            className={styles.deleteBtn}
+                            onClick={() => removeItem(item.barcode)}
+                          >
+                            🗑
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
           </div>
 
           <div className={styles.arrowHint}>

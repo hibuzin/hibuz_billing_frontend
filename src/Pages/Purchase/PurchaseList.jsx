@@ -28,68 +28,68 @@ function PurchaseList() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [openMenu, setOpenMenu] =
-  useState(null);
+    useState(null);
 
-const menuRef = useRef(null);
+  const menuRef = useRef(null);
   const navigate = useNavigate();
 
   const [paymentAmount, setPaymentAmount] = useState("");
 
   const handlePayment = async () => {
-  try {
-    const token = localStorage.getItem("token");
+    try {
+      const token = localStorage.getItem("token");
 
-    const res = await fetch(
-      `${API.purchase}/pay/${selectedPurchase._id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          amount: Number(paymentAmount),
-          note: "Supplier payment",
-        }),
+      const res = await fetch(
+        `${API.purchase}/pay/${selectedPurchase._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            amount: Number(paymentAmount),
+            note: "Supplier payment",
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (data.success) {
+
+        setSelectedPurchase((prev) => ({
+          ...prev,
+          paidAmount: data.data.paidAmount,
+          balanceAmount: data.data.balanceAmount,
+          paymentHistory: data.data.paymentHistory,
+        }));
+
+        setToast({
+          type: "success",
+          message: "Payment updated successfully",
+        });
+
+        setPaymentAmount("");
+
+        fetchPurchases();
+
+      } else {
+        setToast({
+          type: "error",
+          message: data.message || "Payment failed",
+        });
       }
-    );
 
-    const data = await res.json();
+    } catch (err) {
+      console.log(err);
 
-    if (data.success) {
-
-      setSelectedPurchase((prev) => ({
-        ...prev,
-        paidAmount: data.data.paidAmount,
-        balanceAmount: data.data.balanceAmount,
-        paymentHistory: data.data.paymentHistory,
-      }));
-
-      setToast({
-        type: "success",
-        message: "Payment updated successfully",
-      });
-
-      setPaymentAmount("");
-
-      fetchPurchases();
-
-    } else {
       setToast({
         type: "error",
-        message: data.message || "Payment failed",
+        message: "Payment failed",
       });
     }
-
-  } catch (err) {
-    console.log(err);
-
-    setToast({
-      type: "error",
-      message: "Payment failed",
-    });
-  }
-};
+  };
 
   useEffect(() => {
     fetchPurchases();
@@ -98,26 +98,26 @@ const menuRef = useRef(null);
   }, []);
 
   useEffect(() => {
-  const handleClickOutside = (e) => {
-    if (
-      menuRef.current &&
-      !menuRef.current.contains(e.target)
-    ) {
-      setOpenMenu(null);
-    }
-  };
+    const handleClickOutside = (e) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(e.target)
+      ) {
+        setOpenMenu(null);
+      }
+    };
 
-  document.addEventListener(
-    "mousedown",
-    handleClickOutside
-  );
-
-  return () =>
-    document.removeEventListener(
+    document.addEventListener(
       "mousedown",
       handleClickOutside
     );
-}, []);
+
+    return () =>
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
+  }, []);
 
   const fetchPurchases = async () => {
     try {
@@ -321,6 +321,7 @@ const menuRef = useRef(null);
           <thead>
             <tr>
               <th>No</th>
+              <th>Item Code</th>
               <th>Supplier</th>
               <th>Total</th>
               <th>Items</th>
@@ -336,6 +337,7 @@ const menuRef = useRef(null);
                 onClick={() => setSelectedPurchase(p)}
               >
                 <td>{index + 1}</td>
+                <td>{p.items?.[0]?.barcode || "-"}</td>
                 <td>{p.supplier?.name || "-"}</td>
                 <td>Rs. {p.supplierBillAmount}</td>
                 <td>{p.items?.length}</td>
@@ -345,55 +347,55 @@ const menuRef = useRef(null);
                     : "-"}
                 </td>
                 <td onClick={(e) => e.stopPropagation()}>
-  <div
-    className={styles.menuWrapper}
-    ref={
-      openMenu === p._id
-        ? menuRef
-        : null
-    }
-  >
-    <button
-      className={styles.menuBtn}
-      onClick={() =>
-        setOpenMenu(
-          openMenu === p._id
-            ? null
-            : p._id
-        )
-      }
-    >
-      <FaEllipsisV />
-    </button>
+                  <div
+                    className={styles.menuWrapper}
+                    ref={
+                      openMenu === p._id
+                        ? menuRef
+                        : null
+                    }
+                  >
+                    <button
+                      className={styles.menuBtn}
+                      onClick={() =>
+                        setOpenMenu(
+                          openMenu === p._id
+                            ? null
+                            : p._id
+                        )
+                      }
+                    >
+                      <FaEllipsisV />
+                    </button>
 
-    {openMenu === p._id && (
-      <div className={styles.dropdownMenu}>
-        <button
-          className={styles.editMenuItem}
-          onClick={() => {
-            openEditModal(p);
-            setOpenMenu(null);
-          }}
-        >
-          <FaEdit />
-          Edit
-        </button>
+                    {openMenu === p._id && (
+                      <div className={styles.dropdownMenu}>
+                        <button
+                          className={styles.editMenuItem}
+                          onClick={() => {
+                            openEditModal(p);
+                            setOpenMenu(null);
+                          }}
+                        >
+                          <FaEdit />
+                          Edit
+                        </button>
 
-        <button
-          className={styles.deleteMenuItem}
-          onClick={() => {
-            setDeleteId(p._id);
-            setShowDeleteModal(true);
-            setOpenMenu(null);
-          }}
-        >
-          <FaTrash />
-          Delete
-        </button>
-      </div>
-    )}
-  </div>
-</td>
+                        <button
+                          className={styles.deleteMenuItem}
+                          onClick={() => {
+                            setDeleteId(p._id);
+                            setShowDeleteModal(true);
+                            setOpenMenu(null);
+                          }}
+                        >
+                          <FaTrash />
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -524,6 +526,7 @@ const menuRef = useRef(null);
                     <span>Qty: {item.qty}</span>
                     <span>MRP: ₹{item.mrp}</span>
                     <span>CP: ₹{item.costPrice}</span>
+                    <span>Barcode: {item.barcode || "-"}</span>
                   </div>
 
                 </div>

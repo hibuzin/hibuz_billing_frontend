@@ -142,16 +142,6 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
     },
 
     {
-      name: lang === "ta" ? "கட்டணம்" : "Payment",
-      icon: <MdPayments />,
-      children: [
-        { name: lang === "ta" ? "பணம்" : "Cash", path: "/payment/cash" },
-        { name: lang === "ta" ? "ஆன்லைன்" : "Online", path: "/payment/online" },
-        { name: lang === "ta" ? "நிலுவை" : "Pending", path: "/payment/pending" },
-      ],
-    },
-
-    {
       name: lang === "ta" ? "சரக்கு" : "Stocks",
       icon: <MdInventory />,
       children: [
@@ -166,12 +156,6 @@ function Sidebar({ collapsed, setCollapsed, lang }) {
       path: "/gst",
       icon: <FaChartBar />,
       onlyRole: "super_admin"
-    },
-
-    {
-      name: lang === "ta" ? "பகுப்பாய்வு" : "Analytics",
-      path: "/analytics",
-      icon: <FaChartBar />
     },
 
     {

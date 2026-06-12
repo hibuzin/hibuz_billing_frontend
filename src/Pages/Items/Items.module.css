@@ -150,9 +150,8 @@
 
 .table th,
 .table td {
+  padding: 12px;
   vertical-align: top;
-  font-size: 13px;
-  font-weight: 550;
   color: #111;
   border-bottom: 1px solid #e5e7eb;
   border-right: 1px solid #d1d5db; 
@@ -164,16 +163,24 @@
 }
 
 .table th {
-    padding: 12px 18px;
-
+  padding: 10px 18px;
   text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: #777;
+  border-bottom: 1px solid #ececec;
+  white-space: nowrap;
 }
-.table td {
-  padding: 16px 18px;
-  font-weight: 350;
-  cursor: pointer;
 
+.table td {
+  padding: 10px 18px;
+  font-size: 13px;
+  color: #111;
+  height: 50px;
+  border-bottom: 1px solid #f3f3f3;
+  vertical-align: middle;
 }
+
 
 /* SEARCH */
 

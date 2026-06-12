@@ -253,6 +253,75 @@ function CreatePurchase() {
     });
   };
 
+ const handleBarcodeSearch = async (barcode) => {
+  console.log("================================");
+  console.log("handleBarcodeSearch called");
+  console.log("Received Barcode:", barcode);
+  console.log("Barcode Length:", barcode?.length);
+  console.log("API URL:", API.scanProduct(barcode));
+  console.log("================================");
+
+  if (!barcode.trim()) {
+    console.log("Barcode is empty");
+    return;
+  }
+
+  try {
+    console.log("Calling API...");
+
+    const res = await fetch(API.scanProduct(barcode), {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log("Response Status:", res.status);
+
+    const data = await res.json();
+
+    console.log("API Response:", data);
+
+    if (data.success) {
+      console.log("Product Found");
+      console.log("Product Name:", data.data.productName);
+      console.log("Product ID:", data.data.productId);
+      console.log("Barcode:", data.data.barcode);
+
+      if (
+        scannedItems.some(
+          (item) => item.barcode === data.data.barcode
+        )
+      ) {
+        console.log("Duplicate product scanned");
+        return;
+      }
+
+      console.log("Adding product to scannedItems");
+
+      setScannedItems((prev) => [...prev, data.data]);
+
+      setSelectedItems((prev) => ({
+        ...prev,
+        [data.data.productId]: { qty: 1 },
+      }));
+
+      console.log("Product added successfully");
+
+      setItemSearch("");
+    } else {
+      console.log("API returned success=false");
+    }
+  } catch (err) {
+    console.error("Barcode Search Error:", err);
+    showToast("Barcode not found", "error");
+  }
+};
+
+useEffect(() => {
+  console.log("Scanned Items Updated");
+  console.table(scannedItems);
+}, [scannedItems]);
+
   const removeRow = (index) => {
     if (billItems.length === 1) return;
     setBillItems((prev) => prev.filter((_, i) => i !== index));
@@ -741,13 +810,18 @@ function CreatePurchase() {
               <div className={styles.searchWrapper}>
                 <FiSearch className={styles.searchIcon} />
                 <input
-                  autoFocus
-                  type="text"
-                  placeholder="Search by Item/ Serial no./ HSN code/ SKU/ Custom Field / Category"
-                  className={styles.searchInput}
-                  value={itemSearch}
-                  onChange={(e) => setItemSearch(e.target.value)}
-                />
+  autoFocus
+  type="text"
+  placeholder="Scan or Enter Barcode"
+  className={styles.searchInput}
+  value={itemSearch}
+  onChange={(e) => setItemSearch(e.target.value)}
+  onKeyDown={(e) => {
+    if (e.key === "Enter") {
+      handleBarcodeSearch(itemSearch);
+    }
+  }}
+/>
                 <FiGrid className={styles.barcodeIcon} onClick={() => setShowCamera(true)} style={{ cursor: 'pointer' }} />
               </div>
               <select className={styles.categorySelect}>

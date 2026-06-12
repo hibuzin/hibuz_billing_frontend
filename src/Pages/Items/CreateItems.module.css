@@ -227,6 +227,44 @@
   cursor: pointer;
 }
 
+/* Slab Pricing */
+
+.slabRow {
+  display: grid;
+  gap: 12px;
+  align-items: end;
+  margin-bottom: 12px;
+}
+
+.slabRow input {
+  height: var(--field-height);
+  width: 100%;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  padding: 0 14px;
+  font-size: 12px;
+  outline: none;
+}
+
+.slabRow input:focus {
+  border-color: #111;
+}
+
+.slabRow button {
+  height: var(--field-height);
+  padding: 0 16px;
+  border: none;
+  border-radius: 4px;
+  background: #ef4444;
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.slabRow button:hover {
+  background: #dc2626;
+}
+
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr;

@@ -41,12 +41,20 @@
   margin-top: 12px;
 }
 
-/* THIS AREA ONLY SCROLLS */
+.sectionHeader {
+  margin: 5px;
+}
+
+.sectionHeader h1 {
+  font-size: 15px;
+  font-weight: 500;
+}
+
 .pageContent {
   flex: 1;
   padding-top: 18px;
 }
-/* HEADER */
+
 .header {
   font-size: 18px;
   font-weight: 600;
@@ -54,7 +62,6 @@
   margin-bottom: 10px;
 }
 
-/* SECTION TITLE */
 .sectionTitle {
   font-size: 14px;
   font-weight: 600;
@@ -62,8 +69,6 @@
   margin: 16px 0;
 }
 
-/* OVERVIEW */
-/* OVERVIEW */
 .overviewGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -81,10 +86,24 @@
 .cardRed,
 .cardGreay {
   background: #fff;
-  padding: 15px;      /* same as infoCard */
-  border-radius: 8px; /* same as infoCard */
+  padding: 15px;      
+  border-radius: 8px; 
   cursor: pointer;
   transition: 0.2s;
+}
+
+.cardTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgb(23, 207, 23);
+  font-size: 14px;
+  gap: 10px;
+  font-weight: 400;
+}
+
+.cardTitle svg {
+  font-size: 15px;
 }
 
 .cardGreen:hover,
@@ -93,7 +112,6 @@
   transform: translateY(-2px);
 }
 
-/* Keep your existing colors & borders */
 .cardGreen {
   background: linear-gradient(135deg, #ecfdf5, #ffffff);
   border: 1px solid #bbf7d0;
@@ -111,19 +129,18 @@
 
 .cardLabel {
   margin: 0;
-  font-size: 14px; /* same as first card p */
+  font-size: 14px; 
   color: inherit;
 }
 
 .amount {
   margin-top: 8px;
-  font-size: 20px; /* same as first card h2 */
+  font-size: 20px; 
   font-family: Inter, sans-serif;
   font-weight: 300;
   color: #292d35;
 }
 
-/* TABLE */
 .tableCard {
   background: white;
   margin-top: 18px;
@@ -156,6 +173,12 @@
   border-top: 1px solid #f1f5f9;
 }
 
+.table th:not(:last-child),
+.table td:not(:last-child) {
+  border-bottom: 1px solid #e5e7eb;
+  border-right: 1px solid #d1d5db;
+}
+
 .empty {
   text-align: center;
   padding: 40px;
@@ -171,7 +194,6 @@
   color: #6b7280;
 }
 
-/* SALES CHART */
 .chartCard {
   background: #ffffff;
   border-radius: 14px;
@@ -180,7 +202,6 @@
   margin-top: 16px;
 }
 
-/* Header row */
 .chartHeader {
   display: flex;
   justify-content: space-between;
@@ -188,7 +209,6 @@
   margin-bottom: 12px;
 }
 
-/* Title */
 .chartHeader h3 {
   font-size: 16px;
   font-weight: 600;
@@ -196,7 +216,6 @@
   margin: 0;
 }
 
-/* Dropdown */
 .chartHeader select {
   padding: 6px 10px;
   border-radius: 8px;
@@ -209,7 +228,6 @@
   transition: all 0.2s ease;
 }
 
-/* Hover + focus effect */
 .chartHeader select:hover {
   border-color: #ffffff;
 }
@@ -218,7 +236,6 @@
   border-color: #4f46e5;
 }
 
-/* Chart spacing fix */
 .chartCard .recharts-wrapper {
   margin-top: 10px;
 }

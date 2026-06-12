@@ -8,11 +8,12 @@ import {
   FaEllipsisV,
   FaEdit,
   FaTrash,
-  FaArrowUp
+  FaUsers
 } from "react-icons/fa";
+import { IndianRupee, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { FiArrowUp } from "react-icons/fi";
 import Toast from "../../components/Toast";
 import { API } from "../../constants/api";
-import { FaUsers } from "react-icons/fa";
 import { FaRupeeSign } from "react-icons/fa";
 
 function Supplier() {
@@ -529,7 +530,7 @@ setSupplierBalances(merged);
                   <td>{sup.gstNumber}</td>
                   <td>{sup.mobile}</td>
                   <td className={styles.balanceCell}>
-                    <FaArrowUp className={styles.balanceIcon} />
+                    <FiArrowUp className={styles.balanceIcon} />
                     ₹ {sup.balance.toLocaleString("en-IN", {
                       minimumFractionDigits: 2,
                     })}

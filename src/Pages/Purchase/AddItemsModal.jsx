@@ -92,6 +92,7 @@ function AddItemsModal({ products, onClose, onAddItems }) {
                                 <th>MRP</th>
                                 <th>Sales Price</th>
                                 <th>Purchase Price</th>
+                                <th>Slab Price</th>
                                 <th>Quantity</th>
                             </tr>
                         </thead>
@@ -107,6 +108,20 @@ function AddItemsModal({ products, onClose, onAddItems }) {
                                         <td>₹ {p.mrp || 0}</td>
                                         <td>₹ {p.sellingPrice || 0}</td>
                                         <td>₹ {p.costPrice || 0}</td>
+                                        <td>
+    {p.priceLevel?.pricingType === "slab" &&
+    p.priceLevel?.slabs?.length > 0 ? (
+        <div>
+            {p.priceLevel.slabs.map((slab, idx) => (
+                <div key={idx}>
+                    ₹{slab.price} ({(slab.minQty || 0) + 1} PCS)
+                </div>
+            ))}
+        </div>
+    ) : (
+        "-"
+    )}
+</td>
                                         <td>
                                             {!isAdded ? (
                                                 <button className={styles.addBtn} onClick={() => addItem(p)}>
@@ -144,7 +159,7 @@ function AddItemsModal({ products, onClose, onAddItems }) {
                             })}
                             {filtered.length === 0 && (
                                 <tr>
-                                    <td colSpan={7} className={styles.empty}>No items found</td>
+                                    <td colSpan={8} className={styles.empty}>No items found</td>
                                 </tr>
                             )}
                         </tbody>

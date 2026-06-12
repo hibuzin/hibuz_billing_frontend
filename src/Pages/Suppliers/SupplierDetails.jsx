@@ -7,6 +7,7 @@ import {
   FiTrash2,
   FiCreditCard,
   FiChevronDown,
+  FiArrowUp
 } from "react-icons/fi";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "./SupplierDetails.module.css";
@@ -156,7 +157,7 @@ function SupplierDetails() {
               </div>
               <div className={styles.cardRight}>
                 <span className={styles.cardBalance}>₹ {sup.balance.toLocaleString("en-IN")}</span>
-                <FaArrowUp className={styles.icon} />
+                <FiArrowUp className={styles.icon} />
               </div>
             </div>
           ))}

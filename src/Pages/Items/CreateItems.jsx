@@ -14,8 +14,11 @@ function CreateProduct() {
     mrp: "",
     costPrice: "",
     sellingPrice: "",
-     description: "",
+    description: "",
     barcode: "",
+
+    pricingType: "standard",
+    slabs: [],
   });
 
   const [categories, setCategories] = useState([]);
@@ -114,16 +117,28 @@ function CreateProduct() {
       setLoading(true);
       const token = localStorage.getItem("token");
       const payload = {
-  name: form.name,
-  categoryId: form.categoryId,
-  hsnCode: form.hsnCode,
-  gstRate: Number(form.gstRate),
-  mrp: Number(form.mrp),
-  costPrice: Number(form.costPrice),
-  sellingPrice: Number(form.sellingPrice),
-  barcode: form.barcode,
-  description: form.description,
-};
+        name: form.name,
+        categoryId: form.categoryId,
+        hsnCode: form.hsnCode,
+        gstRate: Number(form.gstRate),
+        mrp: Number(form.mrp),
+        costPrice: Number(form.costPrice),
+        sellingPrice: Number(form.sellingPrice),
+        barcode: form.barcode,
+        description: form.description,
+
+      };
+      if (form.pricingType === "slab") {
+        payload.priceLevel = {
+          pricingType: "slab",
+          slabs: form.slabs.map((s) => ({
+  minQty: Number(s.minQty),
+  maxQty: s.maxQty ? Number(s.maxQty) : null,
+  price: Number(s.price),
+}))
+        };
+      }
+
 
 
       const res = await fetch(API.createProduct, {
@@ -138,16 +153,16 @@ function CreateProduct() {
       if (!res.ok) throw new Error(data.message || "Failed to create item");
       showToast("Item created successfully", "success");
       setForm({
-  name: "",
-  categoryId: "",
-  hsnCode: "",
-  gstRate: "",
-  mrp: "",
-  costPrice: "",
-  sellingPrice: "",
-  barcode: "",
-  description: "",
-});
+        name: "",
+        categoryId: "",
+        hsnCode: "",
+        gstRate: "",
+        mrp: "",
+        costPrice: "",
+        sellingPrice: "",
+        barcode: "",
+        description: "",
+      });
     } catch (err) {
       showToast(err.message, "error");
     } finally {
@@ -162,197 +177,256 @@ function CreateProduct() {
       <div className={styles.container}>
 
         <div className={styles.header}>
-  <button
-    type="button"
-    className={styles.backBtn}
-    onClick={() => navigate("/product")}
-  >
-    <FiArrowLeft size={18} />
-  </button>
+          <button
+            type="button"
+            className={styles.backBtn}
+            onClick={() => navigate("/product")}
+          >
+            <FiArrowLeft size={18} />
+          </button>
 
-  <h2>Create Customer</h2>
-</div>
+          <h2>Create Customer</h2>
+        </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>
 
-  <div className={styles.sectionTitle}>
-    Product Details
-  </div>
+          <div className={styles.sectionTitle}>
+            Product Details
+          </div>
 
-  <div className={styles.productGrid}>
+          <div className={styles.productGrid}>
 
-    <div className={styles.field}>
-      <label>Item Name</label>
+            <div className={styles.field}>
+              <label>Item Name</label>
+              <input
+                ref={nameRef}
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                onKeyDown={(e) => handleKeyDown(e, categoryRef)}
+                placeholder="Enter item name"
+                required
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label>Category</label>
+
+              <div className={styles.categoryWrapper}>
+                <select
+                  ref={categoryRef}
+                  name="categoryId"
+                  value={form.categoryId}
+                  onChange={(e) => {
+                    if (e.target.value === "__add_category__") {
+                      setShowCategoryModal(true);
+                      return;
+                    }
+
+                    setForm((prev) => ({
+                      ...prev,
+                      categoryId: e.target.value,
+                    }));
+                  }}
+                  required
+                >
+                  <option value="">Select Category</option>
+
+                  {categories.map((cat) => (
+                    <option key={cat._id} value={cat._id}>
+                      {cat.name}
+                    </option>
+                  ))}
+
+                  <option value="__add_category__">
+                    + Add Category
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div className={styles.field}>
+              <label>HSN Code</label>
+              <input
+                ref={hsnRef}
+                type="text"
+                name="hsnCode"
+                value={form.hsnCode}
+                onChange={handleChange}
+                onKeyDown={(e) => handleKeyDown(e, gstRef)}
+                placeholder="Enter HSN Code"
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label>GST Rate (%)</label>
+              <input
+                ref={gstRef}
+                type="number"
+                name="gstRate"
+                value={form.gstRate}
+                onChange={handleChange}
+                onKeyDown={(e) => handleKeyDown(e, mrpRef)}
+                placeholder="18"
+              />
+            </div>
+
+          </div>
+
+          <div className={styles.sectionTitle}>
+            Pricing Details
+          </div>
+
+          <div className={styles.grid}>
+
+            <div className={styles.field}>
+              <label>MRP</label>
+              <input
+                ref={mrpRef}
+                type="number"
+                name="mrp"
+                value={form.mrp}
+                onChange={handleChange}
+                onKeyDown={(e) => handleKeyDown(e, costRef)}
+                placeholder="MRP"
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label>Cost Price</label>
+              <input
+                ref={costRef}
+                type="number"
+                name="costPrice"
+                value={form.costPrice}
+                onChange={handleChange}
+                onKeyDown={(e) => handleKeyDown(e, sellingRef)}
+                placeholder="Cost Price"
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label>Selling Price</label>
+              <input
+                ref={sellingRef}
+                type="number"
+                name="sellingPrice"
+                value={form.sellingPrice}
+                onChange={handleChange}
+                onKeyDown={(e) => handleKeyDown(e, barcodeRef)}
+                placeholder="Selling Price"
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label>Description</label>
+              <input
+                 ref={descriptionRef}
+                name="description"
+                value={form.description}
+                onChange={handleChange}
+                onKeyDown={(e) => handleKeyDown(e, submitRef)}
+                placeholder="Enter product description"
+              />
+            </div>
+
+            
+
+            <div className={styles.field}>
+              <label>Pricing Type</label>
+
+              <select
+                value={form.pricingType}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    pricingType: e.target.value,
+                    slabs:
+                      e.target.value === "slab"
+                        ? [{ minQty: "", maxQty: null, price: "" }]
+                        : [],
+                  })
+                }
+              >
+                <option value="standard">Standard</option>
+                <option value="slab">Slab Pricing</option>
+              </select>
+            </div>
+
+             {form.pricingType === "slab" && (
+  <div className={`${styles.field} ${styles.full}`}>
+    <label>Slab Pricing</label>
+
+    <div className={styles.slabRow}>
       <input
-        ref={nameRef}
-        type="text"
-        name="name"
-        value={form.name}
-        onChange={handleChange}
-        onKeyDown={(e) => handleKeyDown(e, categoryRef)}
-        placeholder="Enter item name"
-        required
-      />
-    </div>
-
-    <div className={styles.field}>
-      <label>Category</label>
-
-      <div className={styles.categoryWrapper}>
-        <select
-          ref={categoryRef}
-          name="categoryId"
-          value={form.categoryId}
-          onChange={(e) => {
-            if (e.target.value === "__add_category__") {
-              setShowCategoryModal(true);
-              return;
-            }
-
-            setForm((prev) => ({
-              ...prev,
-              categoryId: e.target.value,
-            }));
-          }}
-          required
-        >
-          <option value="">Select Category</option>
-
-          {categories.map((cat) => (
-            <option key={cat._id} value={cat._id}>
-              {cat.name}
-            </option>
-          ))}
-
-          <option value="__add_category__">
-            + Add Category
-          </option>
-        </select>
-      </div>
-    </div>
-
-    <div className={styles.field}>
-      <label>HSN Code</label>
-      <input
-        ref={hsnRef}
-        type="text"
-        name="hsnCode"
-        value={form.hsnCode}
-        onChange={handleChange}
-        onKeyDown={(e) => handleKeyDown(e, gstRef)}
-        placeholder="Enter HSN Code"
-      />
-    </div>
-
-    <div className={styles.field}>
-      <label>GST Rate (%)</label>
-      <input
-        ref={gstRef}
         type="number"
-        name="gstRate"
-        value={form.gstRate}
-        onChange={handleChange}
-        onKeyDown={(e) => handleKeyDown(e, mrpRef)}
-        placeholder="18"
+        placeholder="Min Qty"
+        value={form.slabs[0]?.minQty || ""}
+        onChange={(e) => {
+          const slabs = [...form.slabs];
+          slabs[0] = {
+            ...slabs[0],
+            minQty: e.target.value,
+            maxQty: null,
+          };
+          setForm({ ...form, slabs });
+        }}
       />
-    </div>
 
-  </div>
-
-  <div className={styles.sectionTitle}>
-    Pricing Details
-  </div>
-
-  <div className={styles.grid}>
-
-    <div className={styles.field}>
-      <label>MRP</label>
       <input
-        ref={mrpRef}
         type="number"
-        name="mrp"
-        value={form.mrp}
-        onChange={handleChange}
-        onKeyDown={(e) => handleKeyDown(e, costRef)}
-        placeholder="MRP"
+        placeholder="Price"
+        value={form.slabs[0]?.price || ""}
+        onChange={(e) => {
+          const slabs = [...form.slabs];
+          slabs[0] = {
+            ...slabs[0],
+            price: e.target.value,
+            maxQty: null,
+          };
+          setForm({ ...form, slabs });
+        }}
       />
     </div>
-
-    <div className={styles.field}>
-      <label>Cost Price</label>
-      <input
-        ref={costRef}
-        type="number"
-        name="costPrice"
-        value={form.costPrice}
-        onChange={handleChange}
-        onKeyDown={(e) => handleKeyDown(e, sellingRef)}
-        placeholder="Cost Price"
-      />
-    </div>
-
-    <div className={styles.field}>
-      <label>Selling Price</label>
-      <input
-        ref={sellingRef}
-        type="number"
-        name="sellingPrice"
-        value={form.sellingPrice}
-        onChange={handleChange}
-        onKeyDown={(e) => handleKeyDown(e, barcodeRef)}
-        placeholder="Selling Price"
-      />
-    </div>
-
-<div className={`${styles.field} ${styles.full}`}>
-  <label>Description</label>
-
-  <textarea
-    ref={descriptionRef}
-    name="description"
-    value={form.description}
-    onChange={handleChange}
-    onKeyDown={(e) => handleKeyDown(e, submitRef)}
-    placeholder="Enter product description"
-    rows={4}
-  />
-</div>
-
   </div>
+)}
 
-  <div className={styles.sectionTitle}>
-    Inventory Details
-  </div>
+          </div>
 
-  <div className={styles.grid}>
+          <div className={styles.sectionTitle}>
+            Inventory Details
+          </div>
 
-    <div className={styles.field}>
-      <label>Barcode</label>
-      <input
-        ref={barcodeRef}
-        type="text"
-        name="barcode"
-        value={form.barcode}
-        onChange={handleChange}
-        onKeyDown={(e) => handleKeyDown(e, submitRef)}
-        placeholder="Barcode"
-      />
-    </div>
+          <div className={styles.grid}>
 
-  </div>
+            <div className={styles.field}>
+              <label>Barcode</label>
+              <input
+                ref={barcodeRef}
+                type="text"
+                name="barcode"
+                value={form.barcode}
+                onChange={handleChange}
+                onKeyDown={(e) => handleKeyDown(e, submitRef)}
+                placeholder="Barcode"
+              />
+            </div>
 
-  <div className={styles.submitRow}>
-    <button
-      ref={submitRef}
-      type="submit"
-      disabled={loading}
-      className={styles.submitBtn}
-    >
-      {loading ? "Creating..." : "Create Item"}
-    </button>
-  </div>
+          </div>
 
-</form>
+          <div className={styles.submitRow}>
+            <button
+              ref={submitRef}
+              type="submit"
+              disabled={loading}
+              className={styles.submitBtn}
+            >
+              {loading ? "Creating..." : "Create Item"}
+            </button>
+          </div>
+
+        </form>
       </div>
 
       {showCategoryModal && (

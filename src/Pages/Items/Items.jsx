@@ -547,94 +547,95 @@ function Item() {
         ) : (
           <table className={styles.table}>
             <thead>
-  <tr>
-    <th>No</th>
-    <th>Name</th>
-    <th>HSN Code</th>
-    <th>BarCode</th>
-    <th>Qty</th>
-    <th>Selling Price</th>
-    <th>Purchase Price</th>
-    <th>MRP</th>
-    <th></th>
-  </tr>
-</thead>
+              <tr>
+                <th>No</th>
+                <th>Item Code</th>
+                <th>Name</th>
+                <th>HSN Code</th>
+                <th>Qty</th>
+                <th>Selling Price</th>
+                <th>Purchase Price</th>
+                <th>MRP</th>
+                <th></th>
+              </tr>
+            </thead>
 
             <tbody>
-  {product.map((p, index) => (
-    <tr
-      key={p._id || p.productId}
-      onClick={() =>
-        navigate(`/item/${p._id || p.productId}`)
-      }
-    >
-      <td>{index + 1}</td>
+              {product.map((p, index) => (
+                <tr
+                  key={p._id || p.productId}
+                  onClick={() =>
+                    navigate(`/item/${p._id || p.productId}`)
+                  }
+                >
+                  <td>{index + 1}</td>
 
-      <td className={styles.nameCell}>
-        {p.name || p.productName}
-      </td>
 
-      <td>{p.hsnCode || "—"}</td>
+                  <td>{p.barcode || "—"}</td>
 
-      <td>{p.barcode || "—"}</td>
+                  <td className={styles.nameCell}>
+                    {p.name || p.productName}
+                  </td>
 
-      <td>{p.availableQty || 0}</td>
 
-      <td>₹ {p.sellingPrice || 0}</td>
+                  <td>{p.hsnCode || "—"}</td>
+                  <td>{p.availableQty || 0}</td>
 
-      <td>₹ {p.costPrice || 0}</td>
+                  <td>₹ {p.sellingPrice || 0}</td>
 
-      <td>₹ {p.mrp || 0}</td>
+                  <td>₹ {p.costPrice || 0}</td>
 
-      <td>
-        <div
-          ref={openMenu === p._id ? menuRef : null}
-          className={styles.menuWrapper}
-        >
-          <button
-            className={styles.menuBtn}
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpenMenu(
-                openMenu === p._id ? null : p._id
-              );
-            }}
-          >
-            <FaEllipsisV />
-          </button>
+                  <td>₹ {p.mrp || 0}</td>
 
-          {openMenu === p._id && (
-            <div className={styles.dropdownMenu}>
-              <button
-                className={styles.editMenuItem}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  openEdit(p);
-                  setOpenMenu(null);
-                }}
-              >
-                <FaEdit />
-                Edit
-              </button>
+                  <td>
+                    <div
+                      ref={openMenu === p._id ? menuRef : null}
+                      className={styles.menuWrapper}
+                    >
+                      <button
+                        className={styles.menuBtn}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setOpenMenu(
+                            openMenu === p._id ? null : p._id
+                          );
+                        }}
+                      >
+                        <FaEllipsisV />
+                      </button>
 
-              <button
-                className={styles.deleteMenuItem}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setDeleteProductId(p._id);
-                  setOpenMenu(null);
-                }}
-              >
-                <FaTrash />
-                Delete
-              </button>
-            </div>
-          )}
-        </div>
-      </td>
-    </tr>
-  ))}
-</tbody>
+                      {openMenu === p._id && (
+                        <div className={styles.dropdownMenu}>
+                          <button
+                            className={styles.editMenuItem}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openEdit(p);
+                              setOpenMenu(null);
+                            }}
+                          >
+                            <FaEdit />
+                            Edit
+                          </button>
+
+                          <button
+                            className={styles.deleteMenuItem}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setDeleteProductId(p._id);
+                              setOpenMenu(null);
+                            }}
+                          >
+                            <FaTrash />
+                            Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         )}
       </div>
