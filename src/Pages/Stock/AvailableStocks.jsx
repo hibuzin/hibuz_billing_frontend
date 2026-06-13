@@ -27,6 +27,11 @@ function Stocks() {
       });
 
       const data = await res.json();
+      if (data.success) {
+        console.log("Stocks Data:", data.data);
+        setStocks(data.data || []);
+        setFilteredStocks(data.data || []);
+      }
 
       if (data.success) {
         setStocks(data.data || []);
@@ -113,10 +118,8 @@ function Stocks() {
           <thead>
             <tr>
               <th>No</th>
+              <th>Item Code</th>
               <th>Product</th>
-              <th>Brand</th>
-              <th>Flavor</th>
-              <th>Liters</th>
               <th>MRP</th>
               <th>Stock</th>
               <th>Status</th>
@@ -142,18 +145,14 @@ function Stocks() {
                 <tr key={index} className={styles.tableRow}>
 
                   <td>{index + 1}</td>
+                  <td>{item.itemCode}</td>
+
 
                   <td>
                     <div className={styles.productName}>
                       {item.productName}
                     </div>
                   </td>
-
-                  <td>{item.brand || "-"}</td>
-
-                  <td>{item.flavor || "-"}</td>
-
-                  <td>{item.litters || "-"}</td>
 
                   <td>₹ {item.mrp}</td>
 

@@ -437,11 +437,11 @@ function Item() {
         <div className={styles.infoCard}>
           <div className={`${styles.cardRow} ${styles.stockCard}`}>
             <div className={styles.cardTitle}>
-              <TrendingUp size={14} />
+              <TrendingUp size={16} />
               <p>Stock Value</p>
             </div>
 
-            <ExternalLink size={14} className={styles.externalIcon} />
+            <ExternalLink size={16} className={styles.externalIcon} />
           </div>
 
           <h2>
@@ -453,11 +453,11 @@ function Item() {
         <div className={styles.infoCard}>
           <div className={`${styles.cardRow} ${styles.lowStockCard}`}>
             <div className={styles.cardTitle}>
-              <PackageMinus size={14} />
+              <PackageMinus size={16} />
               <p>Low Stock</p>
             </div>
 
-            <ExternalLink size={14} className={styles.externalIcon} />
+            <ExternalLink size={16} className={styles.externalIcon} />
           </div>
 
           <h2>{lowStockItems}</h2>
@@ -467,11 +467,11 @@ function Item() {
         <div className={styles.infoCard}>
           <div className={`${styles.cardRow} ${styles.outStockCard}`}>
             <div className={styles.cardTitle}>
-              <PackageX size={14} />
+              <PackageX size={16} />
               <p>Out Of Stock</p>
             </div>
 
-            <ExternalLink size={14} className={styles.externalIcon} />
+            <ExternalLink size={16} className={styles.externalIcon} />
           </div>
 
           <h2>0</h2>

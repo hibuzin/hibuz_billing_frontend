@@ -78,9 +78,8 @@ function OutOfStock() {
           <thead>
             <tr>
               <th>No</th>
+              <th>Item Code</th>
               <th>Product</th>
-              <th>Brand</th>
-              <th>Flavor</th>
               <th>MRP</th>
               <th>Stock</th>
               <th>Status</th>
@@ -103,11 +102,9 @@ function OutOfStock() {
 
                   <td>{index + 1}</td>
 
+                  <td>{item.barcode}</td>
+
                   <td>{item.productName}</td>
-
-                  <td>{item.brand || "-"}</td>
-
-                  <td>{item.flavor || "-"}</td>
 
                   <td>₹ {item.mrp}</td>
 

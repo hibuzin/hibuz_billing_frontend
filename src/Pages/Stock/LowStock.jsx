@@ -99,10 +99,8 @@ console.log("filtered:", filteredStocks);
           <thead>
             <tr>
               <th>No</th>
+              <th>Item Code</th>
               <th>Product</th>
-              <th>Brand</th>
-              <th>Flavor</th>
-              <th>Liters</th>
               <th>MRP</th>
               <th>Stock</th>
               <th>Status</th>
@@ -129,17 +127,13 @@ console.log("filtered:", filteredStocks);
 
                   <td>{index + 1}</td>
 
+                  <td>{item.barcode}</td>
+
                   <td>
                     <div className={styles.productName}>
                       {item.productName}
                     </div>
                   </td>
-
-                  <td>{item.brand || "-"}</td>
-
-                  <td>{item.flavor || "-"}</td>
-
-                  <td>{item.litters || "-"}</td>
 
                   <td>₹ {item.mrp}</td>
 

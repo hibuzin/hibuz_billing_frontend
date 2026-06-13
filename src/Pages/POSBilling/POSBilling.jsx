@@ -694,8 +694,8 @@ function POSBilling() {
               <thead>
                 <tr>
                   <th>NO</th>
+                  <th>ITEM CODE</th>
                   <th>ITEMS</th>
-                  <th>BARCODE</th>
                   <th>MRP</th>
                   <th>SP (₹)</th>
                   <th>DISC (%)</th>
@@ -715,7 +715,7 @@ function POSBilling() {
                   scannedItems.map((item, idx) => (
                     <tr key={`${item.barcode}-${idx}`}>
                       <td>{idx + 1}</td>
-
+<td>{item.barcode}</td>
                       <td>
                         {item.productName}
                         {item.flavor && (
@@ -724,8 +724,6 @@ function POSBilling() {
                           </span>
                         )}
                       </td>
-
-                      <td>{item.barcode}</td>
 
                       <td>₹{item.mrp || 0}</td>
 

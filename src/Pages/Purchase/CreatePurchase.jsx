@@ -53,9 +53,9 @@ function CreatePurchase() {
 
   const handleAddToBill = () => {
     const selected = scannedItems.map(item => ({
-  ...item,
-  quantity: selectedItems[item.productId]?.qty || 1,
-}));
+      ...item,
+      quantity: selectedItems[item.productId]?.qty || 1,
+    }));
     handleAddItems(selected);
     setShowBarcodeModal(false);
     setScannedItems([]);
@@ -222,26 +222,26 @@ function CreatePurchase() {
   };
 
   const handleProductSelect = (index, selected) => {
- const product = selected?.product;  
+    const product = selected?.product;
 
-  setBillItems((prev) => {
-    const updated = [...prev];
+    setBillItems((prev) => {
+      const updated = [...prev];
 
-    updated[index] = {
-      ...updated[index],
-      productId: product?._id || "",
-      hsnCode: product?.hsnCode || "",
-      barcode: product?.barcode || "",
-      mrp: product?.mrp || "",
-      costPrice: product?.costPrice || "",
-      sellingPrice: product?.sellingPrice || "",
-      description: product?.description || "",
-      tax: product?.gstRate || "",
-    };
+      updated[index] = {
+        ...updated[index],
+        productId: product?._id || "",
+        hsnCode: product?.hsnCode || "",
+        barcode: product?.barcode || "",
+        mrp: product?.mrp || "",
+        costPrice: product?.costPrice || "",
+        sellingPrice: product?.sellingPrice || "",
+        description: product?.description || "",
+        tax: product?.gstRate || "",
+      };
 
-    return updated;
-  });
-};
+      return updated;
+    });
+  };
 
 
   const handleAddItems = (newItems) => {
@@ -253,74 +253,74 @@ function CreatePurchase() {
     });
   };
 
- const handleBarcodeSearch = async (barcode) => {
-  console.log("================================");
-  console.log("handleBarcodeSearch called");
-  console.log("Received Barcode:", barcode);
-  console.log("Barcode Length:", barcode?.length);
-  console.log("API URL:", API.scanProduct(barcode));
-  console.log("================================");
+  const handleBarcodeSearch = async (barcode) => {
+    console.log("================================");
+    console.log("handleBarcodeSearch called");
+    console.log("Received Barcode:", barcode);
+    console.log("Barcode Length:", barcode?.length);
+    console.log("API URL:", API.scanProduct(barcode));
+    console.log("================================");
 
-  if (!barcode.trim()) {
-    console.log("Barcode is empty");
-    return;
-  }
-
-  try {
-    console.log("Calling API...");
-
-    const res = await fetch(API.scanProduct(barcode), {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    console.log("Response Status:", res.status);
-
-    const data = await res.json();
-
-    console.log("API Response:", data);
-
-    if (data.success) {
-      console.log("Product Found");
-      console.log("Product Name:", data.data.productName);
-      console.log("Product ID:", data.data.productId);
-      console.log("Barcode:", data.data.barcode);
-
-      if (
-        scannedItems.some(
-          (item) => item.barcode === data.data.barcode
-        )
-      ) {
-        console.log("Duplicate product scanned");
-        return;
-      }
-
-      console.log("Adding product to scannedItems");
-
-      setScannedItems((prev) => [...prev, data.data]);
-
-      setSelectedItems((prev) => ({
-        ...prev,
-        [data.data.productId]: { qty: 1 },
-      }));
-
-      console.log("Product added successfully");
-
-      setItemSearch("");
-    } else {
-      console.log("API returned success=false");
+    if (!barcode.trim()) {
+      console.log("Barcode is empty");
+      return;
     }
-  } catch (err) {
-    console.error("Barcode Search Error:", err);
-    showToast("Barcode not found", "error");
-  }
-};
 
-useEffect(() => {
-  console.log("Scanned Items Updated");
-  console.table(scannedItems);
-}, [scannedItems]);
+    try {
+      console.log("Calling API...");
+
+      const res = await fetch(API.scanProduct(barcode), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("Response Status:", res.status);
+
+      const data = await res.json();
+
+      console.log("API Response:", data);
+
+      if (data.success) {
+        console.log("Product Found");
+        console.log("Product Name:", data.data.productName);
+        console.log("Product ID:", data.data.productId);
+        console.log("Barcode:", data.data.barcode);
+
+        if (
+          scannedItems.some(
+            (item) => item.barcode === data.data.barcode
+          )
+        ) {
+          console.log("Duplicate product scanned");
+          return;
+        }
+
+        console.log("Adding product to scannedItems");
+
+        setScannedItems((prev) => [...prev, data.data]);
+
+        setSelectedItems((prev) => ({
+          ...prev,
+          [data.data.productId]: { qty: 1 },
+        }));
+
+        console.log("Product added successfully");
+
+        setItemSearch("");
+      } else {
+        console.log("API returned success=false");
+      }
+    } catch (err) {
+      console.error("Barcode Search Error:", err);
+      showToast("Barcode not found", "error");
+    }
+  };
+
+  useEffect(() => {
+    console.log("Scanned Items Updated");
+    console.table(scannedItems);
+  }, [scannedItems]);
 
   const removeRow = (index) => {
     if (billItems.length === 1) return;
@@ -549,9 +549,9 @@ useEffect(() => {
               <thead>
                 <tr>
                   <th className={styles.colNo}>NO</th>
+                  <th className={styles.colBarcode}>ITEM CODE</th>
                   <th className={styles.colItem}>ITEMS</th>
                   <th className={styles.colHsn}>HSN</th>
-                  <th className={styles.colBarcode}>BARCODE</th>
                   <th className={styles.colMrp}>MRP</th>
                   <th className={styles.colQty}>QTY</th>
                   <th className={styles.colPrice}>PRICE/ITEM (₹)</th>
@@ -570,6 +570,19 @@ useEffect(() => {
                   return (
                     <tr key={index} className={styles.itemRow}>
                       <td className={styles.colNo}>{index + 1}</td>
+
+                      <td className={styles.colBarcode}>
+                        <input
+                          type="text"
+                          className={styles.cellInput}
+                          value={item.barcode || ""}
+                          onChange={(e) =>
+                            updateItem(index, "barcode", e.target.value)
+                          }
+                          placeholder="Barcode"
+                        />
+                      </td>
+
                       <td className={styles.colItem}>
                         <Select
                           options={getProductOptions()}
@@ -583,14 +596,15 @@ useEffect(() => {
                         />
 
                         <input
-  type="text"
-  className={styles.descInput}
-  value={item.description || ""}
-  onChange={(e) => updateItem(index, "description", e.target.value)}
-  placeholder="Enter Description (optional)"
-/>
+                          type="text"
+                          className={styles.descInput}
+                          value={item.description || ""}
+                          onChange={(e) => updateItem(index, "description", e.target.value)}
+                          placeholder="Enter Description (optional)"
+                        />
 
                       </td>
+                    
 
                       <td className={styles.colHsn}>
                         <input
@@ -604,17 +618,7 @@ useEffect(() => {
                         />
                       </td>
 
-                      <td className={styles.colBarcode}>
-                        <input
-                          type="text"
-                          className={styles.cellInput}
-                          value={item.barcode || ""}
-                          onChange={(e) =>
-                            updateItem(index, "barcode", e.target.value)
-                          }
-                          placeholder="Barcode"
-                        />
-                      </td>
+
 
                       <td className={styles.colMrp}>
                         <input
@@ -741,8 +745,6 @@ useEffect(() => {
           {/* FOOTER */}
           <div className={styles.invoiceFooter}>
             <div className={styles.footerLeft}>
-              <button className={styles.addLink}>+ Add Notes</button>
-              <button className={styles.addLink}>+ Add Terms and Conditions</button>
             </div>
             <div className={styles.totalsPanel}>
               <button className={styles.addLink}>+ Add Additional Charges</button>
@@ -750,10 +752,7 @@ useEffect(() => {
                 <span>Taxable Amount</span>
                 <span>₹ {subtotal.toLocaleString("en-IN")}</span>
               </div>
-              <div className={styles.totalLine}>
-                <span>+ Add Discount</span>
-                <span>- ₹ {totalDiscount.toLocaleString("en-IN")}</span>
-              </div>
+              
               <div className={styles.divider} />
               <div className={styles.totalLineBold}>
                 <span>Total Amount</span>
@@ -810,18 +809,18 @@ useEffect(() => {
               <div className={styles.searchWrapper}>
                 <FiSearch className={styles.searchIcon} />
                 <input
-  autoFocus
-  type="text"
-  placeholder="Scan or Enter Barcode"
-  className={styles.searchInput}
-  value={itemSearch}
-  onChange={(e) => setItemSearch(e.target.value)}
-  onKeyDown={(e) => {
-    if (e.key === "Enter") {
-      handleBarcodeSearch(itemSearch);
-    }
-  }}
-/>
+                  autoFocus
+                  type="text"
+                  placeholder="Scan or Enter Barcode"
+                  className={styles.searchInput}
+                  value={itemSearch}
+                  onChange={(e) => setItemSearch(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleBarcodeSearch(itemSearch);
+                    }
+                  }}
+                />
                 <FiGrid className={styles.barcodeIcon} onClick={() => setShowCamera(true)} style={{ cursor: 'pointer' }} />
               </div>
               <select className={styles.categorySelect}>

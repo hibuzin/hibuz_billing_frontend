@@ -146,6 +146,7 @@
   font-family: Inter, sans-serif;
   font-weight: 300;
   text-align: left;
+  color: #292d35;
 }
 
 .cardTitle {
@@ -155,7 +156,6 @@
 }
 
 .cardIcon {
-  font-size: 18px;
   color: #555;
 }
 
@@ -180,7 +180,7 @@
 .cardIcon,
 .collectIcon,
 .payIcon {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .cardIcon {
@@ -190,9 +190,10 @@
 }
 
 .rupeeIcon {
-  font-size: 18px;
-  margin-right: 4px;
-  color: #333333;
+  font-size: 15px;
+  font-weight: 300;
+  margin-right: 3px;
+  color: #474545;
 }
 
 .tableWrapper {
