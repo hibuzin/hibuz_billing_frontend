@@ -2,7 +2,7 @@
   /* primary brand */
   --primary-color: #4f452b;
 
-  --sidebar-bg: #0E1525 ; 
+  --sidebar-bg: #045c5c ; 
   /* sidebar hover accent */
   --sidebar-accent:  #d4af37; 
 
@@ -15,10 +15,10 @@
   --button-text: #ffffff;
 
   /* hover */
-  --button-hover: #4A3DC6;
+  --button-hover: #040218;
 
   /* focus (input / active highlight) */
-  --focus-color: #1b0f8d;
+  --focus-color: #040218;
 
   /* text */
   --text-primary: #111;

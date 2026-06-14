@@ -11,6 +11,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { FiArrowUp, FiArrowDown } from "react-icons/fi";
+import dashboardBg from "../../assets/marble.png";
+console.log(dashboardBg);
 
 export default function Home() {
   const [reportType, setReportType] = useState("today");
@@ -77,13 +79,17 @@ export default function Home() {
   };
 
   return (
-    <div className={styles.page}>
-
+    
+    <div
+  className={styles.page}
+  style={{
+    backgroundImage: `url(${dashboardBg})`,
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "100%",
+  }}
+>
       {/* FIXED TOP */}
-      <div className={styles.pageHeader}>
-        <h1>Dashboard</h1>
-        <div className={styles.divider}></div>
-      </div>
+      
       <div className={styles.sectionHeader}>
         <h1>Business Overview</h1>
       </div>
