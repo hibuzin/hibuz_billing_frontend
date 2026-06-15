@@ -1,4 +1,4 @@
-const BASE_URL = "https://pos-backend-6uh4.onrender.com/api";
+const BASE_URL = "https://hibuz-general-billing.onrender.com/api";
 
 export const API = {
 
